@@ -34,7 +34,7 @@ class LaunchActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        Thread.sleep(2000)
+        Thread.sleep(1000)
         enterDisplay()
     }
 

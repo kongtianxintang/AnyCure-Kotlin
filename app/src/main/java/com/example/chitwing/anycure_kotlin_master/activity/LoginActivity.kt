@@ -253,7 +253,6 @@ class LoginActivity : BaseActivity(), LoaderCallbacks<Cursor> {
         override fun doInBackground(vararg params: Void): Boolean? {
             try {
                 // Simulate network access.
-                Thread.sleep(2000)
                 val map = mapOf("mobile" to mEmail,"passwd" to mPassword)
                 val logCallback = NetRequest.loginAction(map)
                 val response = logCallback.execute()

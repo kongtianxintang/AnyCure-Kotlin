@@ -30,15 +30,14 @@ object NetRequest {
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(client)
             .build();
+    private var api = retro.create(NetApi ::class.java)
 
     fun loginAction(map: Map<String,String>) : Call<Login> {
-        val api = retro.create(NetApi ::class.java);
-        val body = createPair(map);
+        val body = createPair(map)
         return api.loginAction(body);
     }
 
     fun fetchRecipeAction(map: Map<String, String>) : Call<List<Recipe>> {
-        val api = retro.create(NetApi ::class.java)
         val body = createPair(map)
         return api.fetchRecipeList(body)
     }

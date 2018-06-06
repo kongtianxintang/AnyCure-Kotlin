@@ -26,12 +26,12 @@ object DBHelper {
         return logs.get(id)
     }
     /*查找 数组id*/
-    fun <T>find(list:List<Long>, context: Context, entityClass:Class<T>):List<T>{
+    fun <T>find(list:List<Long>, context: Context, entityClass:Class<T>):List<T>?{
         val logs = syncLogs(context,entityClass)
         return logs.get(list)
     }
     /*查找 所有*/
-    fun <T>find(context: Context, entityClass:Class<T>) :List<T>{
+    fun <T>find(context: Context, entityClass:Class<T>) :List<T>?{
         val logs = syncLogs(context,entityClass)
         val query = logs.query().order(BaseData_.id).build()
         return query.find()

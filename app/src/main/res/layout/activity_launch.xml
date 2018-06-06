@@ -6,9 +6,11 @@
     android:layout_height="match_parent"
     tools:context="com.example.chitwing.anycure_kotlin_master.launch.LaunchActivity">
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-
+        android:fitsSystemWindows="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:textColor="@color/main_theme"
         android:textAlignment="center"
         android:text="@string/default_string"

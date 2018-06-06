@@ -1,5 +1,6 @@
 package com.example.chitwing.anycure_kotlin_master.model
 import com.google.gson.annotations.SerializedName
+import io.objectbox.annotation.Entity
 
 /***********************************************************
  * 版权所有,2018,Chitwing.
@@ -13,6 +14,7 @@ import com.google.gson.annotations.SerializedName
  * Modifier:
  * Reason:
  *************************************************************/
+@Entity
 data class Recipe (
         @SerializedName("recipe_id")
         var recipeId:Int = 0,

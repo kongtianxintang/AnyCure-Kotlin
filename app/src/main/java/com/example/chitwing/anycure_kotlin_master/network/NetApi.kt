@@ -28,10 +28,10 @@ interface NetApi {
     /*上传日志:其实是记录用户使用的处方*/
     @POST("/Log")
     @FormUrlEncoded
-    fun userRecipeLog(@FieldMap body: Map<String, String>) : Call<Login>;
+    fun userRecipeLog(@FieldMap body: Map<String, String>) : Call<Login>
 
     /*登录*/
     @POST("/Login/login")
     @FormUrlEncoded
-    fun loginAction(@FieldMap body: Map<String, String>) : Call<Login>;
+    fun loginAction(@FieldMap body: Map<String, String>) : Call<Login>
 }

@@ -1,5 +1,7 @@
 package com.example.chitwing.anycure_kotlin_master.model
 
+import io.objectbox.annotation.Entity
+
 /***********************************************************
  * 版权所有,2018,Chitwing.
  * Copyright(C),2018,Chitwing co. LTD.All rights reserved.
@@ -12,6 +14,7 @@ package com.example.chitwing.anycure_kotlin_master.model
  * Modifier:
  * Reason:
  *************************************************************/
+@Entity
 data class Login(var code:Int,
                  var msg:String?,
                  var uid:String?,

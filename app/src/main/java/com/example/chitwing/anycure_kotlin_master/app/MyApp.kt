@@ -1,6 +1,10 @@
 package com.example.chitwing.anycure_kotlin_master.app
 
 import android.app.Application
+import android.content.Context
+import android.nfc.Tag
+import android.os.AsyncTask
+import android.util.Log
 import com.example.chitwing.anycure_kotlin_master.model.MyObjectBox
 import io.objectbox.BoxStore
 
@@ -18,11 +22,17 @@ import io.objectbox.BoxStore
  *************************************************************/
 class MyApp :Application() {
 
+    companion object {
+        val Tag: String = "AnyCure-Kotlin"
+    }
+
     lateinit var boxStore: BoxStore
-        private  set
+        private set
 
     override fun onCreate() {
         super.onCreate()
         boxStore = MyObjectBox.builder().androidContext(this).build()
+        Log.d(Tag, "启动app")
     }
+
 }

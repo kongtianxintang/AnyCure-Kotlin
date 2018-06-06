@@ -17,7 +17,7 @@
         <item name="android:windowFullscreen">true</item>
     </style>
     <style name="AppTheme.Launch" parent="AppTheme.Full">
-        <item name="android:windowBackground">@drawable/ic_launcher_background</item>
+        <item name="android:windowBackground">@drawable/splash_bg</item>
     </style>
 
 

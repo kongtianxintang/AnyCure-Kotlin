@@ -15,4 +15,5 @@
         android:textAlignment="center"
         android:text="@string/default_string"
         />
+
 </android.support.constraint.ConstraintLayout>

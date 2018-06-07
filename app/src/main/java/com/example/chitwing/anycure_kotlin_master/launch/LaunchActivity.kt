@@ -6,6 +6,7 @@ import com.example.chitwing.anycure_kotlin_master.MainActivity
 import com.example.chitwing.anycure_kotlin_master.R
 import com.example.chitwing.anycure_kotlin_master.activity.BaseActivity
 import com.example.chitwing.anycure_kotlin_master.activity.LoginActivity
+import com.example.chitwing.anycure_kotlin_master.activity.RecipeActivity
 import com.example.chitwing.anycure_kotlin_master.database.DBHelper
 import com.example.chitwing.anycure_kotlin_master.model.Login
 
@@ -27,13 +28,15 @@ class LaunchActivity : BaseActivity() {
     private fun createIntent(arg :Boolean):Intent{
         when (arg){
             true -> return Intent(this,LoginActivity ::class.java)
-            false -> return Intent(this,MainActivity ::class.java)
+            false -> return Intent(this, RecipeActivity ::class.java)
         }
     }
 
 
     override fun onResume() {
         super.onResume()
+
+        this.window.setBackgroundDrawableResource(R.mipmap.launch)
         Thread.sleep(1000)
         enterDisplay()
     }

@@ -1,5 +1,7 @@
 package com.example.chitwing.anycure_kotlin_master.ble
 
+import java.util.*
+
 /***********************************************************
  * 版权所有,2018,Chitwing.
  * Copyright(C),2018,Chitwing co. LTD.All rights reserved.
@@ -18,15 +20,15 @@ class CWGattAttributes {
         /**
          * 服务uuid
          */
-        val sUUID = "6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
+        val sUUID = UUID.fromString("6E400001-B5A3-F393-E0A9-E50E24DCCA9E")
         /**
          * 广播uuid
          */
-        val notifyUUID =  "6E400003-B5A3-F393-E0A9-E50E24DCCA9E"
+        val notifyUUID = UUID.fromString("6E400003-B5A3-F393-E0A9-E50E24DCCA9E")
         /**
          * 写入uuid
          * */
-        val writeUUID = "6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
+        val writeUUID = UUID.fromString("6E400002-B5A3-F393-E0A9-E50E24DCCA9E")
     }
 
 }

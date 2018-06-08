@@ -1,9 +1,6 @@
 package com.example.chitwing.anycure_kotlin_master.ble
 
-import android.app.Activity
-import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothDevice
-import android.bluetooth.BluetoothManager
+import android.bluetooth.*
 import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanFilter
 import android.bluetooth.le.ScanResult
@@ -15,9 +12,7 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.ParcelUuid
 import android.util.Log
-import com.example.chitwing.anycure_kotlin_master.activity.BaseActivity
 import com.example.chitwing.anycure_kotlin_master.app.MyApp
-import java.util.*
 
 /***********************************************************
  * 版权所有,2018,Chitwing.
@@ -43,8 +38,8 @@ object  CWBleManager {
     /**
     * 保存外接设备类
     * */
-    val mDevices = mutableListOf<CWDevice>()
-
+    val mCWDevices = mutableListOf<CWDevice>()
+    val mDevices = mutableListOf<BluetoothDevice>()
     /**
      *
      */
@@ -72,7 +67,6 @@ object  CWBleManager {
 
     /*蓝牙开始扫描*/
     fun startScan(){
-
         val context = MyApp.getApp()
         val filter = IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED)
         context.registerReceiver(mBluetoothReceiver,filter)
@@ -95,20 +89,24 @@ object  CWBleManager {
             return
         }
 
-//        mBleAdapter!!.startLeScan(bleAdapterCallback)
         scanDevice()
     }
 
 
+    /**
+     * 开始扫描设备
+     * */
     private fun scanDevice(){
         val scanner = mBleAdapter!!.bluetoothLeScanner
-        val uuid = UUID.fromString(CWGattAttributes.sUUID)
-        val pUUID = ParcelUuid(uuid)
+        val pUUID = ParcelUuid(CWGattAttributes.sUUID)
         val tFilter = ScanFilter.Builder().setServiceUuid(pUUID).build()
         val settings = ScanSettings.Builder().setScanMode(ScanSettings.SCAN_MODE_LOW_POWER).build()
         scanner.startScan(listOf(tFilter),settings, mScannerCallback)
     }
 
+    /**
+     * 停止扫描设备
+     * */
     private fun stopScanDevice(){
         val scanner = mBleAdapter!!.bluetoothLeScanner
         scanner.stopScan(mScannerCallback)
@@ -124,11 +122,11 @@ object  CWBleManager {
             super.onScanResult(callbackType, result)
 
             result?.let {
-                val cw = CWDevice(it.device)
-                if (!mDevices.contains(cw)){
-                    mDevices.add(cw)
-                    Log.e(tag,"设备${cw.device.name}")
+                if (!mDevices.contains(it.device)){
+                    mDevices.add(it.device)
+                    it.device.connectGatt(MyApp.getApp(),false,mGattCallback)
                     stopScanDevice()
+                    Log.e(tag,"设备${it.device.name}")
                 }
             }
         }
@@ -140,12 +138,62 @@ object  CWBleManager {
     }
 
 
+    private val mGattCallback = object :BluetoothGattCallback (){
+
+        /**
+         * 特征改变
+         * */
+        override fun onCharacteristicChanged(gatt: BluetoothGatt?, characteristic: BluetoothGattCharacteristic?) {
+            super.onCharacteristicChanged(gatt, characteristic)
+            Log.d(tag,"特征改变")
+        }
+
+        /**
+         * 蓝牙链接状态
+        * */
+        override fun onConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int) {
+            super.onConnectionStateChange(gatt, status, newState)
+            when(status){
+                BluetoothGatt.GATT_SUCCESS -> {
+                    Log.d(tag,"gatt处理完成")
+                    when(newState){
+                        BluetoothGatt.STATE_CONNECTED ->{
+                            Log.d(tag,"链接成功2")
+
+                            gatt!!.discoverServices()
+                        }
+                        BluetoothGatt.STATE_DISCONNECTED -> {
+                            Log.d(tag,"断开链接")
+                            gatt?.close()
+                        }
+                        else -> {
+
+                        }
+                    }
+                }
+                else -> {
+                    Log.d(tag,"gatt不知道啥状态")
+                }
+            }
+        }
+
+        override fun onServicesDiscovered(gatt: BluetoothGatt?, status: Int) {
+            super.onServicesDiscovered(gatt, status)
+            gatt?.let {
+                Log.d(tag,"gatt:$it")
+            }
+        }
+
+    }
 
     private val bleAdapterCallback = object :BluetoothAdapter.LeScanCallback {
         override fun onLeScan(device: BluetoothDevice?, rssi: Int, scanRecord: ByteArray?) {
             Log.e(tag,"扫描蓝牙:${device!!.address} rssi:$rssi")
         }
+
     }
+
+
 
     private fun checkBluetoothSupport(context: Context,bluetoothAdapter: BluetoothAdapter?): Boolean {
         if (bluetoothAdapter == null) {

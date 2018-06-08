@@ -13,6 +13,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
      override protected fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+         initView()
     }
 
     override fun onDestroy() {
@@ -20,4 +21,5 @@ abstract class BaseActivity : AppCompatActivity() {
         Log.d(tag,"销毁$this")
     }
 
+    abstract fun initView()
 }

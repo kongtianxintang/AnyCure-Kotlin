@@ -17,6 +17,12 @@
     </string>
 
 
-
+    <!--button 默认文字-->
     <string name="default_button">默认文字</string>
+
+    <!--底部栏-->
+    <string name="item_first">处方</string>
+    <string name="item_second">理疗</string>
+    <string name="item_third">商城</string>
+    <string name="item_four">个人</string>
 </resources>

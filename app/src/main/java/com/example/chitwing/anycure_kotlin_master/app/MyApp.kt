@@ -24,6 +24,8 @@ class MyApp :Application() {
 
     companion object {
         val Tag: String = "AnyCure-Kotlin"
+        private var instance:MyApp? = null
+        fun getApp() = instance!!
     }
 
     lateinit var boxStore: BoxStore
@@ -31,8 +33,12 @@ class MyApp :Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        instance = this
+
         boxStore = MyObjectBox.builder().androidContext(this).build()
         Log.d(Tag, "启动app")
     }
+
 
 }

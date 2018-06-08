@@ -59,6 +59,10 @@ class LoginActivity : BaseActivity(), LoaderCallbacks<Cursor> {
         email_sign_in_button.setOnClickListener { attemptLogin() }
     }
 
+    override fun initView() {
+
+    }
+
     private fun populateAutoComplete() {
         if (!mayRequestContacts()) {
             return

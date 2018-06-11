@@ -29,6 +29,10 @@ import com.example.chitwing.anycure_kotlin_master.app.MyApp
 object  CWBleManager {
 
     private val tag = "蓝牙管理类"
+    /**
+     * 基础配置:1.渠道号 2.可用性
+     * */
+    val configure = CWConfigure()
     /**蓝牙状态 可否使用*/
     private var mStatusCallback:CWBleStatusInterface? = null
     /**蓝牙管理*/
@@ -98,7 +102,7 @@ object  CWBleManager {
      * */
     private fun scanDevice(){
         val scanner = mBleAdapter!!.bluetoothLeScanner
-        val pUUID = ParcelUuid(CWGattAttributes.sUUID)
+        val pUUID = ParcelUuid(CWGattAttributes.CW_SERVICE_UUID)
         val tFilter = ScanFilter.Builder().setServiceUuid(pUUID).build()
         val settings = ScanSettings.Builder().setScanMode(ScanSettings.SCAN_MODE_LOW_POWER).build()
         scanner.startScan(listOf(tFilter),settings, mScannerCallback)
@@ -112,6 +116,9 @@ object  CWBleManager {
         scanner.stopScan(mScannerCallback)
     }
 
+    /**
+     * 扫描回调
+     * */
     private val mScannerCallback = object :ScanCallback(){
         override fun onBatchScanResults(results: MutableList<ScanResult>?) {
             super.onBatchScanResults(results)
@@ -123,10 +130,12 @@ object  CWBleManager {
 
             result?.let {
                 if (!mDevices.contains(it.device)){
-                    mDevices.add(it.device)
-                    it.device.connectGatt(MyApp.getApp(),false,mGattCallback)
-                    stopScanDevice()
-                    Log.e(tag,"设备${it.device.name}")
+                    if (it.device.name.contains("4B7B")){
+                        mDevices.add(it.device)
+                        it.device.connectGatt(MyApp.getApp(),false,mGattCallback)
+                        stopScanDevice()
+                        Log.e(tag,"设备${it.device.name}")
+                    }
                 }
             }
         }
@@ -138,14 +147,22 @@ object  CWBleManager {
     }
 
 
+    /**
+     * 数据交互回调
+     * */
     private val mGattCallback = object :BluetoothGattCallback (){
 
         /**
          * 特征改变
+         * 获取到外接设备发回到值
          * */
         override fun onCharacteristicChanged(gatt: BluetoothGatt?, characteristic: BluetoothGattCharacteristic?) {
             super.onCharacteristicChanged(gatt, characteristic)
             Log.d(tag,"特征改变")
+            val cw = mCWDevices.find { it.gatt == gatt }
+            cw?.let {
+                it.gattRead.handleData(characteristic?.value)
+            }
         }
 
         /**
@@ -159,12 +176,22 @@ object  CWBleManager {
                     when(newState){
                         BluetoothGatt.STATE_CONNECTED ->{
                             Log.d(tag,"链接成功2")
-
-                            gatt!!.discoverServices()
+                            gatt?.let {
+                                it.discoverServices()
+                                /**保存自定义的外接设备*/
+                                val cw = CWDevice(it.device,it)
+                                mCWDevices.add(cw)
+                            }
                         }
                         BluetoothGatt.STATE_DISCONNECTED -> {
                             Log.d(tag,"断开链接")
-                            gatt?.close()
+                            val e = mCWDevices.find {  it.gatt == gatt!! }
+                            e?.let {
+                                it.removeSelf()
+                                mDevices.remove(it.device)
+                                gatt?.close()
+                            }
+
                         }
                         else -> {
 
@@ -172,25 +199,70 @@ object  CWBleManager {
                     }
                 }
                 else -> {
-                    Log.d(tag,"gatt不知道啥状态")
+                    Log.d(tag,"gatt不知道啥状态$status")
+                    gatt?.close()
                 }
             }
         }
 
+        /**
+         * 发现服务
+         * */
         override fun onServicesDiscovered(gatt: BluetoothGatt?, status: Int) {
             super.onServicesDiscovered(gatt, status)
             gatt?.let {
-                Log.d(tag,"gatt:$it")
+                it.services.forEach {
+                    Log.d(tag,"服务-${it.uuid}")
+                }
+                val service = it.getService(CWGattAttributes.CW_SERVICE_UUID)
+                val character = service.getCharacteristic(CWGattAttributes.CW_notifyUUID)
+                Log.d(tag,"服务:${service.uuid}")
+                Log.d(tag,"特征值:${character.uuid}")
+                it.setCharacteristicNotification(character!!,true)
+                character.descriptors.forEach {
+                    it.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
+                    val isWrite = gatt.writeDescriptor(it)
+                    Log.d(tag,"desc写入:$isWrite desc的uuid:${it.uuid}")
+                }
             }
         }
 
+        override fun onDescriptorWrite(gatt: BluetoothGatt?, descriptor: BluetoothGattDescriptor?, status: Int) {
+            super.onDescriptorWrite(gatt, descriptor, status)
+            Log.d(tag,"descriptor写入$status")
+            val cw = mCWDevices.find { it.gatt == gatt }
+            cw?.writeData()
+        }
+
+        override fun onDescriptorRead(gatt: BluetoothGatt?, descriptor: BluetoothGattDescriptor?, status: Int) {
+            super.onDescriptorRead(gatt, descriptor, status)
+            Log.d(tag,"descriptor读取$status")
+        }
+
+        override fun onCharacteristicRead(gatt: BluetoothGatt?, characteristic: BluetoothGattCharacteristic?, status: Int) {
+            super.onCharacteristicRead(gatt, characteristic, status)
+            Log.d(tag,"特征值读取:${characteristic?.value}")
+        }
+
+        override fun onCharacteristicWrite(gatt: BluetoothGatt?, characteristic: BluetoothGattCharacteristic?, status: Int) {
+            super.onCharacteristicWrite(gatt, characteristic, status)
+            Log.d(tag,"特征值写入:${characteristic?.value}")
+//            val cw = mCWDevices.find { it.gatt == gatt }
+//            cw?.gattRead?.handleData(characteristic?.value)
+        }
+
+        override fun onReadRemoteRssi(gatt: BluetoothGatt?, rssi: Int, status: Int) {
+            super.onReadRemoteRssi(gatt, rssi, status)
+            Log.d(tag,"信号量:$rssi")
+        }
+
     }
+
 
     private val bleAdapterCallback = object :BluetoothAdapter.LeScanCallback {
         override fun onLeScan(device: BluetoothDevice?, rssi: Int, scanRecord: ByteArray?) {
             Log.e(tag,"扫描蓝牙:${device!!.address} rssi:$rssi")
         }
-
     }
 
 

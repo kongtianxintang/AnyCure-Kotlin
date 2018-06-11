@@ -20,15 +20,16 @@ class CWGattAttributes {
         /**
          * 服务uuid
          */
-        val sUUID = UUID.fromString("6E400001-B5A3-F393-E0A9-E50E24DCCA9E")
+        val CW_SERVICE_UUID:UUID? = UUID.fromString("6E400001-B5A3-F393-E0A9-E50E24DCCA9E")
         /**
          * 广播uuid
          */
-        val notifyUUID = UUID.fromString("6E400003-B5A3-F393-E0A9-E50E24DCCA9E")
+        val CW_notifyUUID:UUID? = UUID.fromString("6E400003-B5A3-F393-E0A9-E50E24DCCA9E")
         /**
-         * 写入uuid
+         * 写入uuid 特征值
          * */
-        val writeUUID = UUID.fromString("6E400002-B5A3-F393-E0A9-E50E24DCCA9E")
+        val CW_CHARACTER_writeUUID:UUID? = UUID.fromString("6E400002-B5A3-F393-E0A9-E50E24DCCA9E")
     }
+
 
 }

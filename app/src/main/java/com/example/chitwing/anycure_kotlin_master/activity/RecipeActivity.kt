@@ -21,11 +21,6 @@ class RecipeActivity : BaseActivity() {
 
     override fun initView() {
         initBle()
-        val list:MutableList<Int> = mutableListOf()
-        list.add(2)
-        list.add(4)
-        list.forEach { Log.d(tag,"数字:$it") }
-
     }
 
     private fun initBle(){

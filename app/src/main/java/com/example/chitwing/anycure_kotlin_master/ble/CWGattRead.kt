@@ -22,7 +22,7 @@ class CWGattRead(b:CWGattReadInterface) :CWGattReadInterface by b{
     fun handleData(list:ByteArray?){
         val first = list?.first()?.toInt()
         first?.let {
-            when(it){
+            when(it and 0xff){
                 /**
                  * 设备发过来到信息(除去0xab)
                  * */

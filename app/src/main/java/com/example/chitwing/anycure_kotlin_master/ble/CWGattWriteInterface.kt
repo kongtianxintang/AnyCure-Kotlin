@@ -13,5 +13,5 @@ package com.example.chitwing.anycure_kotlin_master.ble
  * Reason:
  *************************************************************/
 interface CWGattWriteInterface {
-    fun cwGattWriteData(list:ByteArray)
+    fun cwGattWriteData(list:List<Int>)
 }

@@ -1,5 +1,6 @@
 package com.example.chitwing.anycure_kotlin_master.ble
 
+import android.util.Log
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -75,8 +76,9 @@ enum class CWChannel {
         val n1 = (n + 45) % 256
 
         val subs = NUM_CODE.map {
-            val s = it.toInt()
-            return@map s xor n
+            val str = it.toString()
+            val t = str.toInt()
+            return@map t xor n
         }
 
         val result = subs.reduce { total, next -> total + next }

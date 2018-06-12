@@ -219,6 +219,7 @@ object  CWBleManager {
                 Log.d(tag,"服务:${service.uuid}")
                 Log.d(tag,"特征值:${character.uuid}")
                 it.setCharacteristicNotification(character!!,true)
+
                 character.descriptors.forEach {
                     it.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
                     val isWrite = gatt.writeDescriptor(it)
@@ -247,8 +248,10 @@ object  CWBleManager {
         override fun onCharacteristicWrite(gatt: BluetoothGatt?, characteristic: BluetoothGattCharacteristic?, status: Int) {
             super.onCharacteristicWrite(gatt, characteristic, status)
             Log.d(tag,"特征值写入:${characteristic?.value}")
-//            val cw = mCWDevices.find { it.gatt == gatt }
-//            cw?.gattRead?.handleData(characteristic?.value)
+            val cw = mCWDevices.find { it.gatt == gatt }
+            characteristic?.value?.let {
+                cw?.readCharacteristicData(it)
+            }
         }
 
         override fun onReadRemoteRssi(gatt: BluetoothGatt?, rssi: Int, status: Int) {

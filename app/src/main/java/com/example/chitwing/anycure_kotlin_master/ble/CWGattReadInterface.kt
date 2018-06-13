@@ -80,7 +80,7 @@ interface CWGattReadInterface {
      * - extension1: 扩展电极1状态
      * - extension2: 扩展电极2状态
      * */
-    fun cwrBleElectrodeQueryCallback(extensionIsInsert:Boolean,main:Int,extension1:Int,extension2:Int)
+    fun cwBleElectrodeQueryCallback(extensionIsInsert:Boolean,main:Int,extension1:Int,extension2:Int)
 
     /**
      * 硬件主动发送的电极贴合信息

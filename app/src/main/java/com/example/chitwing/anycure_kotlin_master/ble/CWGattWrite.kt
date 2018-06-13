@@ -1,5 +1,6 @@
 package com.example.chitwing.anycure_kotlin_master.ble
 
+import android.content.Context
 import android.os.AsyncTask
 import android.os.Handler
 import android.util.Log
@@ -91,22 +92,8 @@ class CWGattWrite(b:CWGattWriteInterface) :CWGattWriteInterface by b {
         val n2 = n + 6
         val n3 = n + 8
 
-        val datas = mutableListOf(0xec, 0x12)
-        datas.add(n)
-        datas.add(f1)
-        datas.add(f0)
-        datas.add(n1)
-        datas.add(f2)
-        datas.add(n2)
-        datas.add(c1)
-        datas.add(f3)
-        datas.add(n3)
-        datas.add(f4)
-        datas.add(f5)
-        datas.add(f6)
-        datas.add(f7)
-
-        cwGattWriteData(datas)
+        val data = listOf(0xec, 0x12,n,f1,f0,n1,f2,n2,c1,f3,n3,f4,f5,f6,f7)
+        cwGattWriteData(data)
     }
 
     /**
@@ -114,6 +101,30 @@ class CWGattWrite(b:CWGattWriteInterface) :CWGattWriteInterface by b {
      * */
     fun cwBleWriteQueryRangeMap(){
         val data  = listOf(0xad,0x01)
+        cwGattWriteData(data)
+    }
+
+    /**
+     * 写入幅度映射表
+     * todo:未验证～请做测试
+     * */
+    fun cwBleWriteRangeMapContent(index: Int){
+        val content = CWBleManager.configure.channel.rangeMap
+        val max = content.count() / 16
+        if (index >= max){
+            return
+        }
+        val subs = content.subList(index * 16,(index + 1) * 16)
+        val data = mutableListOf(0xad,0x02,index)
+        data.addAll(subs)
+        cwGattWriteData(data)
+    }
+
+    /**
+     *更新硬件设备的幅度映射表
+     * */
+    fun cwBleWriteToUpdateRangeMap(){
+        val data = listOf(0xad,0x03)
         cwGattWriteData(data)
     }
 
@@ -135,14 +146,39 @@ class CWGattWrite(b:CWGattWriteInterface) :CWGattWriteInterface by b {
         val content = mutableListOf(0xab,0x00,contentIndex)
         content.addAll(subs)
         cwGattWriteData(content)
-
     }
+
+
     /**
-    * 加载处方
-    * */
-    fun cwBleWriteLoadingRecipe(){
-        val commands = listOf(0xaa, 0x06, 0x01)
-        cwGattWriteData(commands)
+     * 停止输出
+     * */
+    fun cwBleWriteStopCure(){
+        val data = listOf(0xaa,0x00)
+    }
+
+    /**
+     * 开始输出
+     * */
+    fun cwBleWriteStartCure(){
+        val data = listOf(0xaa,0x01)
+        cwGattWriteData(data)
+    }
+
+    /**
+     * 选择设备
+     * 0x00 为取消 0x01为选择
+     * */
+    fun cwBleWriteSelectDevice(value: Int){
+        val data = listOf(0xaa,0x02,value)
+        cwGattWriteData(data)
+    }
+
+    /**
+     * 调节强度
+     * */
+    fun cwBleWriteIntensity(value: Int){
+        val data = listOf(0xaa,0x03,value)
+        cwGattWriteData(data)
     }
 
     /**
@@ -154,41 +190,36 @@ class CWGattWrite(b:CWGattWriteInterface) :CWGattWriteInterface by b {
         cwGattWriteData(subs)
     }
 
-
-
-    private var writeTask:WriteContentTask? = null
-
     /**
-     * 异步线程写入处方内容
+     * 加载处方
      * */
-    inner class WriteContentTask internal constructor(private val index: Int,private val recipeContent:List<Int>) : AsyncTask<Void, Void, Boolean>(){
-        override fun doInBackground(vararg params: Void): Boolean? {
-            val max = recipeContent.count() / 12 - 1
-
-            for (i in 0 .. max){
-                var contentIndex = i + 1
-                if (i == max){
-                    contentIndex = 0x00
-                }
-                val subs = recipeContent.subList(i * 12,(i + 1) * 12)
-                val content = mutableListOf(0xab,0x00,contentIndex)
-                content.addAll(subs)
-                Thread.sleep(50)
-                cwGattWriteData(content)
-            }
-            return true
-        }
-
-
-        override fun onPostExecute(success: Boolean?) {
-            writeTask = null
-        }
-
-        override fun onCancelled() {
-            writeTask = null
-        }
+    fun cwBleWriteLoadingRecipe(){
+        val commands = listOf(0xaa, 0x06, 0x01)
+        cwGattWriteData(commands)
     }
 
+    /**
+     *电极贴状态查询
+     * */
+    fun cwBleWriteElectrodeQuery(){
+        val data = listOf(0xaa,0x07)
+        cwGattWriteData(data)
+    }
 
+    /**
+     *电疗查询
+     * */
+    fun cwBleWriteBatteryPowerQuery(){
+        val data = listOf(0xaa,0x0b)
+        cwGattWriteData(data)
+    }
+
+    /**
+     * 设备信息查询
+     * */
+    fun cwBleWriteDeviceStatusQuery(){
+        val data = listOf(0xaa,0x12)
+        cwGattWriteData(data)
+    }
 
 }

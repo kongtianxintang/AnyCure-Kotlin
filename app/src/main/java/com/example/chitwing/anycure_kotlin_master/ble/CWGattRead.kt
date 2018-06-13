@@ -1,6 +1,7 @@
 package com.example.chitwing.anycure_kotlin_master.ble
 
 import android.util.Log
+import kotlin.experimental.and
 
 /***********************************************************
  * 版权所有,2018,Chitwing.
@@ -83,15 +84,19 @@ class CWGattRead(b:CWGattReadInterface) :CWGattReadInterface by b{
         when(command){
             0x00 -> {
                 desc = "停止输出"
+                softwareStopOutputCallback(list)
             }
             0x01 ->{
                 desc = "开始输出"
+                softwareStartOutputCallback(list)
             }
             0x02 -> {
                 desc = "选择设备"
+                softwareSelectDevice(list)
             }
             0x03 -> {
                 desc = "调节强度"
+                softwareSetIntensity(list)
             }
             0x04 -> {
                 desc = "输出模式"
@@ -106,15 +111,18 @@ class CWGattRead(b:CWGattReadInterface) :CWGattReadInterface by b{
             }
             0x07 -> {
                 desc = "电极贴贴合状态查询"
+                softwareElectrodeQuery(list)
             }
             0x08 -> {
                 desc = "电极贴贴合状态 设备主动通知"
+                hardwareElectrodeNotify(list)
             }
             0x09 -> {
                 desc = "未知指令:09"
             }
             0x0a -> {
                 desc = "播放完成通知 设备主动通知"
+                hardwarePlayComplete(list)
             }
             0x0b -> {
                 desc = "电池电量查询 设备主动通知"
@@ -122,21 +130,27 @@ class CWGattRead(b:CWGattReadInterface) :CWGattReadInterface by b{
             }
             0x0d -> {
                 desc = "扩展电极状态 设备主动通知"
+                hardwareExtensionElectrodeNotify(list)
             }
             0x10 -> {
                 desc = "电极强度 设备主动通知"
+                hardwareIntensityNotify(list)
             }
             0x11 -> {
                 desc = "输出开始or暂停 设备主动通知"
+                hardwareOutputNotify(list)
             }
             0x12 -> {
                 desc = "设备状态信息获取"
+                softwareQueryDeviceInfo(list)
             }
             0x16 -> {
                 desc = "设备按钮锁定or解除"
+                softwareLockDeviceButton(list)
             }
             0x17 -> {
                 desc = "手动解除按钮锁 设备主动通知"
+                hardwareUnlockDeviceButton(list)
             }
             else -> {
                 desc =  "默认指令:未知->" + "$command"
@@ -257,7 +271,7 @@ class CWGattRead(b:CWGattReadInterface) :CWGattReadInterface by b{
      * 处方加载
      * */
     private fun deviceDataRecipeLoading(list: ByteArray){
-        val dur = list[2].toInt() + list[3].toInt() * 256
+        val dur = list[2].toInt() and 0xff + list[3] * 256
         val flag = list[4].toInt() == 1
         cwBleRecipeLoadingCallback(flag,dur)
         Log.d(tag,"处方是否有效:$flag ,处方时长:$dur")
@@ -271,6 +285,132 @@ class CWGattRead(b:CWGattReadInterface) :CWGattReadInterface by b{
         cwBleSetOutputSchemeCallback(true)
     }
 
+    /**
+    * 停止输出
+    * */
+    private fun softwareStopOutputCallback(list: ByteArray){
+        cwBleSoftwareStopCureCallback(true)
+    }
+    /**
+     * 开始输出
+     * */
+    private fun softwareStartOutputCallback(list: ByteArray){
+        cwBleSoftwareStartCureCallback(true)
+    }
+    /**
+     * 选择设备
+     * */
+    private fun softwareSelectDevice(list: ByteArray){
+        cwBleSelectDeviceCallback(true)
+    }
+    /**
+     * 调节强度
+     * */
+    private fun softwareSetIntensity(list: ByteArray){
+        cwBleSetIntensityCallback(true)
+    }
+    /**
+     * 电极贴贴合 软件状态查询
+     * */
+    private fun softwareElectrodeQuery(list: ByteArray){
+        if (list.count() > 5){
+            val isInsert = list[2].toInt() == 1//0未插入 1插入
+            val main = list[3].toInt()//电极贴贴合
+            val e1 = list[4].toInt()
+            val e2 = list[5].toInt()
+            Log.d(tag,"软件 电极贴贴合状态查询 贴合:$main")
+            cwBleElectrodeQueryCallback(isInsert,main,e1,e2)
+        }
+    }
+    /**
+     * 电极贴贴合状态 设备主动通知
+     * */
+    private fun hardwareElectrodeNotify(list: ByteArray){
+        if (list.count() > 6){
+            val isInsert = list[2].toInt() == 1//0未插入 1插入
+            val main = list[3].toInt()//电极贴贴合
+            val e1 = list[4].toInt()
+            val e2 = list[5].toInt()
+            val isClose = list[6].toInt() == 1//0正常工作 1即将关机
+            Log.d(tag,"硬件 电极贴贴合状态通知 关机位:$isClose 贴合位:$main")
+            cwBleElectrodeNotify(isClose,isInsert,main,e1,e2)
+        }
+    }
+    /**
+     * 播放完成通知 设备主动通知
+     * */
+    private fun hardwarePlayComplete(list: ByteArray){
+        if (list.count() > 2){
+            val flag = list[2].toInt() == 1
+            Log.d(tag,"播放完成通知:$flag")
+            cwBlePlayCompleteNotify(flag)
+        }
+    }
+    /**
+     * 扩展电极状态 设备主动通知
+     * */
+    private fun hardwareExtensionElectrodeNotify(list: ByteArray){
+        if (list.count() > 2){
+            val flag = list[2].toInt() == 1
+            Log.d(tag,"扩展电极状态通知:$flag")
+            cwBleExtensionElectrodeInsertNotify(flag)
+        }
+    }
+    /**
+     * 电极强度 设备主动通知
+     * */
+    private fun hardwareIntensityNotify(list: ByteArray){
+        if (list.count() > 2){
+            val value = list[2].toInt()
+            Log.d(tag,"电极强度通知:$value")
+            cwBleIntensityNotify(value)
+        }
+    }
+    /**
+     * 输出开始 or 暂停 设备主动通知
+     * */
+    private fun hardwareOutputNotify(list: ByteArray) {
+        if (list.count() > 2){
+            val flag = list[2].toInt() == 1//0暂停 1开始
+            Log.d(tag,"硬件 输出开始or暂停通知$flag")
+            cwBleCureStatusNotify(flag)
+        }
+    }
+    /**
+     * 设备状态信息获取
+     * */
+    private fun softwareQueryDeviceInfo(list: ByteArray){
+        if (list.count() <= 6){
+            return
+        }
+        val isPlay = list[2].toInt() == 1//0 暂停 1 播放
+        val intensity = list[3].toInt()
+        val recipeId = list[4].toInt()
+        val dur = list[5].toInt() and 0xff * 256 + list[6].toInt() and 0xff
+        Log.d(tag,"设备信息 播放状态:$isPlay -- 强度:$intensity -- 处方id：$recipeId -- 播放时间:$dur")
+        cwBleDeviceStatusQueryCallback(isPlay,intensity,recipeId,dur)
+    }
+    /**
+     * 设备按钮锁定 or 解除
+     * */
+    private fun softwareLockDeviceButton(list: ByteArray){
+        if (list.count() > 2) {
+            val flag = list[2].toInt() == 1
+            Log.d(tag,"设备按钮锁定 or 解除:$flag")
+            cwBleLockDeviceButtonCallback(flag)
+        }
+    }
+
+    /**
+     * 手动解除按钮锁 设备主动通知
+     * */
+    private fun hardwareUnlockDeviceButton(list: ByteArray){
+        if (list.count() > 2){
+            val flag = list[2].toInt() == 1
+            Log.d(tag,"手动解除按钮锁 设备主动通知:$flag")
+            cwBleUnlockDeviceButtonNotify(flag)
+        }
+    }
 
 
 

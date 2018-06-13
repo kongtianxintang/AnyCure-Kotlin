@@ -4,6 +4,7 @@ package com.example.chitwing.anycure_kotlin_master.activity
 import android.bluetooth.BluetoothAdapter
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.widget.RecyclerView
 import android.util.Log
 import com.example.chitwing.anycure_kotlin_master.R
 import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
@@ -13,6 +14,10 @@ import com.example.chitwing.anycure_kotlin_master.ble.CWBleStatusInterface
 class RecipeActivity : BaseActivity() {
 
 
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var layoutManager: RecyclerView.LayoutManager
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recipe)
@@ -20,7 +25,11 @@ class RecipeActivity : BaseActivity() {
 
 
     override fun initView() {
-        initBle()
+
+    }
+
+    override fun fetchData() {
+
     }
 
     private fun initBle(){
@@ -50,5 +59,7 @@ class RecipeActivity : BaseActivity() {
             Log.d(tag,"请求开启蓝牙回调$requestCode,result:$resultCode")
         }
     }
+
+    private val dataSet:List<String>  = List(50,{i -> "位置哦$i"})
 
 }

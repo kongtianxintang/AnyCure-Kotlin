@@ -16,7 +16,7 @@ import android.util.Log
  * Modifier:
  * Reason:
  *************************************************************/
-data class CWDevice (private val mDevice:BluetoothDevice,private val mGatt:BluetoothGatt):CWGattReadInterface,CWGattWriteInterface{
+data class CWDevice ( val mDevice:BluetoothDevice, val mGatt:BluetoothGatt):CWGattReadInterface,CWGattWriteInterface{
 
     private val tag = "CWDevice"
 

@@ -63,6 +63,10 @@ class LoginActivity : BaseActivity(), LoaderCallbacks<Cursor> {
 
     }
 
+    override fun fetchData() {
+
+    }
+
     private fun populateAutoComplete() {
         if (!mayRequestContacts()) {
             return

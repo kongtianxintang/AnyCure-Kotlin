@@ -159,7 +159,7 @@ object  CWBleManager {
         override fun onCharacteristicChanged(gatt: BluetoothGatt?, characteristic: BluetoothGattCharacteristic?) {
             super.onCharacteristicChanged(gatt, characteristic)
             Log.d(tag,"特征改变")
-            val cw = mCWDevices.find { it.gatt == gatt }
+            val cw = mCWDevices.find { it.mGatt == gatt }
             cw?.let {
                 it.gattRead.handleData(characteristic?.value)
             }
@@ -185,10 +185,10 @@ object  CWBleManager {
                         }
                         BluetoothGatt.STATE_DISCONNECTED -> {
                             Log.d(tag,"断开链接")
-                            val e = mCWDevices.find {  it.gatt == gatt!! }
+                            val e = mCWDevices.find {  it.mGatt == gatt }
                             e?.let {
                                 it.removeSelf()
-                                mDevices.remove(it.device)
+                                mDevices.remove(it.mDevice)
                                 gatt?.close()
                             }
 
@@ -231,7 +231,7 @@ object  CWBleManager {
         override fun onDescriptorWrite(gatt: BluetoothGatt?, descriptor: BluetoothGattDescriptor?, status: Int) {
             super.onDescriptorWrite(gatt, descriptor, status)
             Log.d(tag,"descriptor写入$status")
-            val cw = mCWDevices.find { it.gatt == gatt }
+            val cw = mCWDevices.find { it.mGatt == gatt }
             cw?.writeData()
         }
 
@@ -248,7 +248,7 @@ object  CWBleManager {
         override fun onCharacteristicWrite(gatt: BluetoothGatt?, characteristic: BluetoothGattCharacteristic?, status: Int) {
             super.onCharacteristicWrite(gatt, characteristic, status)
             Log.d(tag,"特征值写入:${characteristic?.value}")
-            val cw = mCWDevices.find { it.gatt == gatt }
+            val cw = mCWDevices.find { it.mGatt == gatt }
             characteristic?.value?.let {
                 cw?.readCharacteristicData(it)
             }

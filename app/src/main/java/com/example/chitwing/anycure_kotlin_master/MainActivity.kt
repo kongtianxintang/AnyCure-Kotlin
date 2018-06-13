@@ -14,5 +14,9 @@ class MainActivity : BaseActivity() {
 
     }
 
+    override fun fetchData() {
+
+    }
+
 
 }

@@ -2,12 +2,11 @@ package com.example.chitwing.anycure_kotlin_master.launch
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import com.example.chitwing.anycure_kotlin_master.MainActivity
 import com.example.chitwing.anycure_kotlin_master.R
 import com.example.chitwing.anycure_kotlin_master.activity.BaseActivity
 import com.example.chitwing.anycure_kotlin_master.activity.LoginActivity
 import com.example.chitwing.anycure_kotlin_master.activity.RecipeActivity
+import com.example.chitwing.anycure_kotlin_master.activity.recipe.PingAnActivity
 import com.example.chitwing.anycure_kotlin_master.database.DBHelper
 import com.example.chitwing.anycure_kotlin_master.model.Login
 
@@ -29,10 +28,13 @@ class LaunchActivity : BaseActivity() {
 
     }
 
+    override fun fetchData() {
+    }
+
     private fun createIntent(arg :Boolean):Intent{
         when (arg){
             true -> return Intent(this,LoginActivity ::class.java)
-            else -> return Intent(this,RecipeActivity ::class.java)
+            else -> return Intent(this, PingAnActivity ::class.java)
         }
     }
 

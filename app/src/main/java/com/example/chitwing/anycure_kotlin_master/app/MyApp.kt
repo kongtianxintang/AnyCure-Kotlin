@@ -5,6 +5,7 @@ import android.content.Context
 import android.nfc.Tag
 import android.os.AsyncTask
 import android.util.Log
+import com.bumptech.glide.annotation.GlideModule
 import com.example.chitwing.anycure_kotlin_master.model.MyObjectBox
 import io.objectbox.BoxStore
 
@@ -38,6 +39,7 @@ class MyApp :Application() {
 
         boxStore = MyObjectBox.builder().androidContext(this).build()
         Log.d(Tag, "启动app")
+
     }
 
 

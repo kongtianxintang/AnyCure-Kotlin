@@ -1,12 +1,16 @@
 package com.example.chitwing.anycure_kotlin_master.activity.recipe
 
+import android.app.Activity
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import com.example.chitwing.anycure_kotlin_master.R
+import com.example.chitwing.anycure_kotlin_master.model.Recipe
+import com.example.chitwing.anycure_kotlin_master.network.NetRequest
+import com.example.chitwing.anycure_kotlin_master.unit.loader
 
 /***********************************************************
  * 版权所有,2018,Chitwing.
@@ -20,29 +24,43 @@ import com.example.chitwing.anycure_kotlin_master.R
  * Modifier:
  * Reason:
  *************************************************************/
-class PingAnAdapter (private val dataSet:List<String>) : RecyclerView.Adapter<PingAnAdapter.ViewHolder>() {
+class PingAnAdapter (private val dataSet:List<Recipe>?, private val context:Activity) : RecyclerView.Adapter<PingAnAdapter.ViewHolder>() {
 
     private val tag = "RecipeAdapter"
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(parent.context)
                 .inflate(R.layout.recipe_item, parent, false)
-        Log.d(tag,"创建视图～～")
         return ViewHolder(v)
     }
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = dataSet[position]
-        holder.mTextView?.text = item
+        val item = dataSet!![position]
+        holder.mTextView.text = item.recipeName
+        holder.mDesc.text = item.recipeUse
+        item.recipeIcon?.let {
+            val path = NetRequest.IMAGE_BASE_PATH + it
+            holder.mImg.loader(context,path)
+        }
     }
 
-    override fun getItemCount() = dataSet.count()
+
+    override fun getItemCount(): Int {
+        dataSet?.let {
+            return it.count()
+        }
+        return 0
+    }
 
     class ViewHolder(v: View):RecyclerView.ViewHolder(v) {
-        var mTextView: TextView? = null
+        val mTextView:TextView
+        val mImg:ImageView
+        val mDesc:TextView
         init {
-            mTextView = v.findViewById(R.id.textView)
+            mTextView = v.findViewById(R.id.recipe_item_title)
+            mImg = v.findViewById(R.id.recipe_item_img)
+            mDesc = v.findViewById(R.id.recipe_item_desc)
         }
     }
 

@@ -23,10 +23,15 @@ import java.util.concurrent.TimeUnit
  *************************************************************/
 object NetRequest {
 
+
+    private val CW_HOST_IP = "http://ancure.mayable.com.cn/"
+
+    val IMAGE_BASE_PATH = CW_HOST_IP + "uploadfile/"
+
     private val gson = Gson();
     private val client = OkHttpClient.Builder().readTimeout(15, TimeUnit.SECONDS).connectTimeout(15, TimeUnit.SECONDS).build();
     private val retro = Retrofit.Builder()
-            .baseUrl("http://ancure.mayable.com.cn/")
+            .baseUrl(CW_HOST_IP)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(client)
             .build();

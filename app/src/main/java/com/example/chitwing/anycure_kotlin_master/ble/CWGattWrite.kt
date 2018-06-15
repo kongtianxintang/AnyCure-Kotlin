@@ -154,6 +154,7 @@ class CWGattWrite(b:CWGattWriteInterface) :CWGattWriteInterface by b {
      * */
     fun cwBleWriteStopCure(){
         val data = listOf(0xaa,0x00)
+        cwGattWriteData(data)
     }
 
     /**

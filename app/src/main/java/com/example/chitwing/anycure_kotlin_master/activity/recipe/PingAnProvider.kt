@@ -1,6 +1,7 @@
 package com.example.chitwing.anycure_kotlin_master.activity.recipe
 
 import android.content.Context
+import android.os.Looper
 import android.util.Log
 import com.example.chitwing.anycure_kotlin_master.base.CWBaseProvider
 import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
@@ -8,9 +9,15 @@ import com.example.chitwing.anycure_kotlin_master.database.DBHelper
 import com.example.chitwing.anycure_kotlin_master.model.Recipe
 import com.example.chitwing.anycure_kotlin_master.network.NetRequest
 import com.example.chitwing.anycure_kotlin_master.unit.showToast
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.experimental.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.concurrent.Delayed
+import kotlin.coroutines.experimental.buildSequence
 
 /***********************************************************
  * 版权所有,2018,Chitwing.
@@ -29,6 +36,8 @@ class PingAnProvider(private val context: PingAnActivity) : CWBaseProvider(conte
     private val tag = "PingAnProvider"
 
     override fun fetchDataSource() {
+
+        testT()
 
         if(!context.mRefresh.isRefreshing){
             context.mRefresh.isRefreshing = true
@@ -68,5 +77,43 @@ class PingAnProvider(private val context: PingAnActivity) : CWBaseProvider(conte
         DBHelper.removeAll(context,Recipe ::class.java)
         DBHelper.insert(context,list,Recipe::class.java)
     }
+
+    /**
+     * 测试协程
+     * */
+    private fun testT(){
+       val job = launch(CommonPool){
+            delay(20)
+           for (i in 0 .. 20){
+               Log.e(tag,"我也不知道啥～$i")
+           }
+           Log.e(tag,"当前线程${Thread.currentThread()}")
+        }
+        job.start()
+        Log.e(tag,"哈哈")
+        val job2 = launch(CommonPool) {
+            delay(20)
+            for (i in 0 .. 5){
+                Log.e(tag,"我也不知道啥222～$i")
+            }
+            Log.e(tag,"当前线程${Thread.currentThread()}")
+        }
+        job2.start()
+
+        val job3 = launch(CommonPool) {
+            delay(20)
+            for (i in 0 .. 10){
+                Log.e(tag,"我也不知道啥33～$i")
+            }
+            Log.e(tag,"当前线程${Thread.currentThread()}")
+            Log.e(tag,"主线程${Looper.getMainLooper().getThread()}")
+        }
+        job3.start()
+
+
+    }
+
+
+
 
 }

@@ -7,4 +7,9 @@
     
     <!--tab bar height-->
     <dimen name="bottom_navigation_view_height">56dp</dimen>
+
+
+    <!--圆角-->
+    <dimen name="default_shape_radius">16dp</dimen>
+
 </resources>

@@ -4,6 +4,7 @@ import android.content.Context
 import android.widget.ImageView
 import android.widget.Toast
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.chitwing.anycure_kotlin_master.R
 
@@ -29,6 +30,15 @@ class Unit {
  * */
 fun ImageView.loader(context: Context, url:String?){
     val options = RequestOptions().placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_foreground)
+    Glide.with(context).load(url).apply(options).into(this)
+}
+/**
+* 扩展imageView 切圆角
+ * radius 圆角
+* */
+fun ImageView.loadRadius(context: Context,url: String?,radius:Int){
+    val corners = RoundedCorners(radius)
+    val options = RequestOptions().placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_foreground).transform(corners)
     Glide.with(context).load(url).apply(options).into(this)
 }
 

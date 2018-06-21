@@ -24,22 +24,28 @@ import java.util.concurrent.TimeUnit
 object NetRequest {
 
 
+    /**
+     * 主机地址
+     * */
     private val CW_HOST_IP = "http://ancure.mayable.com.cn/"
 
+    /**
+     * 图片url前缀
+     * */
     val IMAGE_BASE_PATH = CW_HOST_IP + "uploadfile/"
 
-    private val gson = Gson();
+    private val gson = Gson()
     private val client = OkHttpClient.Builder().readTimeout(15, TimeUnit.SECONDS).connectTimeout(15, TimeUnit.SECONDS).build();
     private val retro = Retrofit.Builder()
             .baseUrl(CW_HOST_IP)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(client)
-            .build();
-    private var api = retro.create(NetApi ::class.java)
+            .build()
+    private val api = retro.create(NetApi ::class.java)
 
     fun loginAction(map: Map<String,String>) : Call<Login> {
         val body = createPair(map)
-        return api.loginAction(body);
+        return api.loginAction(body)
     }
 
     fun fetchRecipeAction(map: Map<String, String>) : Call<List<Recipe>> {
@@ -48,8 +54,8 @@ object NetRequest {
     }
 
     private fun createPair(map: Map<String, String>) :Map<String,String>{
-        val json = gson.toJson(map);
-        val body = mapOf("data" to json);
-        return body;
+        val json = gson.toJson(map)
+        val body = mapOf("data" to json)
+        return body
     }
 }

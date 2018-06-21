@@ -5,8 +5,10 @@ import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
+import android.view.View
 import com.example.chitwing.anycure_kotlin_master.R
 import com.example.chitwing.anycure_kotlin_master.activity.BaseActivity
+import com.example.chitwing.anycure_kotlin_master.base.CWOnItemClickListener
 import com.example.chitwing.anycure_kotlin_master.database.DBHelper
 import com.example.chitwing.anycure_kotlin_master.model.Recipe
 
@@ -57,6 +59,12 @@ class PingAnActivity : BaseActivity() {
         }
 
         mAdapter = PingAnAdapter(mDataSet,this)
+
+        mAdapter!!.onItemClickListenner = object : CWOnItemClickListener {
+            override fun onItemClick(view: View, position: Int) {
+                Log.e(tag,"点击事件 view->$view,\n位置->$position")
+            }
+        }
 
         mRecyclerView.adapter = mAdapter
 

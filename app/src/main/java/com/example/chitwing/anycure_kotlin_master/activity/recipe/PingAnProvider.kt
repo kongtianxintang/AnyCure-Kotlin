@@ -83,16 +83,13 @@ class PingAnProvider(private val context: PingAnActivity) : CWBaseProvider(conte
      * */
     private fun testT(){
        val job = launch(CommonPool){
-            delay(20)
            for (i in 0 .. 20){
                Log.e(tag,"我也不知道啥～$i")
            }
            Log.e(tag,"当前线程${Thread.currentThread()}")
         }
         job.start()
-        Log.e(tag,"哈哈")
         val job2 = launch(CommonPool) {
-            delay(20)
             for (i in 0 .. 5){
                 Log.e(tag,"我也不知道啥222～$i")
             }
@@ -101,12 +98,11 @@ class PingAnProvider(private val context: PingAnActivity) : CWBaseProvider(conte
         job2.start()
 
         val job3 = launch(CommonPool) {
-            delay(20)
             for (i in 0 .. 10){
                 Log.e(tag,"我也不知道啥33～$i")
             }
             Log.e(tag,"当前线程${Thread.currentThread()}")
-            Log.e(tag,"主线程${Looper.getMainLooper().getThread()}")
+            Log.e(tag,"主线程${Looper.getMainLooper().thread}")
         }
         job3.start()
 

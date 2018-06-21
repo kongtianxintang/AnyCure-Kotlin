@@ -8,8 +8,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.chitwing.anycure_kotlin_master.R
+import com.example.chitwing.anycure_kotlin_master.base.CWOnItemClickListener
 import com.example.chitwing.anycure_kotlin_master.model.Recipe
 import com.example.chitwing.anycure_kotlin_master.network.NetRequest
+import com.example.chitwing.anycure_kotlin_master.unit.loadRadius
 import com.example.chitwing.anycure_kotlin_master.unit.loader
 
 /***********************************************************
@@ -28,6 +30,11 @@ class PingAnAdapter (private val dataSet:List<Recipe>?, private val context:Acti
 
     private val tag = "RecipeAdapter"
 
+    /**
+     * 点击事件
+     * */
+    var onItemClickListenner:CWOnItemClickListener? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(parent.context)
                 .inflate(R.layout.recipe_item, parent, false)
@@ -41,7 +48,13 @@ class PingAnAdapter (private val dataSet:List<Recipe>?, private val context:Acti
         holder.mDesc.text = item.recipeUse
         item.recipeIcon?.let {
             val path = NetRequest.IMAGE_BASE_PATH + it
-            holder.mImg.loader(context,path)
+            holder.mImg.loadRadius(context,path,10)
+        }
+
+        holder.itemView.setOnClickListener {
+            if (onItemClickListenner != null){
+                onItemClickListenner!!.onItemClick(holder.itemView,position)
+            }
         }
     }
 
@@ -52,6 +65,7 @@ class PingAnAdapter (private val dataSet:List<Recipe>?, private val context:Acti
         }
         return 0
     }
+
 
     class ViewHolder(v: View):RecyclerView.ViewHolder(v) {
         val mTextView:TextView

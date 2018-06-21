@@ -3,7 +3,10 @@
     android:id="@+id/recipe_constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="4dp"
+    android:paddingStart="4dp"
+    android:paddingEnd="4dp"
+    android:paddingTop="4dp"
+    android:paddingBottom="0dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
@@ -24,6 +27,7 @@
         android:id="@+id/recipe_item_title"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toRightOf="@id/recipe_item_img"
+        android:layout_marginStart="@dimen/default_margin_left"
         android:text="@string/default_title"
         />
     <TextView
@@ -33,6 +37,7 @@
         app:layout_constraintTop_toBottomOf="@id/recipe_item_title"
         app:layout_constraintLeft_toRightOf="@id/recipe_item_img"
         app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginStart="@dimen/default_margin_left"
         android:text="@string/default_desc"
         />
 

@@ -29,4 +29,8 @@
     <string name="item_second">理疗</string>
     <string name="item_third">商城</string>
     <string name="item_four">个人</string>
+
+    <!--绑定-->
+    <string name="un_bind">解绑</string>
+    <string name="bind">绑定</string>
 </resources>

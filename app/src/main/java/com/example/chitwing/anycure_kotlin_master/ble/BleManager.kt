@@ -35,6 +35,10 @@ object  CWBleManager {
     val configure = CWConfigure()
     /**蓝牙状态 可否使用*/
     private var mStatusCallback:CWBleStatusInterface? = null
+    /**
+     * 扫描发现到的设备
+     * */
+    private var mScanCallback:CWScanCallback? = null
     /**蓝牙管理*/
     private var mBleManager:BluetoothManager? = null
     /** 蓝牙适配器 */
@@ -45,10 +49,16 @@ object  CWBleManager {
     val mCWDevices = mutableListOf<CWDevice>()
     val mDevices = mutableListOf<BluetoothDevice>()
     /**
-     *
+     *设置蓝牙状态回调
      */
     fun setStatusCallback(statusCallback:CWBleStatusInterface) {
         mStatusCallback = statusCallback
+    }
+    /**
+     * 设置发现设备回调
+     * */
+    fun setScanCallback(callback: CWScanCallback){
+        mScanCallback = callback
     }
 
     /**
@@ -77,7 +87,7 @@ object  CWBleManager {
 
         if (mStatusCallback == null) {
             Log.e(tag,"请设置回调")
-            return
+//            return
         }
 
         mBleManager = context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
@@ -111,7 +121,7 @@ object  CWBleManager {
     /**
      * 停止扫描设备
      * */
-    private fun stopScanDevice(){
+    fun stopScanDevice(){
         val scanner = mBleAdapter!!.bluetoothLeScanner
         scanner.stopScan(mScannerCallback)
     }
@@ -129,13 +139,8 @@ object  CWBleManager {
             super.onScanResult(callbackType, result)
 
             result?.let {
-                if (!mDevices.contains(it.device)){
-                    if (it.device.name.contains("4B7B")){
-                        mDevices.add(it.device)
-                        it.device.connectGatt(MyApp.getApp(),false,mGattCallback)
-                        stopScanDevice()
-                        Log.e(tag,"设备${it.device.name}")
-                    }
+                if (mScanCallback != null){
+                    mScanCallback!!.discoveryDevice(it.device)
                 }
             }
         }
@@ -145,6 +150,16 @@ object  CWBleManager {
             Log.d(tag,"Failed")
         }
     }
+
+    /**
+     * 去链接设备
+     * */
+    fun connect(device: BluetoothDevice){
+        device.connectGatt(MyApp.getApp(),false, mGattCallback)
+        mBleAdapter?.bondedDevices
+    }
+
+
 
 
     /**

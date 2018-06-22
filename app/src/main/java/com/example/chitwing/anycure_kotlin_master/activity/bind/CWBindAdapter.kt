@@ -2,14 +2,13 @@ package com.example.chitwing.anycure_kotlin_master.activity.bind
 
 import android.app.Activity
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
 import com.example.chitwing.anycure_kotlin_master.R
-import com.example.chitwing.anycure_kotlin_master.base.CWOnItemClickListener
 import com.example.chitwing.anycure_kotlin_master.model.BindDevice
 
 /***********************************************************
@@ -24,8 +23,9 @@ import com.example.chitwing.anycure_kotlin_master.model.BindDevice
  * Modifier:
  * Reason:
  *************************************************************/
-class CWBindAdapter(private val dataSet:List<BindDevice>?, private val context: Activity) :RecyclerView.Adapter<CWBindAdapter.ViewHolder>() {
+class CWBindAdapter(private val dataSet:List<BindDevice>?, private val context: BindActivity) :RecyclerView.Adapter<CWBindAdapter.ViewHolder>() {
 
+    private val tag = "CWBindAdapter"
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CWBindAdapter.ViewHolder {
         val v = LayoutInflater.from(parent.context)
@@ -40,7 +40,10 @@ class CWBindAdapter(private val dataSet:List<BindDevice>?, private val context: 
         val indexStr = "$position"
         holder.mName.text = "控制器$indexStr"
         holder.mButton.setOnClickListener {
-            //todo:点击解绑 删除
+            //todo:点击解绑 删除 从数据库删除
+            Log.e("zzz","解绑")
+            context.mDataSet.removeAt(position)
+            notifyDataSetChanged()
         }
     }
 
@@ -51,16 +54,14 @@ class CWBindAdapter(private val dataSet:List<BindDevice>?, private val context: 
         return  0
     }
 
+    override fun getItemViewType(position: Int): Int {
+        Log.d(tag,"type")
+        return super.getItemViewType(position)
+    }
+
     class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
-        val mMac: TextView
-        val mName: TextView
-        val mButton: Button
-
-        init {
-            mName = v.findViewById(R.id.bind_item_device_name)
-            mMac = v.findViewById(R.id.bind_item_device_mac)
-            mButton = v.findViewById(R.id.bind_item_device_button)
-        }
-
+        val mMac: TextView = v.findViewById(R.id.bind_item_device_mac)
+        val mName: TextView = v.findViewById(R.id.bind_item_device_name)
+        val mButton: Button = v.findViewById(R.id.bind_item_device_button)
     }
 }

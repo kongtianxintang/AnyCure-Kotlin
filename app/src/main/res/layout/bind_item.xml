@@ -6,15 +6,16 @@
 
     <ImageView
         android:id="@+id/bind_item_device_icon"
-        android:layout_width="88dp"
-        android:layout_height="88dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:src="@mipmap/device"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginTop="@dimen/default_margin_left"
         android:layout_marginBottom="@dimen/default_margin_left"
+        android:layout_marginStart="@dimen/default_margin_left"
         android:contentDescription="@string/default_desc"
-
         />
     <TextView
         android:id="@+id/bind_item_device_name"
@@ -36,15 +37,15 @@
         />
     <Button
         android:id="@+id/bind_item_device_button"
-        android:layout_width="88dp"
-        android:layout_height="88dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginEnd="@dimen/default_margin_right"
         android:text="@string/un_bind"
         android:background="@drawable/shape_corner"
         android:textColor="@color/white"
-        android:textSize="@dimen/default_button_text_size"
         />
 
 </android.support.constraint.ConstraintLayout>

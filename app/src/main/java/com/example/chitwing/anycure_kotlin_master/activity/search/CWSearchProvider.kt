@@ -1,5 +1,17 @@
 package com.example.chitwing.anycure_kotlin_master.activity.search
 
+import android.bluetooth.BluetoothDevice
+import android.util.Log
+import com.example.chitwing.anycure_kotlin_master.base.CWBaseProvider
+import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
+import com.example.chitwing.anycure_kotlin_master.ble.CWScanCallback
+import com.example.chitwing.anycure_kotlin_master.database.DBHelper
+import com.example.chitwing.anycure_kotlin_master.model.BindDevice
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.experimental.launch
+
 /***********************************************************
  * 版权所有,2018,Chitwing.
  * Copyright(C),2018,Chitwing co. LTD.All rights reserved.
@@ -12,5 +24,67 @@ package com.example.chitwing.anycure_kotlin_master.activity.search
  * Modifier:
  * Reason:
  *************************************************************/
-class CWSearchProvider {
+class CWSearchProvider(private val context: SearchActivity) :CWBaseProvider(context){
+
+    private val tag = "CWSearchProvider"
+    /**
+     * 是否在扫描
+     * */
+    private var mIsScan:Boolean = true
+    private var job: Job? = null
+    private val mBinds = mutableListOf<BindDevice>()
+
+    override fun fetchDataSource() {
+
+        val finds = DBHelper.findAll(context,BindDevice ::class.java)
+        finds?.let {
+            mBinds.addAll(it)
+        }
+
+        CWBleManager.setScanCallback(object : CWScanCallback{
+            override fun discoveryDevice(item: BluetoothDevice) {
+                if (!context.mDataSet.contains(item)){
+                    val cw = mBinds.find { it.mac == item.address }
+                    if (cw == null){
+                        context.mDataSet.add(item)
+                        context.mAdapter!!.notifyDataSetChanged()
+                    }
+                }
+            }
+        })
+
+        CWBleManager.startScan()
+        stopScan(15000)
+    }
+
+
+    fun bindSpecifyDevice(item:BluetoothDevice){
+        val bond = item.createBond()
+        if (bond){
+            val temp = BindDevice()
+            temp.mac = item.address
+            DBHelper.insert(context,temp,BindDevice::class.java)
+            context.finish()
+        }
+    }
+
+    fun finish(){
+        if (mIsScan){
+            CWBleManager.stopScanDevice()
+            job!!.cancel()
+            job = null
+        }
+        mIsScan = false
+    }
+
+    private fun stopScan(time:Int){
+        if (mIsScan){
+            job = launch(CommonPool) {
+                delay(time)
+                finish()
+            }
+            job!!.start()
+        }
+    }
+
 }

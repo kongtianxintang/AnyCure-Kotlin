@@ -1,6 +1,8 @@
 package com.example.chitwing.anycure_kotlin_master.activity.bind
 
 import com.example.chitwing.anycure_kotlin_master.base.CWBaseProvider
+import com.example.chitwing.anycure_kotlin_master.database.DBHelper
+import com.example.chitwing.anycure_kotlin_master.model.BindDevice
 
 /***********************************************************
  * 版权所有,2018,Chitwing.
@@ -17,6 +19,11 @@ import com.example.chitwing.anycure_kotlin_master.base.CWBaseProvider
 class CWBindProvider(private val context: BindActivity) : CWBaseProvider(context) {
 
     override fun fetchDataSource() {
-
+        val list = DBHelper.findAll(context,BindDevice ::class.java)
+        list?.let {
+            context.mDataSet.clear()
+            context.mDataSet.addAll(it)
+            context.mAdapter!!.notifyDataSetChanged()
+        }
     }
 }

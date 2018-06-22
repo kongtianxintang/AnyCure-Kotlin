@@ -1,5 +1,6 @@
 package com.example.chitwing.anycure_kotlin_master.activity.recipe
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
@@ -8,6 +9,7 @@ import android.util.Log
 import android.view.View
 import com.example.chitwing.anycure_kotlin_master.R
 import com.example.chitwing.anycure_kotlin_master.activity.BaseActivity
+import com.example.chitwing.anycure_kotlin_master.activity.bind.BindActivity
 import com.example.chitwing.anycure_kotlin_master.base.CWOnItemClickListener
 import com.example.chitwing.anycure_kotlin_master.database.DBHelper
 import com.example.chitwing.anycure_kotlin_master.model.Recipe
@@ -63,6 +65,8 @@ class PingAnActivity : BaseActivity() {
         mAdapter!!.onItemClickListenner = object : CWOnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
                 Log.e(tag,"点击事件 view->$view,\n位置->$position")
+                val intent = Intent(this@PingAnActivity,BindActivity ::class.java)
+                startActivity(intent)
             }
         }
 

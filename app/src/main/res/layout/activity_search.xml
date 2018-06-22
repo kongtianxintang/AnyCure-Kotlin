@@ -6,4 +6,13 @@
     android:layout_height="match_parent"
     tools:context="com.example.chitwing.anycure_kotlin_master.activity.search.SearchActivity">
 
+    <!--todo:需要页头-->
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/search_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </android.support.v7.widget.RecyclerView>
+
+
 </android.support.constraint.ConstraintLayout>

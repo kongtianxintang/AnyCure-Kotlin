@@ -122,9 +122,25 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "4:8543839204498169699",
+      "lastPropertyId": "2:3876066236154550085",
+      "name": "BindDevice",
+      "properties": [
+        {
+          "id": "1:7174069704909000782",
+          "name": "id"
+        },
+        {
+          "id": "2:3876066236154550085",
+          "name": "mac"
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "3:8538193856090455265",
+  "lastEntityId": "4:8543839204498169699",
   "lastIndexId": "0:0",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",

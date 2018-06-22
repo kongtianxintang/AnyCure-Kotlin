@@ -13,6 +13,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
      override protected fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
     }
 
     override fun onDestroy() {

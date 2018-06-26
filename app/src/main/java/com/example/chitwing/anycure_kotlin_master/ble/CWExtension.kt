@@ -1,6 +1,7 @@
 package com.example.chitwing.anycure_kotlin_master.ble
 
 import android.bluetooth.BluetoothDevice
+import android.util.Log
 
 /***********************************************************
  * 版权所有,2018,Chitwing.
@@ -26,4 +27,22 @@ fun BluetoothDevice.deviceType() :CWDeviceType {
         return CWDeviceType.New
     }
     return CWDeviceType.Old
+}
+
+/**
+ * 扩展 获取设备的渠道号
+ * */
+fun BluetoothDevice.channelCode() :String?{
+    val type = deviceType()
+    when(type){
+        CWDeviceType.Old -> {
+            return null
+        }
+        else -> {
+            if (name.length >= 8) {
+                return name.substring(4,8)
+            }
+            return null
+        }
+    }
 }

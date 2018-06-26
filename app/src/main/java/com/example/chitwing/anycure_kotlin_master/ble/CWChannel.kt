@@ -60,7 +60,7 @@ enum class CWChannel {
      * 渠道号 短
      * */
     val SHORT_NUM_CODE:String by lazy {
-        val str = NUM_CODE.substring(NUM_CODE.length,-4)
+        val str = NUM_CODE.substring(NUM_CODE.length - 4,NUM_CODE.length)
         return@lazy str
     }
 

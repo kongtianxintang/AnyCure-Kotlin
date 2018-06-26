@@ -1,6 +1,6 @@
-package com.example.chitwing.anycure_kotlin_master.activity.recipe
+package com.example.chitwing.anycure_kotlin_master.fragment.recipe
 
-import android.app.Activity
+import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -12,38 +12,38 @@ import com.example.chitwing.anycure_kotlin_master.base.CWOnItemClickListener
 import com.example.chitwing.anycure_kotlin_master.model.Recipe
 import com.example.chitwing.anycure_kotlin_master.network.NetRequest
 import com.example.chitwing.anycure_kotlin_master.unit.loadRadius
-import com.example.chitwing.anycure_kotlin_master.unit.loader
 
 /***********************************************************
  * 版权所有,2018,Chitwing.
  * Copyright(C),2018,Chitwing co. LTD.All rights reserved.
  * project:AnyCure-Kotlin
  * Author:chitwing
- * Date:  2018/6/13
+ * Date:  2018/6/26
  * QQ/Tel/Mail:383118832
  * Description:
  * Others:新手勿喷
  * Modifier:
  * Reason:
  *************************************************************/
-class PingAnAdapter (private val dataSet:List<Recipe>?, private val context:Activity) : RecyclerView.Adapter<PingAnAdapter.ViewHolder>() {
+class RecipeAdapter(private val dataSet:List<Recipe>,val context: Context) :RecyclerView.Adapter<RecipeAdapter.ViewHolder>(){
+
 
     private val tag = "RecipeAdapter"
 
     /**
      * 点击事件
      * */
-    var onItemClickListenner:CWOnItemClickListener? = null
+    var onItemClickListenner: CWOnItemClickListener? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeAdapter.ViewHolder {
         val v = LayoutInflater.from(parent.context)
                 .inflate(R.layout.recipe_item, parent, false)
-        return ViewHolder(v)
+        return RecipeAdapter.ViewHolder(v)
     }
 
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = dataSet!![position]
+    override fun onBindViewHolder(holder: RecipeAdapter.ViewHolder, position: Int) {
+        val item = dataSet[position]
         holder.mTextView.text = item.recipeName
         holder.mDesc.text = item.recipeUse
         item.recipeIcon?.let {
@@ -60,22 +60,13 @@ class PingAnAdapter (private val dataSet:List<Recipe>?, private val context:Acti
 
 
     override fun getItemCount(): Int {
-        dataSet?.let {
-            return it.count()
-        }
-        return 0
+        return dataSet.size
     }
 
 
-    class ViewHolder(v: View):RecyclerView.ViewHolder(v) {
-        val mTextView:TextView
-        val mImg:ImageView
-        val mDesc:TextView
-        init {
-            mTextView = v.findViewById(R.id.recipe_item_title)
-            mImg = v.findViewById(R.id.recipe_item_img)
-            mDesc = v.findViewById(R.id.recipe_item_desc)
-        }
+    class ViewHolder(v: View): RecyclerView.ViewHolder(v) {
+        val mTextView: TextView = v.findViewById(R.id.recipe_item_title)
+        val mImg: ImageView = v.findViewById(R.id.recipe_item_img)
+        val mDesc: TextView = v.findViewById(R.id.recipe_item_desc)
     }
-
 }

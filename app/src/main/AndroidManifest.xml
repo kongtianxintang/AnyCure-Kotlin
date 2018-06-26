@@ -32,12 +32,9 @@
         <activity
             android:name=".activity.LoginActivity"
             android:label="@string/title_activity_login" />
-        <activity android:name=".activity.RecipeActivity" />
-        <activity android:name=".cwModule.pRecipe.PARecipe" />
-        <activity android:name=".cwModule.recipe.PaRecipeActivity" />
-        <activity android:name=".activity.recipe.PingAnActivity" />
         <activity android:name=".activity.bind.BindActivity" />
-        <activity android:name=".activity.search.SearchActivity"></activity>
+        <activity android:name=".activity.search.SearchActivity" />
+
     </application>
 
 </manifest>

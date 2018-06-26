@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/action_search"
-              android:title="@string/item_first"
-              android:icon="@drawable/ic_launcher_background"/>
-    <item android:id="@+id/action_settings"
-              android:title="@string/item_second"
-              android:icon="@drawable/ic_launcher_background" />
-    <item android:id="@+id/action_navigation"
-              android:title="@string/item_third"
-              android:icon="@drawable/ic_launcher_background"
+    <item android:id="@+id/action_recipe"
+              android:title="@string/item_recipe"
+              android:icon="@mipmap/recipe_normal"/>
+    <item android:id="@+id/action_cure"
+              android:title="@string/item_cure"
+              android:icon="@mipmap/cure_normal" />
+    <item android:id="@+id/action_mall"
+              android:title="@string/item_mall"
+              android:icon="@mipmap/mall_normal"
         />
     <item android:id="@+id/action_mine"
-        android:title="@string/item_four"
-        android:icon="@drawable/ic_launcher_background"/>
+        android:title="@string/item_mine"
+        android:icon="@mipmap/mine_normal"/>
 </menu>

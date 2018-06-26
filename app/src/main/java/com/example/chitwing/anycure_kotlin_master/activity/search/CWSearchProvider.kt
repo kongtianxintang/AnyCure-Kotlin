@@ -4,9 +4,12 @@ import android.bluetooth.BluetoothDevice
 import android.util.Log
 import com.example.chitwing.anycure_kotlin_master.base.CWBaseProvider
 import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
+import com.example.chitwing.anycure_kotlin_master.ble.CWBleStatus
+import com.example.chitwing.anycure_kotlin_master.ble.CWBleStatusInterface
 import com.example.chitwing.anycure_kotlin_master.ble.CWScanCallback
 import com.example.chitwing.anycure_kotlin_master.database.DBHelper
 import com.example.chitwing.anycure_kotlin_master.model.BindDevice
+import com.example.chitwing.anycure_kotlin_master.unit.showToast
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.delay
@@ -36,10 +39,13 @@ class CWSearchProvider(private val context: SearchActivity) :CWBaseProvider(cont
 
     override fun fetchDataSource() {
 
-        val finds = DBHelper.findAll(context,BindDevice ::class.java)
+        val finds = DBHelper.findAll(BindDevice ::class.java)
         finds?.let {
             mBinds.addAll(it)
         }
+
+
+        CWBleManager.setStatusCallback(bleStatusCallback)
 
         CWBleManager.setScanCallback(object : CWScanCallback{
             override fun discoveryDevice(item: BluetoothDevice) {
@@ -53,18 +59,76 @@ class CWSearchProvider(private val context: SearchActivity) :CWBaseProvider(cont
             }
         })
 
+        startScan()
+    }
+
+
+    private val bleStatusCallback = object : CWBleStatusInterface{
+        override fun bleStatus(arg: CWBleStatus) {
+            when(arg){
+                CWBleStatus.Disable -> {
+                    context.showToast("设备蓝牙不可用，请打开蓝牙")
+                }
+
+                CWBleStatus.DisSupport -> {
+                    context.showToast("设备不支持蓝牙")
+                }
+
+                CWBleStatus.Support -> {
+
+                }
+
+                CWBleStatus.Able -> {
+
+                }
+
+                CWBleStatus.Discover -> {
+
+                }
+
+                CWBleStatus.BeginScan -> {
+
+                }
+
+                CWBleStatus.StopScan -> {
+
+                }
+
+                CWBleStatus.ON -> {
+
+                }
+
+                CWBleStatus.OFF -> {
+
+                }
+            }
+        }
+    }
+
+    private fun startScan(){
         CWBleManager.startScan()
         stopScan(15000)
     }
-
 
     fun bindSpecifyDevice(item:BluetoothDevice){
         val bond = item.createBond()
         if (bond){
             val temp = BindDevice()
             temp.mac = item.address
-            DBHelper.insert(context,temp,BindDevice::class.java)
+
+            DBHelper.insert(temp,BindDevice::class.java)
             context.finish()
+        }
+    }
+
+
+    private fun stopScan(time:Int){
+        if (mIsScan){
+            job = launch(CommonPool) {
+                delay(time)
+                finish()
+            }
+            job!!.start()
         }
     }
 
@@ -75,16 +139,6 @@ class CWSearchProvider(private val context: SearchActivity) :CWBaseProvider(cont
             job = null
         }
         mIsScan = false
-    }
-
-    private fun stopScan(time:Int){
-        if (mIsScan){
-            job = launch(CommonPool) {
-                delay(time)
-                finish()
-            }
-            job!!.start()
-        }
     }
 
 }

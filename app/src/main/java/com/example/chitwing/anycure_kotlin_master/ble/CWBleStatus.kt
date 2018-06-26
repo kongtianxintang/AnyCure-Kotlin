@@ -13,6 +13,8 @@ package com.example.chitwing.anycure_kotlin_master.ble
  * Reason:
  *************************************************************/
 enum class CWBleStatus{
+    ON,//打开蓝牙
+    OFF,//关闭蓝牙
     Support,//支持蓝牙
     DisSupport,//不支持蓝牙
     Disable,//不能使用

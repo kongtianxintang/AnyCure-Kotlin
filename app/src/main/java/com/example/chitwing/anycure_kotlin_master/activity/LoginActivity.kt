@@ -289,7 +289,7 @@ class LoginActivity : BaseActivity(), LoaderCallbacks<Cursor> {
 
         private fun insert(arg:Login){
             Log.d(tag,"登录成功")
-            DBHelper.insert(this@LoginActivity,arg,Login::class.java)
+            DBHelper.insert(arg,Login::class.java)
         }
 
         override fun onPostExecute(success: Boolean?) {

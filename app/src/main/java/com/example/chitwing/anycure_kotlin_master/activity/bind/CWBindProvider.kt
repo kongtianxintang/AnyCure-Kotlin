@@ -19,7 +19,7 @@ import com.example.chitwing.anycure_kotlin_master.model.BindDevice
 class CWBindProvider(private val context: BindActivity) : CWBaseProvider(context) {
 
     override fun fetchDataSource() {
-        val list = DBHelper.findAll(context,BindDevice ::class.java)
+        val list = DBHelper.findAll(BindDevice ::class.java)
         list?.let {
             context.mDataSet.clear()
             context.mDataSet.addAll(it)

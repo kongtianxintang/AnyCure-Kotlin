@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import com.example.chitwing.anycure_kotlin_master.R
+import com.example.chitwing.anycure_kotlin_master.database.DBHelper
 import com.example.chitwing.anycure_kotlin_master.model.BindDevice
 
 /***********************************************************
@@ -40,8 +41,12 @@ class CWBindAdapter(private val dataSet:List<BindDevice>?, private val context: 
         val indexStr = "$position"
         holder.mName.text = "控制器$indexStr"
         holder.mButton.setOnClickListener {
-            //todo:点击解绑 删除 从数据库删除
-            Log.e("zzz","解绑")
+           /**
+            * 删除数据库
+            * 删除源数据
+            * */
+            val temp = context.mDataSet[position]
+            DBHelper.remove(temp,BindDevice::class.java)
             context.mDataSet.removeAt(position)
             notifyDataSetChanged()
         }

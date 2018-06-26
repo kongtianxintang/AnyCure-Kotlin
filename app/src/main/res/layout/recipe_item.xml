@@ -5,11 +5,10 @@
     android:layout_height="wrap_content"
     android:paddingStart="4dp"
     android:paddingEnd="4dp"
-    android:paddingTop="4dp"
-    android:paddingBottom="0dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:background="@drawable/item_shadow"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
-
 
     <ImageView
         android:layout_width="75dp"

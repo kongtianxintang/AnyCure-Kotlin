@@ -25,12 +25,15 @@
     <string name="default_desc">默认描述</string>
 
     <!--底部栏-->
-    <string name="item_first">处方</string>
-    <string name="item_second">理疗</string>
-    <string name="item_third">商城</string>
-    <string name="item_four">个人</string>
+    <string name="item_recipe">处方</string>
+    <string name="item_cure">理疗</string>
+    <string name="item_mall">商城</string>
+    <string name="item_mine">个人</string>
 
     <!--绑定-->
     <string name="un_bind">解绑</string>
     <string name="bind">绑定</string>
+
+
+
 </resources>

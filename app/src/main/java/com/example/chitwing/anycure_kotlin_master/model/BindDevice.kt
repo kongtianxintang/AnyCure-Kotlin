@@ -17,14 +17,19 @@ import io.objectbox.annotation.Entity
 @Entity
 class BindDevice :BaseData() {
 
+
     var mac:String? = null
 
     override fun equals(other: Any?): Boolean {
         val t = other as? BindDevice
         t?.let {
-            return t.mac == mac
+            return it.mac == mac
         }
         return false
+    }
+
+    override fun hashCode(): Int {
+        return mac!!.hashCode()
     }
 
 }

@@ -87,7 +87,7 @@ object  CWBleManager {
 
         if (mStatusCallback == null) {
             Log.e(tag,"请设置回调")
-//            return
+            return
         }
 
         mBleManager = context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
@@ -140,9 +140,33 @@ object  CWBleManager {
 
             result?.let {
                 if (mScanCallback != null){
-                    mScanCallback!!.discoveryDevice(it.device)
+                    /**
+                     * 判断设备新旧
+                     * 旧的设备都可以链接
+                     * 新的设备则需要判断 client 与 设备为同一个渠道
+                     * */
+                    val code = it.device.channelCode()
+                    Log.e(tag,"设备名称${it.device.name} 渠道号:$code")
+                    val type = it.device.deviceType()
+                    when(type){
+                        CWDeviceType.Old -> {
+                            mScanCallback!!.discoveryDevice(it.device)
+                        }
+                        else -> {
+                            when(configure.channel){//如果为自己有渠道 则都可以链接
+                                CWChannel.ChitWing,CWChannel.ALL -> {
+                                    mScanCallback!!.discoveryDevice(it.device)
+                                }
+                                else -> {
+                                    if (code == configure.channel.SHORT_NUM_CODE){
+                                        mScanCallback!!.discoveryDevice(it.device)
+                                    }
+                                }
+                            }
+                        }
+                        }
+                    }
                 }
-            }
         }
 
         override fun onScanFailed(errorCode: Int) {
@@ -157,6 +181,7 @@ object  CWBleManager {
     fun connect(device: BluetoothDevice){
         device.connectGatt(MyApp.getApp(),false, mGattCallback)
         mBleAdapter?.bondedDevices
+        device.createBond()
     }
 
 

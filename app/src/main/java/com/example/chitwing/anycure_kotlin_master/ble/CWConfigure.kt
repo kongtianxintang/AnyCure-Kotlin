@@ -16,5 +16,4 @@ class CWConfigure {
 
     val channel:CWChannel = CWChannel.PingAn
 
-
 }

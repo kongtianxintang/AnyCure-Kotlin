@@ -20,5 +20,16 @@
         <item name="android:windowBackground">@drawable/splash_bg</item>
     </style>
 
+    <!--带push动画主题-->
+    <style name="AppTheme.Push" parent="AppTheme">
+        <item name="android:windowAnimationStyle">@style/MyWindowAnimTheme</item>
+    </style>
+    <style name="MyWindowAnimTheme">
+        <item name="android:activityOpenEnterAnimation">@anim/push_left_in</item>
+        <item name="android:activityOpenExitAnimation">@anim/push_left_out</item>
+        <item name="android:activityCloseEnterAnimation">@anim/push_right_in</item>
+        <item name="android:activityCloseExitAnimation">@anim/push_right_out</item>
+    </style>
+
 
 </resources>

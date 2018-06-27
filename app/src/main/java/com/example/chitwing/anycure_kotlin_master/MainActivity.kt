@@ -58,8 +58,6 @@ class MainActivity : BaseActivity() {
                 return@setOnNavigationItemSelectedListener false
             }
 
-            Log.e(tag,"选择的${mBottomNavView!!.selectedItemId} 当前的:${it.itemId}")
-
             val transaction = supportFragmentManager.beginTransaction()
             val showItem:BaseFragment
 

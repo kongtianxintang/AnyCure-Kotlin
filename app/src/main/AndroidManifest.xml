@@ -18,7 +18,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme.Push">
         <activity android:name=".MainActivity" />
         <activity
             android:name=".launch.LaunchActivity"
@@ -34,7 +34,7 @@
             android:label="@string/title_activity_login" />
         <activity android:name=".activity.bind.BindActivity" />
         <activity android:name=".activity.search.SearchActivity" />
-        <activity android:name=".activity.prepare.PrepareActivity"></activity>
+        <activity android:name=".activity.prepare.PrepareActivity"/>
     </application>
 
 </manifest>

@@ -52,9 +52,6 @@ class PrepareProvider(private val context: Context) :CWBaseProvider(context) {
      * 保存数据到数据库
      * */
     private fun saveData(list:List<PrepareHint>){
-        list.forEach {
-            Log.e(tag,"title->${it.title} content->${it.content}")
-        }
         DBHelper.removeAll(PrepareHint ::class.java)
         DBHelper.insert(list,PrepareHint::class.java)
     }

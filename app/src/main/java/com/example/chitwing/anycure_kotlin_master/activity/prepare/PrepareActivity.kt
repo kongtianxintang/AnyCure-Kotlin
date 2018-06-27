@@ -50,18 +50,15 @@ class PrepareActivity : BaseActivity() {
 
     private val tabListener = object :TabLayout.OnTabSelectedListener{
         override fun onTabReselected(tab: TabLayout.Tab?) {
-            Log.e(tag,"reselected position->${tab?.position}")
         }
 
         override fun onTabSelected(tab: TabLayout.Tab?) {
-            Log.e(tag,"selected position->${tab?.position}")
             tab?.let {
                 provider.switchTab(it.position)
             }
         }
 
         override fun onTabUnselected(tab: TabLayout.Tab?) {
-            Log.e(tag,"unselected position->${tab?.position}")
         }
     }
 

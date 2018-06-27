@@ -18,6 +18,9 @@
 
     <!--字体大小-->
     <dimen name="default_button_text_size">20sp</dimen>
+    <dimen name="text_view_size">15sp</dimen>
+
     <dimen name="text_margin">16dp</dimen>
+
 
 </resources>

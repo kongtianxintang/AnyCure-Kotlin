@@ -110,6 +110,9 @@ class MainActivity : BaseActivity() {
         transaction.add(R.id.linear_view,mRecipeFragment!!)
         transaction.show(mRecipeFragment!!)
         transaction.commit()
+        this.title = "处方"
+        val ac = supportActionBar
+        ac?.setDisplayHomeAsUpEnabled(false)
     }
 
 

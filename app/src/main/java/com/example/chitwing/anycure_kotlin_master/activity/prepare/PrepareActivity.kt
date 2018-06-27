@@ -2,6 +2,7 @@ package com.example.chitwing.anycure_kotlin_master.activity.prepare
 
 import android.os.Bundle
 import android.support.design.widget.TabLayout
+import android.support.v7.app.WindowDecorActionBar
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.widget.Button

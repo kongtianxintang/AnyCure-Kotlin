@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.util.Log
 import com.example.chitwing.anycure_kotlin_master.activity.BaseActivity
+import com.example.chitwing.anycure_kotlin_master.activity.prepare.PrepareProvider
 import com.example.chitwing.anycure_kotlin_master.fragment.BaseFragment
 import com.example.chitwing.anycure_kotlin_master.fragment.cure.CureFragment
 import com.example.chitwing.anycure_kotlin_master.fragment.mall.MallFragment
@@ -28,12 +29,25 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initView()
+        fetchData()
     }
 
     override fun initView() {
         mBottomNavView = findViewById(R.id.bottom_navigation)
         BottomNavigationViewHelper.disableShiftMode(mBottomNavView!!)
 
+        switchTab()
+
+        defaultData()
+    }
+
+    override fun fetchData() {
+
+        PrepareProvider(this).fetchDataSource()
+
+    }
+
+    private fun switchTab(){
         mBottomNavView!!.setOnNavigationItemSelectedListener {
             /**
              * 选择同样的fragment 不切换
@@ -46,48 +60,47 @@ class MainActivity : BaseActivity() {
 
             Log.e(tag,"选择的${mBottomNavView!!.selectedItemId} 当前的:${it.itemId}")
 
-            val current:Int
-            val future:Int
+            val transaction = supportFragmentManager.beginTransaction()
+            val showItem:BaseFragment
 
             when(futureItem){
                 R.id.action_mine -> {
-                    future = 3
+                    if (mMineFragment == null){
+                        mMineFragment = MineFragment()
+                        transaction.add(R.id.linear_view,mMineFragment!!)
+                    }
+                    showItem = mMineFragment!!
                 }
                 R.id.action_recipe -> {
-                    future = 0
+                    showItem = mRecipeFragment!!
                 }
                 R.id.action_cure -> {
-                    future = 1
+                    if (mCureFragment == null){
+                        mCureFragment = CureFragment()
+                        transaction.add(R.id.linear_view,mCureFragment!!)
+                    }
+                    showItem = mCureFragment!!
                 }
                 else -> {
-                    future = 2
+                    if (mMallFragment == null){
+                        mMallFragment = MallFragment()
+                        transaction.add(R.id.linear_view,mMallFragment!!)
+                    }
+                    showItem = mMallFragment!!
                 }
             }
 
-            when(currentItem){
-                R.id.action_mine -> {
-                    current = 3
-                }
-                R.id.action_recipe -> {
-                    current = 0
-                }
-                R.id.action_cure -> {
-                    current = 1
-                }
-                else -> {
-                    current = 2
-                }
+            val hideItem = when(currentItem) {
+                R.id.action_recipe ->  mRecipeFragment!!
+                R.id.action_cure ->  mCureFragment!!
+                R.id.action_mall ->  mMallFragment!!
+                else ->  mMineFragment!!
             }
-            switchTab(future,current)
+            transaction.hide(hideItem)
+            transaction.show(showItem)
+            transaction.commit()
             return@setOnNavigationItemSelectedListener true
         }
-
-        defaultData()
-
-    }
-
-    override fun fetchData() {
-
     }
 
     /**
@@ -101,56 +114,6 @@ class MainActivity : BaseActivity() {
         transaction.commit()
     }
 
-    /**
-     * 切换tab
-     * */
-    private fun switchTab(index:Int,current:Int){
-        val transaction = supportFragmentManager.beginTransaction()
-
-        val item:BaseFragment
-        val currentItem:BaseFragment
-        when(index){
-            0 -> {
-                if (mRecipeFragment == null){
-                    mRecipeFragment = RecipeFragment()
-                    transaction.add(R.id.linear_view,mRecipeFragment!!)
-                }
-                item = mRecipeFragment!!
-            }
-            1 -> {
-                if (mCureFragment == null){
-                    mCureFragment = CureFragment()
-                    transaction.add(R.id.linear_view,mCureFragment!!)
-                }
-                item = mCureFragment!!
-            }
-            2 -> {
-                if (mMallFragment == null){
-                    mMallFragment = MallFragment()
-                    transaction.add(R.id.linear_view,mMallFragment!!)
-                }
-                item = mMallFragment!!
-            }
-            else -> {
-                if (mMineFragment == null){
-                    mMineFragment = MineFragment()
-                    transaction.add(R.id.linear_view,mMineFragment!!)
-                }
-                item = mMineFragment!!
-            }
-        }
-
-        when(current){
-            0 -> currentItem = mRecipeFragment!!
-            1 -> currentItem = mCureFragment!!
-            2 -> currentItem = mMallFragment!!
-            else -> currentItem = mMineFragment!!
-        }
-
-        transaction.hide(currentItem)
-        transaction.show(item)
-        transaction.commit()
-    }
 
 
 

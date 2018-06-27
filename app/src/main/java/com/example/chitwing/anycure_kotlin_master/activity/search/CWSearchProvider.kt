@@ -29,7 +29,6 @@ import kotlinx.coroutines.experimental.launch
  *************************************************************/
 class CWSearchProvider(private val context: SearchActivity) :CWBaseProvider(context){
 
-    private val tag = "CWSearchProvider"
     /**
      * 是否在扫描
      * */

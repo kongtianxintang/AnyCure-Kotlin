@@ -1,5 +1,6 @@
 package com.example.chitwing.anycure_kotlin_master.fragment.recipe
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
@@ -9,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.chitwing.anycure_kotlin_master.R
+import com.example.chitwing.anycure_kotlin_master.activity.prepare.PrepareActivity
 import com.example.chitwing.anycure_kotlin_master.base.CWOnItemClickListener
 import com.example.chitwing.anycure_kotlin_master.database.DBHelper
 import com.example.chitwing.anycure_kotlin_master.fragment.BaseFragment
@@ -72,6 +74,9 @@ class RecipeFragment : BaseFragment() {
     private val onClickItemCallback = object : CWOnItemClickListener {
         override fun onItemClick(view: View, position: Int) {
             Log.e(fm_tag,"位置$position")
+            //todo:去准备页面
+            val intent = Intent(context, PrepareActivity ::class.java)
+            context!!.startActivity(intent)
         }
     }
 

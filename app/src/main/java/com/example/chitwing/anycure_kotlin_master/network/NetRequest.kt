@@ -1,6 +1,7 @@
 package com.example.chitwing.anycure_kotlin_master.network
 
 import com.example.chitwing.anycure_kotlin_master.model.Login
+import com.example.chitwing.anycure_kotlin_master.model.PrepareHint
 import com.example.chitwing.anycure_kotlin_master.model.Recipe
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
@@ -43,19 +44,35 @@ object NetRequest {
             .build()
     private val api = retro.create(NetApi ::class.java)
 
+    /**
+     * 登录
+     * */
     fun loginAction(map: Map<String,String>) : Call<Login> {
         val body = createPair(map)
         return api.loginAction(body)
     }
 
+    /**
+     * 获取处方
+     * */
     fun fetchRecipeAction(map: Map<String, String>) : Call<List<Recipe>> {
         val body = createPair(map)
         return api.fetchRecipeList(body)
     }
 
+    /**
+     * 获取准备页的提示内容
+     * */
+    fun prepareContentAction(map: Map<String, String>) :Call<List<PrepareHint>>{
+        val body = createPair(map)
+        return api.prepareContent(body)
+    }
+
+    /**
+     * 配置参数
+     * */
     private fun createPair(map: Map<String, String>) :Map<String,String>{
         val json = gson.toJson(map)
-        val body = mapOf("data" to json)
-        return body
+        return mapOf("data" to json)
     }
 }

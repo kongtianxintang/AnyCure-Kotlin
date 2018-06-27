@@ -1,6 +1,7 @@
 package com.example.chitwing.anycure_kotlin_master.network
 
 import com.example.chitwing.anycure_kotlin_master.model.Login
+import com.example.chitwing.anycure_kotlin_master.model.PrepareHint
 import com.example.chitwing.anycure_kotlin_master.model.Recipe
 import retrofit2.Call
 import retrofit2.http.FieldMap
@@ -20,18 +21,31 @@ import retrofit2.http.POST
  * Reason:
  *************************************************************/
 interface NetApi {
-    /*获取处方*/
+    /**
+     * 获取处方
+     * */
     @POST("/recipe/getrecipeinfo")
     @FormUrlEncoded
     fun fetchRecipeList(@FieldMap body:Map<String,String>): Call<List<Recipe>>
 
-    /*上传日志:其实是记录用户使用的处方*/
+    /**
+     * 上传日志:其实是记录用户使用的处方
+     * */
     @POST("/Log")
     @FormUrlEncoded
     fun userRecipeLog(@FieldMap body: Map<String, String>) : Call<Login>
 
-    /*登录*/
+    /**
+     * 登录
+     * */
     @POST("/Login/login")
     @FormUrlEncoded
     fun loginAction(@FieldMap body: Map<String, String>) : Call<Login>
+
+    /**
+     * 准备页 提示内容
+     * */
+    @POST("/recipe/promptInfo")
+    @FormUrlEncoded
+    fun prepareContent(@FieldMap body: Map<String, String>) :Call<List<PrepareHint>>
 }

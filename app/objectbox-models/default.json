@@ -138,9 +138,29 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "5:8417888934958215054",
+      "lastPropertyId": "3:3342145509967758711",
+      "name": "PrepareHint",
+      "properties": [
+        {
+          "id": "1:9081221305130792770",
+          "name": "id"
+        },
+        {
+          "id": "2:9163560276177059849",
+          "name": "title"
+        },
+        {
+          "id": "3:3342145509967758711",
+          "name": "content"
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "4:8543839204498169699",
+  "lastEntityId": "5:8417888934958215054",
   "lastIndexId": "0:0",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",

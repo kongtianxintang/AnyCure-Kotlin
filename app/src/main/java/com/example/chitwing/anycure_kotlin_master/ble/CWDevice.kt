@@ -151,7 +151,7 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
      * - extension2: 扩展电极2状态
      * */
     override fun cwBleElectrodeQueryCallback(extensionIsInsert:Boolean,main:Int,extension1:Int,extension2:Int){
-
+        mCallback?.transferMainElectrodeQuery(main,this)
     }
 
     /**
@@ -163,7 +163,7 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
      * - extension2: 扩展电极2状态
      * */
     override fun cwBleElectrodeNotify(isClose:Boolean,extensionIsInsert:Boolean,main:Int,extension1:Int,extension2:Int){
-
+        mCallback?.transferMainElectrodeNotify(main,this)
     }
 
     /**

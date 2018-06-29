@@ -19,7 +19,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.Push">
-        <activity android:name=".MainActivity" />
+        <activity android:name=".MainActivity" android:label="@string/main_title"/>
         <activity
             android:name=".launch.LaunchActivity"
             android:theme="@style/AppTheme.Launch">
@@ -32,9 +32,9 @@
         <activity
             android:name=".activity.LoginActivity"
             android:label="@string/title_activity_login" />
-        <activity android:name=".activity.bind.BindActivity" />
-        <activity android:name=".activity.search.SearchActivity" />
-        <activity android:name=".activity.prepare.PrepareActivity"/>
+        <activity android:name=".activity.bind.BindActivity" android:label="@string/bind_title"/>
+        <activity android:name=".activity.search.SearchActivity" android:label="@string/search_title"/>
+        <activity android:name=".activity.prepare.PrepareActivity" android:label="@string/prepare_title"/>
     </application>
 
 </manifest>

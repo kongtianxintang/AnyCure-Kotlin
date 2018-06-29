@@ -2,6 +2,7 @@ package com.example.chitwing.anycure_kotlin_master.launch
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import com.example.chitwing.anycure_kotlin_master.MainActivity
 import com.example.chitwing.anycure_kotlin_master.R
 import com.example.chitwing.anycure_kotlin_master.activity.BaseActivity
@@ -9,7 +10,7 @@ import com.example.chitwing.anycure_kotlin_master.activity.LoginActivity
 import com.example.chitwing.anycure_kotlin_master.database.DBHelper
 import com.example.chitwing.anycure_kotlin_master.model.Login
 
-class LaunchActivity : BaseActivity() {
+class LaunchActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,12 +24,6 @@ class LaunchActivity : BaseActivity() {
         finish()
     }
 
-    override fun initView() {
-
-    }
-
-    override fun fetchData() {
-    }
 
     private fun createIntent(arg :Boolean):Intent{
         when (arg){

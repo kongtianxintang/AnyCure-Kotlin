@@ -132,7 +132,7 @@ class BleDialog : DialogFragment() {
 
 
             when(arg){
-                CWBleStatus.Connect -> {
+                CWBleStatus.Able -> {
                     Log.e(tag,"已经连上了～～")
                     mCallback?.connectDevice()
                     onDismiss(null)

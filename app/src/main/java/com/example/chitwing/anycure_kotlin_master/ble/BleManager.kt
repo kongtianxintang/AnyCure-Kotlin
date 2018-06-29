@@ -287,8 +287,7 @@ object  CWBleManager {
         override fun onDescriptorWrite(gatt: BluetoothGatt?, descriptor: BluetoothGattDescriptor?, status: Int) {
             super.onDescriptorWrite(gatt, descriptor, status)
             Log.d(tag,"descriptor写入$status")
-            val cw = mCWDevices.find { it.mGatt == gatt }
-            cw?.writeData()
+            mStatusCallback?.bleStatus(CWBleStatus.Able)
         }
 
         override fun onDescriptorRead(gatt: BluetoothGatt?, descriptor: BluetoothGattDescriptor?, status: Int) {

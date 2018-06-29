@@ -57,7 +57,7 @@ interface CWDeviceInterface {
     /**
      * 播放时间
      * */
-    fun transferPlayDurmation(value: Int,item: CWDevice)
+    fun transferPlayDuration(value: Int,item: CWDevice)
 
     /**
      * 电极状态 设备主动通知

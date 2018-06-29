@@ -97,12 +97,11 @@ class PrepareProvider(private val context: Context) :CWBaseProvider(context) {
                 val ac = context as? PrepareActivity
                 ac?.let {
                     val item = mDataSet!![i]
-                    ac.content.text = item.getReplaceContent()
+                    it.content.text = item.getReplaceContent()
                 }
             }
         }
     }
-
 
 
 

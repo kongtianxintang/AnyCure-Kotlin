@@ -81,11 +81,4 @@ class BindActivity : BaseActivity() {
         }
     }
 
-    override fun finish() {
-        super.finish()
-        val last = CWBleManager.mCWDevices.last()
-        last?.let {
-            it.removeSelf()
-        }
-    }
 }

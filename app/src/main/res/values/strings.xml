@@ -37,5 +37,10 @@
     <!--设备准备页面-->
     <string name="prepare_button">开始理疗</string>
 
+    <!--activity 的label-->
+    <string name="prepare_title">电极贴合</string>
+    <string name="bind_title">设备绑定</string>
+    <string name="search_title">设备搜索</string>
+    <string name="main_title">主页</string>
 
 </resources>

@@ -1,10 +1,13 @@
 package com.example.chitwing.anycure_kotlin_master.activity.prepare
 
+import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v7.app.WindowDecorActionBar
 import android.text.method.ScrollingMovementMethod
+import android.util.AttributeSet
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import com.example.chitwing.anycure_kotlin_master.R
@@ -20,6 +23,10 @@ class PrepareActivity : BaseActivity() {
         return@lazy PrepareProvider(this)
     }
 
+    private val deviceProvider by lazy {
+        return@lazy PrepareStatusProvider(this)
+    }
+
     lateinit var titleTextView:TextView
     lateinit var startButton:Button
     lateinit var tabLayout:TabLayout
@@ -30,8 +37,8 @@ class PrepareActivity : BaseActivity() {
         setContentView(R.layout.activity_prepare)
         initView()
         fetchData()
-        Log.e(tag,"onCreate")
     }
+
 
     override fun initView() {
         titleTextView = findViewById(R.id.prepare_title)
@@ -41,10 +48,8 @@ class PrepareActivity : BaseActivity() {
         content.movementMethod = ScrollingMovementMethod.getInstance()
 
         startButton.setOnClickListener {
-            //todo:开始理疗
-
-            //todo:销毁此activity
-            finish()
+            //todo:去查询设备电极贴贴合状态
+            deviceProvider.electrodeQuery()
         }
 
         tabLayout.addOnTabSelectedListener(tabListener)
@@ -67,6 +72,7 @@ class PrepareActivity : BaseActivity() {
 
     override fun fetchData() {
         provider.configureView()
+        deviceProvider.beginWriteData()
     }
 
     /**
@@ -78,5 +84,10 @@ class PrepareActivity : BaseActivity() {
         last?.let {
             it.removeSelf()
         }
+    }
+
+    override fun finish() {
+        super.finish()
+        deviceProvider.mDevice = null
     }
 }

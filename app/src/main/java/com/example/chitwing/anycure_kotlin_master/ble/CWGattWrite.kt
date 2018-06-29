@@ -18,7 +18,7 @@ import java.util.*
  * Modifier:
  * Reason:
  *************************************************************/
-class CWGattWrite(b:CWGattWriteInterface) :CWGattWriteInterface by b {
+ class CWGattWrite(b:CWGattWriteInterface) :CWGattWriteInterface by b {
     private val tag = "数据写入类"
 
     /**

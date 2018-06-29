@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.TextView
 import com.example.chitwing.anycure_kotlin_master.R
 import com.example.chitwing.anycure_kotlin_master.activity.BaseActivity
+import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
 
 /**
  * 理疗准备页面
@@ -29,6 +30,7 @@ class PrepareActivity : BaseActivity() {
         setContentView(R.layout.activity_prepare)
         initView()
         fetchData()
+        Log.e(tag,"onCreate")
     }
 
     override fun initView() {
@@ -65,5 +67,16 @@ class PrepareActivity : BaseActivity() {
 
     override fun fetchData() {
         provider.configureView()
+    }
+
+    /**
+     * 销毁的时候 删除最新链接的一个外设
+     * */
+    override fun finish() {
+        super.finish()
+        val last = CWBleManager.mCWDevices.last()
+        last?.let {
+            it.removeSelf()
+        }
     }
 }

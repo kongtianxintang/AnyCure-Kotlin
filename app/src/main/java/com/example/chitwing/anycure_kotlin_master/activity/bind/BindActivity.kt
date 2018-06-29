@@ -8,6 +8,7 @@ import android.widget.ImageButton
 import com.example.chitwing.anycure_kotlin_master.R
 import com.example.chitwing.anycure_kotlin_master.activity.BaseActivity
 import com.example.chitwing.anycure_kotlin_master.activity.search.SearchActivity
+import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
 import com.example.chitwing.anycure_kotlin_master.model.BindDevice
 
 class BindActivity : BaseActivity() {
@@ -77,6 +78,14 @@ class BindActivity : BaseActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == mRequestCode){
             mProvider.fetchDataSource()
+        }
+    }
+
+    override fun finish() {
+        super.finish()
+        val last = CWBleManager.mCWDevices.last()
+        last?.let {
+            it.removeSelf()
         }
     }
 }

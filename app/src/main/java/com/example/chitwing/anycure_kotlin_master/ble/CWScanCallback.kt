@@ -18,6 +18,6 @@ interface CWScanCallback {
     /**
      * 发现的设备
      * */
-    fun discoveryDevice(item: BluetoothDevice)
+    fun discoveryDevice(item: BluetoothDevice,manager:CWBleManager)
 
 }

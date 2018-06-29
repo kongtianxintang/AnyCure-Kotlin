@@ -1,22 +1,20 @@
-package com.example.chitwing.anycure_kotlin_master.ble
+package com.example.chitwing.anycure_kotlin_master.dialog
 
 /***********************************************************
  * 版权所有,2018,Chitwing.
  * Copyright(C),2018,Chitwing co. LTD.All rights reserved.
  * project:AnyCure-Kotlin
  * Author:chitwing
- * Date:  2018/6/7
+ * Date:  2018/6/28
  * QQ/Tel/Mail:383118832
- * Description:蓝牙的状态接口
+ * Description:
  * Others:新手勿喷
  * Modifier:
  * Reason:
  *************************************************************/
-/**
- * 蓝牙状态
- * */
-interface CWBleStatusInterface {
-    fun bleStatus(arg:CWBleStatus)
+interface BleDialogInterface {
+    /**
+     * 表明已经链接到了一个设备
+     * */
+    fun connectDevice()
 }
-
-

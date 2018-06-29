@@ -20,6 +20,27 @@ enum class CWBleStatus{
     Disable,//不能使用
     Able,//可以使用
     Discover,//发现服务
+    Connect,//链接
+    Disconnect,//断开链接
     BeginScan,//扫描
-    StopScan//停止扫描
+    StopScan;//停止扫描
+
+    /**
+     * 描述
+     * */
+    val desc by lazy {
+        when(this){
+            ON -> return@lazy "打开蓝牙"
+            OFF -> return@lazy "关闭蓝牙"
+            Support -> return@lazy "支持蓝牙"
+            DisSupport -> return@lazy "不支持蓝牙"
+            Disable -> return@lazy  "不能使用"
+            Able -> return@lazy "可以使用"
+            Discover -> return@lazy "发现服务"
+            Connect -> return@lazy "链接"
+            Disconnect -> return@lazy "断开链接"
+            BeginScan -> return@lazy "开始扫描"
+            else -> return@lazy "停止扫描"
+        }
+    }
 }

@@ -39,6 +39,7 @@ object  CWBleManager {
      * 扫描发现到的设备
      * */
     private var mScanCallback:CWScanCallback? = null
+
     /**蓝牙管理*/
     private var mBleManager:BluetoothManager? = null
     /** 蓝牙适配器 */
@@ -47,7 +48,7 @@ object  CWBleManager {
     * 保存外接设备类
     * */
     val mCWDevices = mutableListOf<CWDevice>()
-    val mDevices = mutableListOf<BluetoothDevice>()
+    private val mDevices = mutableListOf<BluetoothDevice>()
     /**
      *设置蓝牙状态回调
      */
@@ -103,6 +104,7 @@ object  CWBleManager {
             return
         }
 
+        mDevices.clear()
         scanDevice()
     }
 
@@ -111,11 +113,13 @@ object  CWBleManager {
      * 开始扫描设备
      * */
     private fun scanDevice(){
+
         val scanner = mBleAdapter!!.bluetoothLeScanner
         val pUUID = ParcelUuid(CWGattAttributes.CW_SERVICE_UUID)
         val tFilter = ScanFilter.Builder().setServiceUuid(pUUID).build()
         val settings = ScanSettings.Builder().setScanMode(ScanSettings.SCAN_MODE_LOW_POWER).build()
         scanner.startScan(listOf(tFilter),settings, mScannerCallback)
+        mStatusCallback?.bleStatus(CWBleStatus.BeginScan)
     }
 
     /**
@@ -124,6 +128,8 @@ object  CWBleManager {
     fun stopScanDevice(){
         val scanner = mBleAdapter!!.bluetoothLeScanner
         scanner.stopScan(mScannerCallback)
+        mStatusCallback?.bleStatus(CWBleStatus.StopScan)
+        mDevices.clear()
     }
 
     /**
@@ -140,6 +146,9 @@ object  CWBleManager {
 
             result?.let {
                 if (mScanCallback != null){
+                    if (mDevices.contains(it.device)){
+                        return@let
+                    }
                     /**
                      * 判断设备新旧
                      * 旧的设备都可以链接
@@ -150,16 +159,19 @@ object  CWBleManager {
                     val type = it.device.deviceType()
                     when(type){
                         CWDeviceType.Old -> {
-                            mScanCallback!!.discoveryDevice(it.device)
+                            mDevices.add(it.device)
+                            mScanCallback!!.discoveryDevice(it.device,this@CWBleManager)
                         }
                         else -> {
                             when(configure.channel){//如果为自己有渠道 则都可以链接
                                 CWChannel.ChitWing,CWChannel.ALL -> {
-                                    mScanCallback!!.discoveryDevice(it.device)
+                                    mDevices.add(it.device)
+                                    mScanCallback!!.discoveryDevice(it.device,this@CWBleManager)
                                 }
                                 else -> {
                                     if (code == configure.channel.SHORT_NUM_CODE){
-                                        mScanCallback!!.discoveryDevice(it.device)
+                                        mDevices.add(it.device)
+                                        mScanCallback!!.discoveryDevice(it.device,this@CWBleManager)
                                     }
                                 }
                             }
@@ -180,8 +192,6 @@ object  CWBleManager {
      * */
     fun connect(device: BluetoothDevice){
         device.connectGatt(MyApp.getApp(),false, mGattCallback)
-        mBleAdapter?.bondedDevices
-        device.createBond()
     }
 
 
@@ -200,9 +210,7 @@ object  CWBleManager {
             super.onCharacteristicChanged(gatt, characteristic)
             Log.d(tag,"特征改变")
             val cw = mCWDevices.find { it.mGatt == gatt }
-            cw?.let {
-                it.gattRead.handleData(characteristic?.value)
-            }
+            cw?.gattRead?.handleData(characteristic?.value)
         }
 
         /**
@@ -216,22 +224,31 @@ object  CWBleManager {
                     when(newState){
                         BluetoothGatt.STATE_CONNECTED ->{
                             Log.d(tag,"链接成功2")
-                            gatt?.let {
-                                it.discoverServices()
-                                /**保存自定义的外接设备*/
-                                val cw = CWDevice(it.device,it)
-                                mCWDevices.add(cw)
+                            val device = mCWDevices.find { it.mGatt == gatt }
+                            if (device != null){//重新链接的
+                                device.gattWrite.cwBleWriteDeviceStatusQuery()
+                            }else{//新链接
+                                gatt?.let {
+                                    it.discoverServices()
+                                    /**保存自定义的外接设备*/
+                                    val cw = CWDevice(it.device,it)
+                                    mCWDevices.add(cw)
+                                    mStatusCallback?.bleStatus(CWBleStatus.Connect)
+                                }
                             }
                         }
                         BluetoothGatt.STATE_DISCONNECTED -> {
                             Log.d(tag,"断开链接")
-                            val e = mCWDevices.find {  it.mGatt == gatt }
-                            e?.let {
-                                it.removeSelf()
-                                mDevices.remove(it.mDevice)
-                                gatt?.close()
+                            val device = mCWDevices.find {  it.mGatt == gatt }
+                            device?.let {
+                                if (it.isAutoDisconnect){
+                                    gatt?.close()
+                                }else{
+                                    Log.d(tag,"重新链接")
+                                    connect(it.mDevice)
+                                }
                             }
-
+                            mStatusCallback?.bleStatus(CWBleStatus.Disconnect)
                         }
                         else -> {
 
@@ -251,14 +268,11 @@ object  CWBleManager {
         override fun onServicesDiscovered(gatt: BluetoothGatt?, status: Int) {
             super.onServicesDiscovered(gatt, status)
             gatt?.let {
-                it.services.forEach {
-                    Log.d(tag,"服务-${it.uuid}")
-                }
                 val service = it.getService(CWGattAttributes.CW_SERVICE_UUID)
                 val character = service.getCharacteristic(CWGattAttributes.CW_notifyUUID)
-                Log.d(tag,"服务:${service.uuid}")
-                Log.d(tag,"特征值:${character.uuid}")
-                it.setCharacteristicNotification(character!!,true)
+                if (character != null){
+                    it.setCharacteristicNotification(character,true)
+                }
 
                 character.descriptors.forEach {
                     it.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE

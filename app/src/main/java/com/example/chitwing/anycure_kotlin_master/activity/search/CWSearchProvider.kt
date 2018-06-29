@@ -47,7 +47,7 @@ class CWSearchProvider(private val context: SearchActivity) :CWBaseProvider(cont
         CWBleManager.setStatusCallback(bleStatusCallback)
 
         CWBleManager.setScanCallback(object : CWScanCallback{
-            override fun discoveryDevice(item: BluetoothDevice) {
+            override fun discoveryDevice(item: BluetoothDevice, manager: CWBleManager) {
                 if (!context.mDataSet.contains(item)){
                     val cw = mBinds.find { it.mac == item.address }
                     if (cw == null){

@@ -12,7 +12,7 @@ abstract class BaseActivity : AppCompatActivity() {
         val tag:String = "AnyCure-Kotlin"
     }
 
-     override protected fun onCreate(savedInstanceState: Bundle?) {
+     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
          defaultSetting()
     }
@@ -37,5 +37,14 @@ abstract class BaseActivity : AppCompatActivity() {
         ac?.setDisplayHomeAsUpEnabled(true)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        item?.let {
+            when(it.itemId){
+                android.R.id.home -> onBackPressed()
+                else -> return super.onOptionsItemSelected(item)
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
 
 }

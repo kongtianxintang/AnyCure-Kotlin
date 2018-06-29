@@ -33,7 +33,7 @@ class RecipeAdapter(private val dataSet:List<Recipe>,val context: Context) :Recy
     /**
      * 点击事件
      * */
-    var onItemClickListenner: CWOnItemClickListener? = null
+    var onItemClickListener: CWOnItemClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeAdapter.ViewHolder {
         val v = LayoutInflater.from(parent.context)
@@ -52,8 +52,8 @@ class RecipeAdapter(private val dataSet:List<Recipe>,val context: Context) :Recy
         }
 
         holder.itemView.setOnClickListener {
-            if (onItemClickListenner != null){
-                onItemClickListenner!!.onItemClick(holder.itemView,position)
+            if (onItemClickListener != null){
+                onItemClickListener!!.onItemClick(holder.itemView,position)
             }
         }
     }

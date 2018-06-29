@@ -21,7 +21,7 @@ abstract class BaseFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.e(fm_tag,"onCreate")
+        Log.d(fm_tag,"onCreate")
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -31,21 +31,21 @@ abstract class BaseFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        Log.e(fm_tag,"onActivityCreated")
+        Log.d(fm_tag,"onActivityCreated")
     }
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        Log.e(fm_tag,"onAttach")
+        Log.d(fm_tag,"onAttach")
     }
 
     override fun onDetach() {
         super.onDetach()
-        Log.e(fm_tag,"onDetach")
+        Log.d(fm_tag,"onDetach")
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.e(fm_tag,"onDestroy")
+        Log.d(fm_tag,"onDestroy")
     }
 }

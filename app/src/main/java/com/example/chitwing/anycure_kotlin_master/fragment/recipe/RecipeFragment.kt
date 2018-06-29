@@ -13,6 +13,8 @@ import com.example.chitwing.anycure_kotlin_master.R
 import com.example.chitwing.anycure_kotlin_master.activity.prepare.PrepareActivity
 import com.example.chitwing.anycure_kotlin_master.base.CWOnItemClickListener
 import com.example.chitwing.anycure_kotlin_master.database.DBHelper
+import com.example.chitwing.anycure_kotlin_master.dialog.BleDialog
+import com.example.chitwing.anycure_kotlin_master.dialog.BleDialogInterface
 import com.example.chitwing.anycure_kotlin_master.fragment.BaseFragment
 import com.example.chitwing.anycure_kotlin_master.model.Recipe
 
@@ -61,7 +63,7 @@ class RecipeFragment : BaseFragment() {
         }
         mAdapter = RecipeAdapter(mDataSet,this.context!!)
         mRecyclerView!!.adapter = mAdapter!!
-        mAdapter!!.onItemClickListenner = onClickItemCallback
+        mAdapter!!.onItemClickListener = onClickItemCallback
 
         mProvider!!.fetchDataSource()
 
@@ -74,9 +76,19 @@ class RecipeFragment : BaseFragment() {
     private val onClickItemCallback = object : CWOnItemClickListener {
         override fun onItemClick(view: View, position: Int) {
             Log.e(fm_tag,"位置$position")
-            //todo:去准备页面
-            val intent = Intent(context, PrepareActivity ::class.java)
-            context!!.startActivity(intent)
+
+            val dialog = BleDialog()
+            dialog.showBleDialog(activity!!.supportFragmentManager)
+            dialog.setCallback(onBleDiaCallback)
+        }
+    }
+
+    private val onBleDiaCallback = object :BleDialogInterface {
+        override fun connectDevice() {
+            //todo--去准备页面
+            Log.e("测试","走了几次")
+            val intent = Intent(activity!!,PrepareActivity ::class.java)
+            startActivity(intent)
         }
     }
 

@@ -3,6 +3,7 @@ package com.example.chitwing.anycure_kotlin_master.ble
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothGatt
 import android.util.Log
+import com.example.chitwing.anycure_kotlin_master.model.Recipe
 
 /***********************************************************
  * 版权所有,2018,Chitwing.
@@ -19,6 +20,11 @@ import android.util.Log
 data class CWDevice ( val mDevice:BluetoothDevice, val mGatt:BluetoothGatt):CWGattReadInterface,CWGattWriteInterface{
 
     private val tag = "CWDevice"
+
+    /**
+     * 处方
+     * */
+    var recipe:Recipe? = null
 
     /**
      * 处方的时间
@@ -42,12 +48,20 @@ data class CWDevice ( val mDevice:BluetoothDevice, val mGatt:BluetoothGatt):CWGa
     /**
      * 写入类
      * */
-    private val gattWrite:CWGattWrite by lazy {
+    val gattWrite:CWGattWrite by lazy {
         return@lazy CWGattWrite(this)
     }
 
+    /**
+     * 记录是否主动断开
+     * 默认为否 当非主动断开时候 需要重连
+     * */
+    var isAutoDisconnect:Boolean = false
+
     fun removeSelf(){
         val isRemove = CWBleManager.mCWDevices.remove(this)
+        isAutoDisconnect = true
+        mGatt.disconnect()
         Log.d(tag,"删除外接设备成功与否:$isRemove")
     }
 

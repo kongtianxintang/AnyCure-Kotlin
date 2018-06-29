@@ -42,4 +42,19 @@ class Recipe :BaseData(){
         var frequency:String? = null
         @SerializedName("recipe_bicon")
         var recipeBigIcon:String? = null
+
+
+        /**
+         * 获取处方内容
+         * */
+        fun getRecipeContent():List<Int>{
+            val set = mutableListOf<Int>()
+            recipeText?.let {
+                val ts = it.split(",")
+                ts.forEach {
+                    set.add(it.toInt())
+                }
+            }
+            return set
+        }
 }

@@ -271,10 +271,12 @@ class CWGattRead(b:CWGattReadInterface) :CWGattReadInterface by b{
      * 处方加载
      * */
     private fun deviceDataRecipeLoading(list: ByteArray){
-        val dur = list[2].toInt() and 0xff + list[3] * 256
         val flag = list[4].toInt() == 1
-        cwBleRecipeLoadingCallback(flag,dur)
+        val low = list[2].toInt() and 0xff
+        val high = list[3].toInt() * 256
+        val dur = low + high
         Log.d(tag,"处方是否有效:$flag ,处方时长:$dur")
+        cwBleRecipeLoadingCallback(flag,dur)
     }
 
     /**

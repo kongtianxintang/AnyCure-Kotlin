@@ -3,10 +3,7 @@ package com.example.chitwing.anycure_kotlin_master.activity.search
 import android.bluetooth.BluetoothDevice
 import android.util.Log
 import com.example.chitwing.anycure_kotlin_master.base.CWBaseProvider
-import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
-import com.example.chitwing.anycure_kotlin_master.ble.CWBleStatus
-import com.example.chitwing.anycure_kotlin_master.ble.CWBleStatusInterface
-import com.example.chitwing.anycure_kotlin_master.ble.CWScanCallback
+import com.example.chitwing.anycure_kotlin_master.ble.*
 import com.example.chitwing.anycure_kotlin_master.database.DBHelper
 import com.example.chitwing.anycure_kotlin_master.model.BindDevice
 import com.example.chitwing.anycure_kotlin_master.unit.showToast
@@ -101,6 +98,10 @@ class CWSearchProvider(private val context: SearchActivity) :CWBaseProvider(cont
 
                 }
             }
+        }
+
+        override fun onCreateCWDevice(arg: CWDevice) {
+
         }
     }
 

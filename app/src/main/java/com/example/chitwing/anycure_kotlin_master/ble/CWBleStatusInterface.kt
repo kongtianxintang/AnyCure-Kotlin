@@ -17,6 +17,10 @@ package com.example.chitwing.anycure_kotlin_master.ble
  * */
 interface CWBleStatusInterface {
     fun bleStatus(arg:CWBleStatus)
+    /**
+     * 创建了CWDevice对象
+     * */
+    fun onCreateCWDevice(arg:CWDevice)
 }
 
 

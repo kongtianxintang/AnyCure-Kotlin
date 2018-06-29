@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:layout_margin="100dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/default_title"
+        android:id="@+id/dialog_title"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/dialog_desc"
+        android:text="@string/default_title"
+        app:layout_constraintTop_toBottomOf="@id/dialog_title"
+        />
+    <android.support.v7.widget.AppCompatButton
+        android:layout_width="0dp"
+        android:layout_height="44dp"
+        android:id="@+id/dialog_cancel_button"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dialog_desc"
+        android:text="@string/default_button"
+        />
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/dialog_sure_button"
+        android:layout_width="0dp"
+        android:layout_height="44dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/dialog_cancel_button"
+        app:layout_constraintBottom_toBottomOf="@id/dialog_cancel_button"
+        android:text="@string/default_button"
+        />
+
+</android.support.constraint.ConstraintLayout>

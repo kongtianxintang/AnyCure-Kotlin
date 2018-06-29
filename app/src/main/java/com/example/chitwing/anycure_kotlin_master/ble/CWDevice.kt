@@ -17,7 +17,8 @@ import com.example.chitwing.anycure_kotlin_master.model.Recipe
  * Modifier:
  * Reason:
  *************************************************************/
-data class CWDevice ( val mDevice:BluetoothDevice, val mGatt:BluetoothGatt):CWGattReadInterface,CWGattWriteInterface{
+data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWGattReadInterface,CWGattWriteInterface{
+
 
     private val tag = "CWDevice"
 
@@ -36,7 +37,9 @@ data class CWDevice ( val mDevice:BluetoothDevice, val mGatt:BluetoothGatt):CWGa
      * */
     var mCallback:CWDeviceInterface? = null
 
-    private val mRecipeContent = listOf(208,7,2,20,152,58,0,250,136,19,21,46,208,7,2,3,136,19,11,215,220,5,11,66,208,7,2,5,184,11,4,80,232,3,4,30,208,7,2,10,208,7,11,35,111,0,17,1,208,7,2,10,220,5,4,14,60,0,11,1,208,7,2,10,208,7,21,20,60,0,4,1,208,7,2,8,220,5,11,15,36,0,11,1,208,7,2,14,184,11,4,27,111,0,17,1,208,7,2,8,16,39,4,170,184,11,4,50,208,7,2,14,248,42,21,100,160,15,21,35,208,7,2,10,208,7,11,35,120,0,17,1,208,7,2,6,228,12,0,116,120,0,17,1,208,7,2,8,220,5,4,30,60,0,11,1,208,7,2,6,220,5,4,30,40,0,11,1,208,7,2,7,232,3,21,20,60,0,11,1,208,7,2,10,32,3,11,8,60,0,11,1,208,7,2,5,136,19,4,130,220,5,4,40,208,7,2,6,64,31,11,150,220,5,11,40,208,7,2,15,16,39,0,90,208,7,0,18,208,7,2,15,184,11,0,27,232,3,0,10,208,7,2,15,152,58,0,125,136,19,21,45,208,7,2,3,220,5,11,70,136,19,11,215,208,7,2,5,232,3,4,26,184,11,4,85,208,7,2,10,208,7,11,35,120,0,17,1,208,7,2,10,220,5,4,15,60,0,11,1,208,7,2,10,208,7,21,18,60,0,4,1,208,7,2,8,220,5,11,15,40,0,11,1,208,7,2,14,184,11,0,25,120,0,17,1,208,7,2,8,16,39,4,170,184,11,4,56,208,7,2,14,224,46,21,112,160,15,21,36,208,7,2,10,208,7,11,35,120,0,17,1,208,7,2,6,184,11,0,100,120,0,17,1,208,7,2,8,220,5,4,30,60,0,11,1,208,7,2,6,176,4,0,24,40,0,11,1,208,7,2,7,232,3,21,20,60,0,11,1,208,7,2,10,32,3,11,8,60,0,11,1,208,7,2,5,136,19,4,100,220,5,4,45,208,7,2,6,64,31,11,136,220,5,11,36,208,7,2,15,16,39,0,90,208,7,0,16,208,7,2,15,184,11,0,28,232,3,0,10,208,7,2,6,64,31,11,136,220,5,11,36,208,7,2,15,16,39,0,90,208,7,0,16,208,7,2,93,184,11,0,28,232,3,0,10,8,2,20,43,10,0,0,0,0,0,0,0)
+    private val mRecipeContent by lazy {
+        return@lazy recipe?.getRecipeContent()
+    }
 
     /**
      * 读取类
@@ -61,7 +64,11 @@ data class CWDevice ( val mDevice:BluetoothDevice, val mGatt:BluetoothGatt):CWGa
     fun removeSelf(){
         val isRemove = CWBleManager.mCWDevices.remove(this)
         isAutoDisconnect = true
-        mGatt.disconnect()
+        mGatt?.disconnect()
+        mGatt?.close()
+        mGatt = null
+        mCallback = null
+
         Log.d(tag,"删除外接设备成功与否:$isRemove")
     }
 
@@ -80,9 +87,11 @@ data class CWDevice ( val mDevice:BluetoothDevice, val mGatt:BluetoothGatt):CWGa
     }
 
     override fun cwBleRecipeSendIndexCallback(index: Int, total: Int) {
-        val max = mRecipeContent.count() / 12 - 1
-        if (max == total) {
-            gattWrite.cwBleWriteLoadingRecipe()
+        mRecipeContent?.let {
+            val max = it.count() / 12 - 1
+            if (max == total) {
+                gattWrite.cwBleWriteLoadingRecipe()
+            }
         }
     }
 
@@ -286,11 +295,11 @@ data class CWDevice ( val mDevice:BluetoothDevice, val mGatt:BluetoothGatt):CWGa
 
     /**********************  CWGattWriteInterface start  ************************/
     override fun cwGattWriteData(list: List<Int>) {
-        val service = mGatt.getService(CWGattAttributes.CW_SERVICE_UUID)
-        val char = service.getCharacteristic(CWGattAttributes.CW_CHARACTER_writeUUID)
+        val service = mGatt?.getService(CWGattAttributes.CW_SERVICE_UUID)
+        val char = service?.getCharacteristic(CWGattAttributes.CW_CHARACTER_writeUUID)
         val bytes = list.map { it.toByte() }
-        char.value = bytes.toByteArray()
-        mGatt.writeCharacteristic(char)
+        char?.value = bytes.toByteArray()
+        mGatt?.writeCharacteristic(char)
     }
     /**********************  CWGattWriteInterface end  ************************/
 
@@ -301,6 +310,7 @@ data class CWDevice ( val mDevice:BluetoothDevice, val mGatt:BluetoothGatt):CWGa
     fun writeData(){
         gattWrite.cwBleWriteChannelCode(CWBleManager.configure.channel.encrypt_Channel_Code)
     }
+
     /**
      * 此方法为了让写入处方内容防止出现mDeviceBusy=true
      * 不是办法的办法
@@ -335,6 +345,7 @@ data class CWDevice ( val mDevice:BluetoothDevice, val mGatt:BluetoothGatt):CWGa
             }
         }
     }
+
 }
 
 

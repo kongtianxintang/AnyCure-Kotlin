@@ -77,7 +77,9 @@ class RecipeFragment : BaseFragment() {
         override fun onItemClick(view: View, position: Int) {
             Log.e(fm_tag,"位置$position")
 
+            val item = mDataSet[position]
             val dialog = BleDialog()
+            dialog.setRecipe(item)
             dialog.showBleDialog(activity!!.supportFragmentManager)
             dialog.setCallback(onBleDiaCallback)
         }

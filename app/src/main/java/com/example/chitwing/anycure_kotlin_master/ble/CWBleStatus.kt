@@ -37,7 +37,7 @@ enum class CWBleStatus{
             Disable -> return@lazy  "不能使用"
             Able -> return@lazy "可以使用"
             Discover -> return@lazy "发现服务"
-            Connect -> return@lazy "链接"
+            Connect -> return@lazy "链接设备成功"
             Disconnect -> return@lazy "断开链接"
             BeginScan -> return@lazy "开始扫描"
             else -> return@lazy "停止扫描"

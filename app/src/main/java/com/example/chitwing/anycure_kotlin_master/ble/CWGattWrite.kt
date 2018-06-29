@@ -131,21 +131,23 @@ import java.util.*
     /**
      * 写入处方
      * */
-    fun cwBleWriteRecipeContent(index:Int,recipeContent:List<Int>){
+    fun cwBleWriteRecipeContent(index:Int,recipeContent:List<Int>?){
 
-        val max = recipeContent.count() / 12
-        if (index > max){
-            return
+        recipeContent?.let {
+            val max = it.count() / 12
+            if (index > max){
+                return
+            }
+            val subs = it.subList((index - 1) * 12,index * 12)
+            var contentIndex = index
+            if (index == max){
+                contentIndex = 0x00
+            }
+            Log.d(tag,"处方写入 $index,max：$max")
+            val content = mutableListOf(0xab,0x00,contentIndex)
+            content.addAll(subs)
+            cwGattWriteData(content)
         }
-        val subs = recipeContent.subList((index - 1) * 12,index * 12)
-        var contentIndex = index
-        if (index == max){
-            contentIndex = 0x00
-        }
-        Log.d(tag,"处方写入 $index,max：$max")
-        val content = mutableListOf(0xab,0x00,contentIndex)
-        content.addAll(subs)
-        cwGattWriteData(content)
     }
 
 

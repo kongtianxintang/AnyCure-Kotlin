@@ -12,10 +12,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
-import com.example.chitwing.anycure_kotlin_master.ble.CWBleStatus
-import com.example.chitwing.anycure_kotlin_master.ble.CWBleStatusInterface
-import com.example.chitwing.anycure_kotlin_master.ble.CWScanCallback
+import com.example.chitwing.anycure_kotlin_master.R
+import com.example.chitwing.anycure_kotlin_master.ble.*
 import com.example.chitwing.anycure_kotlin_master.database.DBHelper
 import com.example.chitwing.anycure_kotlin_master.model.BindDevice
 import com.example.chitwing.anycure_kotlin_master.model.Recipe
@@ -34,6 +32,10 @@ import com.example.chitwing.anycure_kotlin_master.model.Recipe
  *************************************************************/
 class BleDialog : DialogFragment() {
 
+    /**
+     *
+     * */
+    private var mDialog:AlertDialog? = null
     /**
      * 处方
      * */
@@ -56,6 +58,9 @@ class BleDialog : DialogFragment() {
         Log.e(tag,"dia->$dia")
     }
 
+    /**
+     * 创建系统的dialog
+     * */
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
         val builder = AlertDialog.Builder(activity!!)
@@ -79,15 +84,23 @@ class BleDialog : DialogFragment() {
         })
         Log.e(tag,"onCreateDialog")
 
-        return builder.create()
+        mDialog = builder.create()
+
+        return mDialog!!
     }
 
 
+//    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+//        val v = inflater.inflate(R.layout.ble_dialog, container, false)
+//
+//        return v
+//    }
 
     /**
      * 显示dialog
      * */
     fun showBleDialog(m:android.support.v4.app.FragmentManager){
+
         show(m,"BleDialog")
         CWBleManager.setScanCallback(mScanCallback)
         CWBleManager.setStatusCallback(mBleStatusCallback)
@@ -113,18 +126,28 @@ class BleDialog : DialogFragment() {
     private val mBleStatusCallback = object :CWBleStatusInterface {
         override fun bleStatus(arg: CWBleStatus) {
 
+            activity?.runOnUiThread {
+                mDialog?.setMessage(arg.desc)
+            }
+
+
             when(arg){
                 CWBleStatus.Connect -> {
-                    onDismiss(null)
                     Log.e(tag,"已经连上了～～")
                     mCallback?.connectDevice()
+                    onDismiss(null)
                 }
                 else -> {
                     Log.e(tag,arg.desc)
                 }
             }
         }
+
+        override fun onCreateCWDevice(arg: CWDevice) {
+            arg.recipe = mRecipe
+        }
     }
+
 
     /**
      * 保存在本地的设备地址
@@ -141,6 +164,7 @@ class BleDialog : DialogFragment() {
     override fun onDestroy() {
         super.onDestroy()
         mCallback = null
+        mDialog = null
         Log.e("dialog","销毁")
     }
 

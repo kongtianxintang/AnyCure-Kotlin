@@ -71,7 +71,7 @@ object  CWBleManager {
 
             when (state) {
                 BluetoothAdapter.STATE_ON -> {
-                    Log.e(tag,"蓝牙打开")
+                    Log.d(tag,"蓝牙打开")
                 }
                 BluetoothAdapter.STATE_OFF -> {
                     Log.d(tag,"蓝牙关闭")
@@ -87,7 +87,7 @@ object  CWBleManager {
         context.registerReceiver(mBluetoothReceiver,filter)
 
         if (mStatusCallback == null) {
-            Log.e(tag,"请设置回调")
+            Log.d(tag,"请设置回调")
             return
         }
 
@@ -113,7 +113,6 @@ object  CWBleManager {
      * 开始扫描设备
      * */
     private fun scanDevice(){
-
         val scanner = mBleAdapter!!.bluetoothLeScanner
         val pUUID = ParcelUuid(CWGattAttributes.CW_SERVICE_UUID)
         val tFilter = ScanFilter.Builder().setServiceUuid(pUUID).build()
@@ -126,10 +125,12 @@ object  CWBleManager {
      * 停止扫描设备
      * */
     fun stopScanDevice(){
-        val scanner = mBleAdapter!!.bluetoothLeScanner
-        scanner.stopScan(mScannerCallback)
-        mStatusCallback?.bleStatus(CWBleStatus.StopScan)
-        mDevices.clear()
+        mBleAdapter?.let {
+            val scanner = it.bluetoothLeScanner
+            scanner.stopScan(mScannerCallback)
+            mStatusCallback?.bleStatus(CWBleStatus.StopScan)
+            mDevices.clear()
+        }
     }
 
     /**
@@ -155,7 +156,7 @@ object  CWBleManager {
                      * 新的设备则需要判断 client 与 设备为同一个渠道
                      * */
                     val code = it.device.channelCode()
-                    Log.e(tag,"设备名称${it.device.name} 渠道号:$code")
+                    Log.d(tag,"设备名称${it.device.name} 渠道号:$code")
                     val type = it.device.deviceType()
                     when(type){
                         CWDeviceType.Old -> {
@@ -183,7 +184,7 @@ object  CWBleManager {
 
         override fun onScanFailed(errorCode: Int) {
             super.onScanFailed(errorCode)
-            Log.d(tag,"Failed")
+            Log.d(tag,"Failed->$errorCode")
         }
     }
 
@@ -191,7 +192,8 @@ object  CWBleManager {
      * 去链接设备
      * */
     fun connect(device: BluetoothDevice){
-        device.connectGatt(MyApp.getApp(),false, mGattCallback)
+        val gatt = device.connectGatt(MyApp.getApp(),false, mGattCallback)
+        Log.d(tag,"链接gatt->$gatt")
     }
 
 
@@ -220,10 +222,8 @@ object  CWBleManager {
             super.onConnectionStateChange(gatt, status, newState)
             when(status){
                 BluetoothGatt.GATT_SUCCESS -> {
-                    Log.d(tag,"gatt处理完成")
                     when(newState){
                         BluetoothGatt.STATE_CONNECTED ->{
-                            Log.d(tag,"链接成功2")
                             val device = mCWDevices.find { it.mGatt == gatt }
                             if (device != null){//重新链接的
                                 device.gattWrite.cwBleWriteDeviceStatusQuery()
@@ -233,6 +233,7 @@ object  CWBleManager {
                                     /**保存自定义的外接设备*/
                                     val cw = CWDevice(it.device,it)
                                     mCWDevices.add(cw)
+                                    mStatusCallback?.onCreateCWDevice(cw)
                                     mStatusCallback?.bleStatus(CWBleStatus.Connect)
                                 }
                             }
@@ -267,6 +268,7 @@ object  CWBleManager {
          * */
         override fun onServicesDiscovered(gatt: BluetoothGatt?, status: Int) {
             super.onServicesDiscovered(gatt, status)
+            mStatusCallback?.bleStatus(CWBleStatus.Discover)
             gatt?.let {
                 val service = it.getService(CWGattAttributes.CW_SERVICE_UUID)
                 val character = service.getCharacteristic(CWGattAttributes.CW_notifyUUID)
@@ -318,7 +320,7 @@ object  CWBleManager {
 
     private val bleAdapterCallback = object :BluetoothAdapter.LeScanCallback {
         override fun onLeScan(device: BluetoothDevice?, rssi: Int, scanRecord: ByteArray?) {
-            Log.e(tag,"扫描蓝牙:${device!!.address} rssi:$rssi")
+            Log.d(tag,"扫描蓝牙:${device!!.address} rssi:$rssi")
         }
     }
 
@@ -326,11 +328,11 @@ object  CWBleManager {
 
     private fun checkBluetoothSupport(context: Context,bluetoothAdapter: BluetoothAdapter?): Boolean {
         if (bluetoothAdapter == null) {
-            Log.e(tag, "Bluetooth is not supported")
+            Log.d(tag, "Bluetooth is not supported")
             return false
         }
         if (!context.packageManager.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-            Log.e(tag, "Bluetooth LE is not supported")
+            Log.d(tag, "Bluetooth LE is not supported")
             return false
         }
         return true

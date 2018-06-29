@@ -72,8 +72,8 @@ class PrepareActivity : BaseActivity() {
     /**
      * 销毁的时候 删除最新链接的一个外设
      * */
-    override fun finish() {
-        super.finish()
+    override fun onBackPressed() {
+        super.onBackPressed()
         val last = CWBleManager.mCWDevices.last()
         last?.let {
             it.removeSelf()

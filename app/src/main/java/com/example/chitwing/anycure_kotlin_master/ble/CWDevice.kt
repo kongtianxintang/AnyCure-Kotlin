@@ -37,6 +37,9 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
      * */
     var mCallback:CWDeviceInterface? = null
 
+    /**
+     * 处方内容
+     * */
     private val mRecipeContent by lazy {
         return@lazy recipe?.getRecipeContent()
     }

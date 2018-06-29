@@ -8,6 +8,7 @@ import android.util.Log
 import com.bumptech.glide.annotation.GlideModule
 import com.example.chitwing.anycure_kotlin_master.model.MyObjectBox
 import io.objectbox.BoxStore
+import kotlinx.coroutines.experimental.launch
 
 /***********************************************************
  * 版权所有,2018,Chitwing.
@@ -34,12 +35,9 @@ class MyApp :Application() {
 
     override fun onCreate() {
         super.onCreate()
-
         instance = this
-
         boxStore = MyObjectBox.builder().androidContext(this).build()
-        Log.d(Tag, "启动app")
-
+        Log.d(Tag, "启动boxStore")
     }
 
 

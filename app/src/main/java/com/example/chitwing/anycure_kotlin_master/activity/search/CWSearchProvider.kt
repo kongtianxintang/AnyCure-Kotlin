@@ -1,6 +1,7 @@
 package com.example.chitwing.anycure_kotlin_master.activity.search
 
 import android.bluetooth.BluetoothDevice
+import android.os.Build
 import android.util.Log
 import com.example.chitwing.anycure_kotlin_master.base.CWBaseProvider
 import com.example.chitwing.anycure_kotlin_master.ble.*
@@ -11,6 +12,7 @@ import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
+import java.util.jar.Manifest
 
 /***********************************************************
  * 版权所有,2018,Chitwing.
@@ -106,6 +108,10 @@ class CWSearchProvider(private val context: SearchActivity) :CWBaseProvider(cont
     }
 
     private fun startScan(){
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+        }
+
         CWBleManager.startScan()
         stopScan(15000)
     }

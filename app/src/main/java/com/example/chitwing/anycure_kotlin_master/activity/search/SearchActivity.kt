@@ -1,9 +1,14 @@
 package com.example.chitwing.anycure_kotlin_master.activity.search
 
+import android.Manifest
 import android.bluetooth.BluetoothDevice
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import com.example.chitwing.anycure_kotlin_master.R
 import com.example.chitwing.anycure_kotlin_master.activity.BaseActivity
 import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
@@ -36,7 +41,8 @@ class SearchActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
         initView()
-        fetchData()
+//        fetchData()
+        p()
     }
 
     override fun initView() {
@@ -53,5 +59,34 @@ class SearchActivity : BaseActivity() {
     override fun finish() {
         mProvider.finish()
         super.finish()
+    }
+
+    /**
+     * 动态请求权限
+     * */
+    private fun p(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            val check = checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+            if (check != PackageManager.PERMISSION_GRANTED){
+                //todo:未授权
+                Log.e(tag,"未授权")
+                val list = arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION)
+                this.requestPermissions(list,0x01)
+            }
+        }else{
+            fetchData()
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        Log.e(tag,"code->$requestCode")
+        if (requestCode == 0x01){
+            val g = grantResults[0]
+            if (g == PackageManager.PERMISSION_GRANTED){
+                Log.e(tag,"同意")
+                fetchData()
+            }
+        }
     }
 }

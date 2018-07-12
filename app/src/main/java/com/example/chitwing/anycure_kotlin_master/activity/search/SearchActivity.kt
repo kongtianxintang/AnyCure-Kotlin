@@ -13,6 +13,7 @@ import com.example.chitwing.anycure_kotlin_master.R
 import com.example.chitwing.anycure_kotlin_master.activity.BaseActivity
 import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
 import com.example.chitwing.anycure_kotlin_master.model.BindDevice
+import com.example.chitwing.anycure_kotlin_master.unit.showToast
 
 class SearchActivity : BaseActivity() {
 
@@ -72,6 +73,8 @@ class SearchActivity : BaseActivity() {
                 Log.e(tag,"未授权")
                 val list = arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION)
                 this.requestPermissions(list,0x01)
+            }else{
+                fetchData()
             }
         }else{
             fetchData()
@@ -84,8 +87,10 @@ class SearchActivity : BaseActivity() {
         if (requestCode == 0x01){
             val g = grantResults[0]
             if (g == PackageManager.PERMISSION_GRANTED){
-                Log.e(tag,"同意")
                 fetchData()
+            }else{
+                //todo:
+                showToast("使用蓝牙需要定位权限")
             }
         }
     }

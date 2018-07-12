@@ -6,7 +6,7 @@
     <dimen name="btn_default_margin">4dp</dimen>
 
     <!--tab bar height-->
-    <dimen name="bottom_navigation_view_height">56dp</dimen>
+    <dimen name="bottom_navigation_view_height">49dp</dimen>
 
 
     <!--圆角-->
@@ -19,6 +19,7 @@
     <!--字体大小-->
     <dimen name="default_button_text_size">20sp</dimen>
     <dimen name="text_view_size">15sp</dimen>
+    <dimen name="intensity_size">30sp</dimen>
 
     <dimen name="text_margin">16dp</dimen>
 

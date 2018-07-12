@@ -14,6 +14,41 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        android:id="@+id/cure_progress_view"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/default_title"
+        app:layout_constraintTop_toTopOf="@id/cure_progress_view"
+        app:layout_constraintBottom_toBottomOf="@id/cure_progress_view"
+        app:layout_constraintLeft_toLeftOf="@id/cure_progress_view"
+        app:layout_constraintRight_toRightOf="@id/cure_progress_view"
+        android:textColor="@color/white"
+        android:id="@+id/cure_intensity_text"
+        android:textSize="@dimen/intensity_size"
+        />
+    <android.support.v7.widget.AppCompatButton
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@mipmap/add"
+        app:layout_constraintRight_toLeftOf="@id/cure_progress_view"
+        app:layout_constraintBottom_toBottomOf="@id/cure_progress_view"
+        app:layout_constraintTop_toTopOf="@id/cure_progress_view"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="20dp"
+        android:id="@+id/cure_add_button"
+        />
+    <android.support.v7.widget.AppCompatButton
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        app:layout_constraintLeft_toRightOf="@id/cure_progress_view"
+        app:layout_constraintTop_toTopOf="@id/cure_add_button"
+        app:layout_constraintBottom_toBottomOf="@id/cure_add_button"
+        android:layout_marginStart="20dp"
+        android:background="@mipmap/minus"
+        android:id="@+id/cure_minus_button"
         />
 
 </android.support.constraint.ConstraintLayout>

@@ -90,7 +90,7 @@ class RecipeFragment : BaseFragment() {
             //todo--去准备页面
             Log.e("测试","走了几次")
             val intent = Intent(activity!!,PrepareActivity ::class.java)
-            startActivity(intent)
+            startActivityForResult(intent,0x01)
         }
     }
 

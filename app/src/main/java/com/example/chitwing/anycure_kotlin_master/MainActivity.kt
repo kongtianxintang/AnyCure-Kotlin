@@ -1,30 +1,24 @@
 package com.example.chitwing.anycure_kotlin_master
 
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.util.Log
 import com.example.chitwing.anycure_kotlin_master.activity.BaseActivity
 import com.example.chitwing.anycure_kotlin_master.activity.prepare.PrepareProvider
-import com.example.chitwing.anycure_kotlin_master.broadcast.CureEventReceiver
 import com.example.chitwing.anycure_kotlin_master.fragment.BaseFragment
 import com.example.chitwing.anycure_kotlin_master.fragment.cure.CureFragment
 import com.example.chitwing.anycure_kotlin_master.fragment.mall.MallFragment
 import com.example.chitwing.anycure_kotlin_master.fragment.mine.MineFragment
 import com.example.chitwing.anycure_kotlin_master.fragment.recipe.RecipeFragment
 import com.example.chitwing.anycure_kotlin_master.unit.BottomNavigationViewHelper
-import kotlinx.coroutines.experimental.delay
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.experimental.launch
+
 
 
 class MainActivity : BaseActivity() {
 
-    companion object {
-        val cureEvent = "cureEvent"
-    }
 
 
     private var mBottomNavView:BottomNavigationView? = null
@@ -132,29 +126,18 @@ class MainActivity : BaseActivity() {
 
     }
 
-    private var mReceiver:CureEventReceiver? = null
-    override fun onPause() {
-        super.onPause()
-        unregisterReceiver(mReceiver!!)
-    }
 
-    override fun onResume() {
-        super.onResume()
-        mReceiver = CureEventReceiver()
-        val filter = IntentFilter(cureEvent)
-        registerReceiver(mReceiver!!,filter)
 
-        val job = launch {
-            delay(1000)
-            val intent = Intent()
-            intent.action = cureEvent
-            intent.putExtra("flag","false")
-            sendBroadcast(intent)
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        Log.d(tag,"requestCode->$requestCode  resultCode->$resultCode")
+        if (resultCode == 0x01){
+            switchCure()
         }
-        job.start()
     }
 
-
-
-
+    private fun switchCure(){
+        mBottomNavView!!.selectedItemId = R.id.action_cure
+    }
 }

@@ -80,10 +80,7 @@ class PrepareActivity : BaseActivity() {
      * */
     override fun onBackPressed() {
         super.onBackPressed()
-        val last = CWBleManager.mCWDevices.last()
-        last?.let {
-            it.removeSelf()
-        }
+        deviceProvider.mDevice?.removeSelf()
     }
 
     override fun finish() {

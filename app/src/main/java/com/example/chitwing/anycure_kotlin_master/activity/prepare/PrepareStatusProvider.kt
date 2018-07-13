@@ -5,7 +5,10 @@ import com.example.chitwing.anycure_kotlin_master.base.CWBaseProvider
 import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
 import com.example.chitwing.anycure_kotlin_master.ble.CWDevice
 import com.example.chitwing.anycure_kotlin_master.ble.CWDeviceInterface
+import com.example.chitwing.anycure_kotlin_master.unit.CWMessageEvent
 import com.example.chitwing.anycure_kotlin_master.unit.showToast
+
+
 
 /***********************************************************
  * 版权所有,2018,Chitwing.
@@ -54,7 +57,7 @@ class PrepareStatusProvider(private val context: PrepareActivity) :CWBaseProvide
         }
 
         override fun cureStartEvent(item: CWDevice) {
-
+            enterCurePage()
         }
 
         override fun cureStopEvent(item: CWDevice) {
@@ -62,7 +65,7 @@ class PrepareStatusProvider(private val context: PrepareActivity) :CWBaseProvide
         }
 
         override fun deviceCloseEvent(item: CWDevice) {
-
+            //todo:推出
         }
 
         override fun deviceConnect(flag: Boolean, item: CWDevice) {
@@ -102,6 +105,7 @@ class PrepareStatusProvider(private val context: PrepareActivity) :CWBaseProvide
                     }
                     else -> {
                         context.showToast("正常,可以去理疗页面了")
+                        mDevice?.gattWrite?.cwBleWriteStartCure()
                     }
                 }
             }
@@ -115,6 +119,15 @@ class PrepareStatusProvider(private val context: PrepareActivity) :CWBaseProvide
 
         }
 
+    }
+
+
+    /**
+     * 进入理疗页面
+     * */
+    private fun enterCurePage(){
+        context.setResult(0x01)
+        context.finish()
     }
 
 }

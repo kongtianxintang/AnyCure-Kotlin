@@ -11,6 +11,7 @@
 
     <!--圆角-->
     <dimen name="default_shape_radius">16dp</dimen>
+    <dimen name="cure_shape_radius">4dp</dimen>
 
     <!--外间距-->
     <dimen name="default_margin_left">8dp</dimen>

@@ -137,7 +137,11 @@ class MainActivity : BaseActivity() {
         }
     }
 
+    /**
+     * 切换到理疗页
+     * */
     private fun switchCure(){
         mBottomNavView!!.selectedItemId = R.id.action_cure
+
     }
 }

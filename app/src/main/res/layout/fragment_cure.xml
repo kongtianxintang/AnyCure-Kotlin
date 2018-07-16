@@ -51,4 +51,10 @@
         android:id="@+id/cure_minus_button"
         />
 
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="88dp"
+        android:id="@+id/cure_recycler_view"
+        />
+
 </android.support.constraint.ConstraintLayout>

@@ -65,16 +65,15 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
     var isAutoDisconnect:Boolean = false
 
     fun removeSelf(){
-        val isRemove = CWBleManager.mCWDevices.remove(this)
+
         isAutoDisconnect = true
         mGatt?.disconnect()
         mGatt?.close()
         mGatt = null
         mCallback = null
-
+        val isRemove = CWBleManager.mCWDevices.remove(this)
         Log.d(tag,"删除外接设备成功与否:$isRemove")
     }
-
 
 
     /**********************  CWGattReadInterface  start  **************************/
@@ -166,7 +165,13 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
      * - extension2: 扩展电极2状态
      * */
     override fun cwBleElectrodeNotify(isClose:Boolean,extensionIsInsert:Boolean,main:Int,extension1:Int,extension2:Int){
+        if (isClose){
+            removeSelf()
+            mCallback?.deviceCloseEvent(this)
+            return
+        }
         mCallback?.transferMainElectrodeNotify(main,this)
+
     }
 
     /**

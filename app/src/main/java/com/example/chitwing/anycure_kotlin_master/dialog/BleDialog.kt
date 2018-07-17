@@ -165,7 +165,6 @@ class BleDialog : DialogFragment() {
         super.onDestroy()
         mCallback = null
         mDialog = null
-        Log.e("dialog","销毁")
     }
 
 

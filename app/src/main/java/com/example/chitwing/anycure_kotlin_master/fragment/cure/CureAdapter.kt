@@ -2,6 +2,7 @@ package com.example.chitwing.anycure_kotlin_master.fragment.cure
 
 import android.animation.AnimatorInflater
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,7 +25,7 @@ import java.net.URI
  * Modifier:
  * Reason:
  *************************************************************/
-class CureAdapter(private val mContext:CureFragment,private val dataSet:List<CWDevice>) :RecyclerView.Adapter<CureAdapter.ViewHolder>(){
+class CureAdapter(private val mContext:CureFragment,private val dataSet:List<CWDevice>) :RecyclerView.Adapter<CureAdapter.ViewHolder>(),View.OnClickListener{
 
 
     /**
@@ -37,8 +38,9 @@ class CureAdapter(private val mContext:CureFragment,private val dataSet:List<CWD
             notifyDataSetChanged()
         }
     }
-    fun getSelectItem():CWDevice?{
+    private fun getSelectItem():CWDevice?{
         if (dataSet.count() > mSelect){
+            Log.e("cure_adapter","mSelect->$mSelect")
             return dataSet[mSelect]
         }
         return null
@@ -48,7 +50,15 @@ class CureAdapter(private val mContext:CureFragment,private val dataSet:List<CWD
         val current = getSelectItem()
         current?.let {
             dataSet.forEach {
-                if (current == it) it.mCallback = mContext.mProvider.callback else it.mCallback = null
+                if (current.mDevice.address == it.mDevice.address) {
+                    it.mCallback = mContext.mProvider.callback
+                    it.gattWrite.cwBleWriteSelectDevice(1)
+                    Log.e("测试","设置回调->${it.mDevice.address}")
+                } else {
+                    it.mCallback = null
+                    it.gattWrite.cwBleWriteSelectDevice(0)
+                    Log.e("测试","回调置空 ->${it.mDevice.address}")
+                }
             }
         }
     }
@@ -59,29 +69,42 @@ class CureAdapter(private val mContext:CureFragment,private val dataSet:List<CWD
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(parent.context)
                 .inflate(R.layout.cure_item, parent, false)
+        v.setOnClickListener(this)
         return ViewHolder(v)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.itemView.tag = position
         val item = dataSet[position]
         holder.name.text = item.recipe?.recipeName
         val name = "part_${item.recipe!!.recipeId}"
         val resId = mContext.activity!!.resources.getIdentifier(name,"mipmap",mContext.activity!!.packageName)
         holder.icon.setImageResource(resId)
 
+        if (mSelect == position) {
+            mAnimator.setTarget(holder.line); mAnimator.start()
+        } else {
+            holder.line.clearAnimation()
+        }
 
-        if (mSelect == position) { mAnimator.setTarget(holder.line); mAnimator.start() } else mAnimator.cancel()
+    }
 
-        holder.itemView.setOnClickListener {
+    override fun getItemCount(): Int {
+        return dataSet.count()
+    }
+
+
+    override fun onClick(v: View?) {
+
+
+        /**
+        *  holder.itemView.setOnClickListener {
             if (mSelect != position){
                 mSelect = position
                 notifyDataSetChanged()
             }
         }
-    }
-
-    override fun getItemCount(): Int {
-        return dataSet.count()
+        * */
     }
 
     class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {

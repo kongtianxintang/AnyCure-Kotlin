@@ -57,6 +57,10 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
     val gattWrite:CWGattWrite by lazy {
         return@lazy CWGattWrite(this)
     }
+    /**
+     * 记录是否当前的外设
+     * */
+    var isSelect:Boolean = false
 
     /**
      * 记录是否主动断开
@@ -65,7 +69,6 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
     var isAutoDisconnect:Boolean = false
 
     fun removeSelf(){
-
         isAutoDisconnect = true
         mGatt?.disconnect()
         mGatt?.close()
@@ -166,8 +169,8 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
      * */
     override fun cwBleElectrodeNotify(isClose:Boolean,extensionIsInsert:Boolean,main:Int,extension1:Int,extension2:Int){
         if (isClose){
-            removeSelf()
             mCallback?.deviceCloseEvent(this)
+            removeSelf()
             return
         }
         mCallback?.transferMainElectrodeNotify(main,this)
@@ -353,6 +356,7 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
             }
         }
     }
+
 
 }
 

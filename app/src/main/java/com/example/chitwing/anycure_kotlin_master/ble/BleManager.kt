@@ -53,12 +53,14 @@ object  CWBleManager {
      *设置蓝牙状态回调
      */
     fun setStatusCallback(statusCallback:CWBleStatusInterface) {
+        mStatusCallback = null
         mStatusCallback = statusCallback
     }
     /**
      * 设置发现设备回调
      * */
     fun setScanCallback(callback: CWScanCallback){
+        mScanCallback = null
         mScanCallback = callback
     }
 
@@ -90,8 +92,9 @@ object  CWBleManager {
             Log.d(tag,"请设置回调")
             return
         }
-
-        mBleManager = context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+        if (mBleManager == null){
+            mBleManager = context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+        }
         mBleAdapter = mBleManager!!.adapter
 
         if (!checkBluetoothSupport(context,mBleAdapter)){
@@ -220,13 +223,15 @@ object  CWBleManager {
         * */
         override fun onConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int) {
             super.onConnectionStateChange(gatt, status, newState)
-            when(status){
-                BluetoothGatt.GATT_SUCCESS -> {
+//            when(status){
+//                BluetoothGatt.GATT_SUCCESS -> {
                     when(newState){
                         BluetoothGatt.STATE_CONNECTED ->{
-                            val device = mCWDevices.find { it.mGatt == gatt }
+                            val device = mCWDevices.find { it.mDevice.address == gatt?.device?.address }
                             if (device != null){//重新链接的
-                                device.gattWrite.cwBleWriteDeviceStatusQuery()
+                                Log.d(tag,"重新链接的 gatt->$gatt")
+                                device.mGatt = gatt
+                                gatt?.discoverServices()
                             }else{//新链接
                                 gatt?.let {
                                     it.discoverServices()
@@ -240,13 +245,14 @@ object  CWBleManager {
                         }
                         BluetoothGatt.STATE_DISCONNECTED -> {
                             Log.d(tag,"断开链接")
-                            val device = mCWDevices.find {  it.mGatt == gatt }
+                            val device = mCWDevices.find {  it.mDevice.address == gatt?.device?.address }
                             device?.let {
                                 if (it.isAutoDisconnect){
                                     gatt?.close()
                                 }else{
-                                    Log.d(tag,"重新链接")
-                                    connect(it.mDevice)
+                                    gatt?.disconnect()
+                                    val isReConnect = gatt?.connect()
+                                    Log.d(tag,"重连->$isReConnect 断开链接gatt对象->$gatt")
                                 }
                             }
                             mStatusCallback?.bleStatus(CWBleStatus.Disconnect)
@@ -255,12 +261,12 @@ object  CWBleManager {
 
                         }
                     }
-                }
-                else -> {
-                    Log.d(tag,"gatt不知道啥状态$status")
-                    gatt?.close()
-                }
-            }
+//                }
+//                else -> {
+//                    Log.d(tag,"gatt不知道啥状态$status")
+//                    gatt?.close()
+//                }
+//            }
         }
 
         /**
@@ -272,14 +278,14 @@ object  CWBleManager {
             gatt?.let {
                 val service = it.getService(CWGattAttributes.CW_SERVICE_UUID)
                 val character = service.getCharacteristic(CWGattAttributes.CW_notifyUUID)
-                if (character != null){
-                    it.setCharacteristicNotification(character,true)
+                if (character != null) {
+                    it.setCharacteristicNotification(character, true)
                 }
 
                 character.descriptors.forEach {
                     it.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
                     val isWrite = gatt.writeDescriptor(it)
-                    Log.d(tag,"desc写入:$isWrite desc的uuid:${it.uuid}")
+                    Log.d(tag, "desc写入:$isWrite desc的uuid:${it.uuid}")
                 }
             }
         }
@@ -288,6 +294,11 @@ object  CWBleManager {
             super.onDescriptorWrite(gatt, descriptor, status)
             Log.d(tag,"descriptor写入$status")
             mStatusCallback?.bleStatus(CWBleStatus.Able)
+            val cw = mCWDevices.find { it.mGatt == gatt }
+            cw?.let {
+                Log.d(tag,"查询设备状态")
+                cw.gattWrite.cwBleWriteDeviceStatusQuery()
+            }
         }
 
         override fun onDescriptorRead(gatt: BluetoothGatt?, descriptor: BluetoothGattDescriptor?, status: Int) {

@@ -141,6 +141,7 @@ class MainActivity : BaseActivity() {
      * 切换到理疗页
      * */
     private fun switchCure(){
+        //todo:～～理疗页面做相应处理
         mBottomNavView!!.selectedItemId = R.id.action_cure
 
     }

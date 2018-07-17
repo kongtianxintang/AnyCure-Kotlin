@@ -46,6 +46,7 @@ class CWCureProvider(private val fm:CureFragment) {
 
         override fun deviceCloseEvent(item: CWDevice) {
             Log.e(tag,"deviceCloseEvent")
+            fm.endStatus()
         }
 
         override fun deviceConnect(flag: Boolean, item: CWDevice) {

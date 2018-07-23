@@ -35,7 +35,7 @@ class CureAdapter(private val mContext:CureFragment,private val dataSet:List<CWD
     fun setSelect(arg:Int){
         if (arg != mSelect){
             mSelect = arg
-            notifyDataSetChanged()
+            resetCallback()
         }
     }
     private fun getSelectItem():CWDevice?{
@@ -51,12 +51,14 @@ class CureAdapter(private val mContext:CureFragment,private val dataSet:List<CWD
         current?.let {
             dataSet.forEach {
                 if (current.mDevice.address == it.mDevice.address) {
-                    it.mCallback = mContext.mProvider.callback
+                    it.mCallback = mContext.provider.callback
                     it.gattWrite.cwBleWriteSelectDevice(1)
                     Log.e("测试","设置回调->${it.mDevice.address}")
+                    it.isSelect = true
                 } else {
                     it.mCallback = null
                     it.gattWrite.cwBleWriteSelectDevice(0)
+                    it.isSelect = false
                     Log.e("测试","回调置空 ->${it.mDevice.address}")
                 }
             }
@@ -81,12 +83,12 @@ class CureAdapter(private val mContext:CureFragment,private val dataSet:List<CWD
         val resId = mContext.activity!!.resources.getIdentifier(name,"mipmap",mContext.activity!!.packageName)
         holder.icon.setImageResource(resId)
 
-        if (mSelect == position) {
-            mAnimator.setTarget(holder.line); mAnimator.start()
-        } else {
+        if (item.isSelect){
+            mAnimator.setTarget(holder.line)
+            mAnimator.start()
+        }else{
             holder.line.clearAnimation()
         }
-
     }
 
     override fun getItemCount(): Int {

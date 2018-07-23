@@ -6,6 +6,7 @@ import android.support.design.widget.BottomNavigationView
 import android.util.Log
 import com.example.chitwing.anycure_kotlin_master.activity.BaseActivity
 import com.example.chitwing.anycure_kotlin_master.activity.prepare.PrepareProvider
+import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
 import com.example.chitwing.anycure_kotlin_master.fragment.BaseFragment
 import com.example.chitwing.anycure_kotlin_master.fragment.cure.CureFragment
 import com.example.chitwing.anycure_kotlin_master.fragment.mall.MallFragment
@@ -142,6 +143,11 @@ class MainActivity : BaseActivity() {
      * */
     private fun switchCure(){
         //todo:～～理疗页面做相应处理
+        mCureFragment?.let {
+            val arg = CWBleManager.mCWDevices.count()
+            it.mAdapter.setSelect(arg - 1)
+            it.mAdapter.notifyDataSetChanged()
+        }
         mBottomNavView!!.selectedItemId = R.id.action_cure
 
     }

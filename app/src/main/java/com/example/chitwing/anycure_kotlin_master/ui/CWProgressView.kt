@@ -8,7 +8,7 @@ import com.example.chitwing.anycure_kotlin_master.unit.Unit
 
 
 /**
- * TODO: document your custom view class.
+ * 自定义进度条
  */
 class CWProgressView : View {
 

@@ -28,12 +28,11 @@ class CureFragment : BaseFragment() {
     private lateinit var mMinusButton:AppCompatButton
     lateinit var mIntensityText:TextView
     private lateinit var mRecyclerView:RecyclerView
-    private lateinit var mAdapter:CureAdapter
-    lateinit var mProvider:CWCureProvider
+    lateinit var mAdapter:CureAdapter
     /**
      * 数据处理
      * */
-    private val provider by lazy {
+    val provider by lazy {
         return@lazy CWCureProvider(this)
     }
 
@@ -55,8 +54,6 @@ class CureFragment : BaseFragment() {
         mIntensityText = v.findViewById(R.id.cure_intensity_text)
         mIntensityText.text = "0"
         mRecyclerView = v.findViewById(R.id.cure_recycler_view)
-
-        mProvider = CWCureProvider(this)
 
         buttonAction()
         configureRecyclerView()
@@ -94,14 +91,14 @@ class CureFragment : BaseFragment() {
         mRecyclerView.adapter = mAdapter
         val layout = LinearLayoutManager(this.context!!, LinearLayoutManager.HORIZONTAL,false)
         mRecyclerView.layoutManager = layout
+        mAdapter.setSelect(0)
     }
+
 
     override fun onResume() {
         super.onResume()
-        mAdapter.notifyDataSetChanged()
         mAdapter.resetCallback()
     }
-
 
     /**
      * 暂停状态
@@ -122,6 +119,7 @@ class CureFragment : BaseFragment() {
             mIntensityText.text = "0"
             mIntensityText.visibility = View.GONE
             mProgress.setCurrent(0)
+            mAdapter.notifyDataSetChanged()
         }
 
     }

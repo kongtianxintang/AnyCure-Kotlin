@@ -7,4 +7,14 @@
     <color name="app_gray">#d2d2d2</color>
 
     <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+
+
+
+
+    <!--主题颜色-->
+    <color name="main">#3cb3ff</color>
+    <!--一键理疗button的背景色-->
+    <color name="fast_button_color">#ff7c14</color>
+    
 </resources>

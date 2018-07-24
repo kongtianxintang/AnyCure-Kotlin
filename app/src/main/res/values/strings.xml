@@ -20,12 +20,17 @@
     <!--button 默认文字-->
     <string name="default_button">默认文字</string>
     <string name="fast_button_title">一键启动</string>
+    <string name="select_button_title">选择处方</string>
 
     <!--textView 默认文字-->
     <string name="default_title">默认title</string>
     <string name="default_desc">默认描述</string>
     <string name="default_cure_recipe">暂无方案</string>
-    <string name="default_cure_fast_desc">"一键启动"将自动启用上次使用的方案</string>
+    <string name="default_cure_fast_desc">\"一键启动\"将自动启用上次使用的方案</string>
+    <string name="default_cure_count_down_desc">剩余时间</string>
+    <string name="default_cure_count_down">19:59</string>
+    <string name="default_device_power">电池电量</string>
+    <string name="default_device_link">设备连接正常</string>
 
     <!--底部栏-->
     <string name="item_recipe">处方</string>

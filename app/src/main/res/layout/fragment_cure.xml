@@ -3,9 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/colorPrimary"
+    android:background="@color/white"
     tools:context="com.example.chitwing.anycure_kotlin_master.fragment.cure.CureFragment">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:src="@mipmap/cure_bg_new"
+        app:layout_constraintBottom_toTopOf="@id/cure_select_recipe_button"
+        android:contentDescription="@string/default_title"
+        />
+
+    <!--显示强度-> 进度条-->
     <com.example.chitwing.anycure_kotlin_master.ui.CWProgressView
         android:layout_width="200dp"
         android:layout_height="200dp"
@@ -15,8 +24,10 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:id="@+id/cure_progress_view"
+        android:layout_marginBottom="100dp"
         />
 
+    <!--显示电极强度-->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,39 +40,40 @@
         android:id="@+id/cure_intensity_text"
         android:textSize="@dimen/intensity_size"
         />
-    <android.support.v7.widget.AppCompatButton
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:background="@mipmap/add"
+    <Button
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:background="@mipmap/add_highlight"
         app:layout_constraintRight_toLeftOf="@id/cure_progress_view"
         app:layout_constraintBottom_toBottomOf="@id/cure_progress_view"
         app:layout_constraintTop_toTopOf="@id/cure_progress_view"
-        android:layout_marginEnd="20dp"
+        android:layout_marginEnd="10dp"
         android:layout_marginTop="20dp"
         android:id="@+id/cure_add_button"
         />
-    <android.support.v7.widget.AppCompatButton
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+    <Button
+        android:layout_width="44dp"
+        android:layout_height="44dp"
         app:layout_constraintLeft_toRightOf="@id/cure_progress_view"
         app:layout_constraintTop_toTopOf="@id/cure_add_button"
         app:layout_constraintBottom_toBottomOf="@id/cure_add_button"
-        android:layout_marginStart="20dp"
-        android:background="@mipmap/minus"
+        android:background="@mipmap/minus_highlight"
         android:id="@+id/cure_minus_button"
+        android:layout_marginStart="10dp"
         />
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="88dp"
+        android:layout_height="76dp"
         android:id="@+id/cure_recycler_view"
         />
 
+    <!--一键理疗-->
     <Button
         android:id="@+id/cure_fast_button"
         android:layout_width="156dp"
         android:layout_height="44dp"
-        android:text="@string/default_button"
+        android:text="@string/fast_button_title"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -69,7 +81,20 @@
         android:textColor="@color/white"
         android:layout_marginBottom="18dp"
         />
+    <!--选择处方-->
+    <Button
+        android:layout_width="96dp"
+        android:layout_height="30dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/cure_fast_desc"
+        android:text="@string/select_button_title"
+        android:id="@+id/cure_select_recipe_button"
+        android:background="@drawable/select_recipe_btn_bg"
+        android:layout_marginBottom="@dimen/default_margin"
+        android:layout_marginEnd="@dimen/default_margin"
+        />
 
+    <!--显示一键启动描述-->
     <TextView
         android:id="@+id/cure_fast_desc"
         android:layout_width="wrap_content"
@@ -79,11 +104,150 @@
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginBottom="@dimen/default_margin"
         android:text="@string/default_cure_fast_desc"
-        android:textColor="@color/white"
-        android:textSize="@dimen/text_view_size"
+        android:textColor="@color/app_gray"
+        android:textSize="@dimen/text_size_small"
         android:layout_marginStart="@dimen/default_margin_left"
         />
 
+
+
+    <!--推出按钮-->
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/default_title"
+        app:layout_constraintRight_toRightOf="@id/cure_select_recipe_button"
+        app:layout_constraintTop_toTopOf="@id/cure_select_recipe_button"
+        app:layout_constraintBottom_toBottomOf="@id/cure_select_recipe_button"
+        android:id="@+id/cure_exit_button"
+        android:src="@mipmap/exit"
+        android:visibility="invisible"
+        android:background="@null"
+        />
+
+    <!--显示倒计时-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/default_cure_count_down"
+        android:textSize="20sp"
+        android:textColor="@color/count_down_color"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/cure_fast_desc"
+        android:id="@+id/cure_count_down_text"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/default_cure_count_down_desc"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cure_count_down_text"
+        android:textColor="@color/app_gray"
+        android:id="@+id/cure_count_down_desc"
+        android:layout_marginStart="@dimen/default_margin"
+        android:textSize="@dimen/text_size_small"
+        />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/default_title"
+        android:src="@mipmap/count_down"
+        app:layout_constraintTop_toTopOf="@id/cure_count_down_desc"
+        app:layout_constraintBottom_toBottomOf="@id/cure_count_down_desc"
+        app:layout_constraintRight_toLeftOf="@id/cure_count_down_desc"
+        android:id="@+id/cure_count_down_icon"
+        />
+    <!--电极强度的描述 -> 适中/强烈-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:text="@string/default_title"
+        app:layout_constraintBottom_toTopOf="@id/cure_intensity_text"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/white"
+        android:id="@+id/cure_intensity_desc"
+        />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/start"
+        android:background="@null"
+        app:layout_constraintLeft_toLeftOf="@id/cure_progress_view"
+        app:layout_constraintRight_toRightOf="@id/cure_progress_view"
+        app:layout_constraintTop_toTopOf="@id/cure_progress_view"
+        app:layout_constraintBottom_toBottomOf="@id/cure_progress_view"
+        android:id="@+id/cure_start_button"
+        android:contentDescription="@string/default_title"
+        />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/default_title"
+        android:src="@mipmap/stop"
+        android:background="@null"
+        app:layout_constraintTop_toBottomOf="@id/cure_intensity_text"
+        app:layout_constraintLeft_toLeftOf="@id/cure_progress_view"
+        app:layout_constraintRight_toRightOf="@id/cure_progress_view"
+        android:id="@+id/cure_stop_button"
+        android:padding="20dp"
+        />
+    <View
+        android:layout_width="1dp"
+        android:layout_height="12dp"
+        android:background="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/cure_progress_view"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:id="@+id/cure_one_line"
+        />
+    <!--电池电量-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/cure_device_power"
+        app:layout_constraintRight_toLeftOf="@id/cure_one_line"
+        app:layout_constraintTop_toTopOf="@id/cure_one_line"
+        app:layout_constraintBottom_toBottomOf="@id/cure_one_line"
+        android:text="@string/default_device_power"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_small"
+        android:layout_marginEnd="@dimen/default_margin"
+        />
+    <!--设备链接情况-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/cure_device_link"
+        app:layout_constraintLeft_toRightOf="@id/cure_one_line"
+        app:layout_constraintTop_toTopOf="@id/cure_one_line"
+        app:layout_constraintBottom_toBottomOf="@id/cure_one_line"
+        android:text="@string/default_device_link"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_small"
+        android:layout_marginStart="@dimen/default_margin"
+        />
+    <!--波浪-->
+    <com.scwang.wave.MultiWaveHeader
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:id="@+id/cure_wave_view"
+        app:layout_constraintBottom_toBottomOf="@id/cure_select_recipe_button"
+        android:scaleY="-1"
+        app:mwhProgress="1"
+        app:mwhVelocity="5"
+        app:mwhIsRunning="true"
+        app:mwhStartColor="@color/white"
+        app:mwhColorAlpha="0.8"
+        app:mwhCloseColor="@color/white"
+        />
+
+    <!--显示方案名称-->
     <TextView
         android:id="@+id/cure_recipe_title"
         android:layout_width="wrap_content"
@@ -92,8 +256,9 @@
         android:textColor="@color/black"
         android:textSize="18sp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/cure_fast_desc"
-        android:layout_marginBottom="@dimen/default_margin"
+        app:layout_constraintTop_toTopOf="@id/cure_select_recipe_button"
+        app:layout_constraintBottom_toBottomOf="@id/cure_select_recipe_button"
+        android:layout_marginStart="@dimen/default_margin"
         />
 
 </android.support.constraint.ConstraintLayout>

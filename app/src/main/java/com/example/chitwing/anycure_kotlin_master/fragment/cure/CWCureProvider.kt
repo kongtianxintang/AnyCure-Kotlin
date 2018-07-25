@@ -42,6 +42,8 @@ class CWCureProvider(private val fm:CureFragment) {
 
         override fun transferPlayDuration(value: Int, item: CWDevice) {
             Log.e(tag,"transferPlayDuration")
+            fm.setPlayTime(value)
+
         }
 
         override fun deviceCloseEvent(item: CWDevice) {
@@ -51,39 +53,39 @@ class CWCureProvider(private val fm:CureFragment) {
 
         override fun deviceConnect(flag: Boolean, item: CWDevice) {
             Log.e(tag,"deviceConnect")
+            //todo~~~~~设备连接情况
         }
 
         override fun prepareComplete(item: CWDevice) {
             Log.e(tag,"prepareComplete")
+            //todo~~准备完成,此页面未用到
         }
 
         override fun transferMainElectrodeNotify(value: Int, item: CWDevice) {
             Log.e(tag,"transferMainElectrodeNotify")
+            //todo:电极贴贴合状态～～硬件通知
         }
 
         override fun transferIntensity(value: Int, item: CWDevice) {
-            setIntensity(value)
+            fm.setIntensity(value)
         }
 
         override fun transferMainElectrodeQuery(value: Int, item: CWDevice) {
             Log.e(tag,"transferMainElectrodeQuery")
+            //todo:电极贴贴合状态～～查询
         }
 
         override fun transferPower(value: Int, item: CWDevice) {
             Log.e(tag,"transferPower->$value")
+            fm.setPower(value)
         }
 
         override fun prepareFail(error: String, item: CWDevice) {
             Log.e(tag,"prepareFail")
+            //todo:准备失败～～此页面未用到
         }
 
     }
 
-    fun setIntensity(arg:Int){
-        fm.activity!!.runOnUiThread {
-            fm.mProgress.setCurrent(arg)
-            fm.mIntensityText.text = "$arg"
-        }
-    }
 
 }

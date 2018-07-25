@@ -31,11 +31,27 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
      * 处方的时间
      * */
     var mDuration:Int = 1200
-
+    /**
+     * 处方已播放的时间
+     * */
+    var playDuration:Int = 0
     /**
      * 回调
      * */
     var mCallback:CWDeviceInterface? = null
+    /**
+     * 处方是否在播放
+     * */
+    var isPlay:Boolean = false
+    /**
+     * 强度
+     * */
+    var intensity:Int = 0
+    /**
+     * 电池电量
+     * */
+    var power:Int = 0
+
 
     /**
      * 处方内容
@@ -66,7 +82,15 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
      * 记录是否主动断开
      * 默认为否 当非主动断开时候 需要重连
      * */
-    var isAutoDisconnect:Boolean = false
+    var isAutoDisconnect:Boolean = true
+    /**
+     * 退出
+     * */
+    private var isExit:Boolean = false
+    /**
+     * 设备的连接状态
+     * */
+    var isConnect:Boolean = false
 
     fun removeSelf(){
         isAutoDisconnect = true
@@ -81,10 +105,15 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
 
     /**********************  CWGattReadInterface  start  **************************/
     override fun cwBleBatteryPower(value: Int) {
+        this.power = value
         mCallback?.transferPower(value,this)
     }
 
     override fun cwBleRecipeLoadingCallback(flag: Boolean, duration: Int) {
+        if (isExit) {
+            endCureNotify()
+            return
+        }
         if (flag){
             mDuration = duration
             gattWrite.cwBleWriteOutputModel(2)
@@ -101,10 +130,16 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
     }
 
     override fun cwBleSoftwareStartCureCallback(flag: Boolean) {
+        this.isPlay = true
         mCallback?.cureStartEvent(this)
     }
 
     override fun cwBleSoftwareStopCureCallback(flag: Boolean) {
+        if (isExit) {
+            gattWrite.cwBleWriteLoadingRecipe()
+            return
+        }
+        this.isPlay = false
         mCallback?.cureStopEvent(this)
     }
 
@@ -144,8 +179,8 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
      * - Parameter flag: 成功与否
      * */
     override fun cwBleSetOutputSchemeCallback(flag: Boolean){
-        //todo:到此处 可以开始输出了～
         mCallback?.prepareComplete(this)
+        isAutoDisconnect = false
     }
 
     /**
@@ -169,6 +204,7 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
      * */
     override fun cwBleElectrodeNotify(isClose:Boolean,extensionIsInsert:Boolean,main:Int,extension1:Int,extension2:Int){
         if (isClose){
+            this.isPlay = false
             mCallback?.deviceCloseEvent(this)
             removeSelf()
             return
@@ -189,6 +225,7 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
      * 硬件主动发送的处方播放完成通知
      * */
     override fun cwBlePlayCompleteNotify(flag: Boolean){
+        isPlay = false
         mCallback?.cureEndEvent(this)
     }
 
@@ -197,6 +234,7 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
      * - value: 强度
      * */
     override fun cwBleIntensityNotify(value: Int){
+        this.intensity = value
         mCallback?.transferIntensity(value,this)
     }
 
@@ -205,6 +243,7 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
      * Parameter flag: false 暂停 true 开始
      * */
     override fun cwBleCureStatusNotify(flag: Boolean){
+        isPlay = flag
         if (flag){
             mCallback?.cureStartEvent(this)
         }else{
@@ -234,7 +273,9 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
      * - playTime: 已播放时长
      * */
     override fun cwBleDeviceStatusQueryCallback(isPlay:Boolean,intensity:Int,recipeId:Int,playTime:Int){
-
+        this.isPlay = isPlay
+        this.playDuration = this.mDuration - playTime
+        this.intensity = intensity
     }
 
     /**
@@ -355,6 +396,67 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
                 }
             }
         }
+    }
+
+    /**~~~~~~~~~~~~~~~ 操作功能 ~~~~~~~~~~~~~~~~~**/
+    /**
+     * 结束理疗
+     * */
+
+    private fun endCureNotify(){
+        mCallback?.cureEndEvent(this)
+        removeSelf()
+    }
+
+    /**
+     * 结束
+     * */
+    fun endCureAction(){
+        isExit = true
+        if (isConnect){
+            stopCureAction()
+        }else{
+            endCureNotify()
+        }
+    }
+    /**
+     * 开始
+     * */
+    fun startCureAction(){
+        gattWrite.cwBleWriteStartCure()
+    }
+    /**
+     * 暂停
+     * */
+    fun stopCureAction(){
+        gattWrite.cwBleWriteStopCure()
+    }
+    /**
+     * 强度增加
+     * */
+    fun addIntensity(){
+        intensity += 1
+        if (intensity > 50){
+            intensity = 50
+        }
+        setBleIntensity()
+    }
+    /**
+     * 强度减少
+     * */
+    fun minusIntensity(){
+        intensity -= 1
+        if (intensity < 0 ){
+            intensity = 0
+        }
+        setBleIntensity()
+    }
+    /**
+     * 写入强度
+     * */
+    private fun setBleIntensity(){
+        gattWrite.cwBleWriteIntensity(intensity)
+        mCallback?.transferIntensity(intensity,this)
     }
 
 

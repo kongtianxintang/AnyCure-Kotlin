@@ -296,8 +296,10 @@ object  CWBleManager {
             mStatusCallback?.bleStatus(CWBleStatus.Able)
             val cw = mCWDevices.find { it.mGatt == gatt }
             cw?.let {
-                Log.d(tag,"查询设备状态")
-                cw.gattWrite.cwBleWriteDeviceStatusQuery()
+                if (!it.isAutoDisconnect){
+                    Log.d(tag,"查询设备状态")
+                    cw.gattWrite.cwBleWriteDeviceStatusQuery()
+                }
             }
         }
 

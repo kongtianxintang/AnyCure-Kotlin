@@ -16,6 +16,7 @@ import android.widget.TextView
 
 import com.example.chitwing.anycure_kotlin_master.R
 import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
+import com.example.chitwing.anycure_kotlin_master.ble.CWDevice
 import com.example.chitwing.anycure_kotlin_master.fragment.BaseFragment
 import com.example.chitwing.anycure_kotlin_master.ui.CWProgressView
 
@@ -99,24 +100,20 @@ class CureFragment : BaseFragment() {
     /**
      * button 点击事件
      * */
-    private var intentsy = 0
     private fun buttonAction(){
         mAddButton.setOnClickListener {
-            if (intentsy >= 50){
-                return@setOnClickListener
-            }
-            intentsy++
-            mProgress.setCurrent(intentsy)
-            mIntensityText.text = "$intentsy"
+            val item = mAdapter.getSelectItem()
+            item?.addIntensity()
         }
 
         mMinusButton.setOnClickListener {
-            if (intentsy <= 0){
-                return@setOnClickListener
-            }
-            intentsy--
-            mProgress.setCurrent(intentsy)
-            mIntensityText.text = "$intentsy"
+            val item = mAdapter.getSelectItem()
+            item?.minusIntensity()
+        }
+
+        mExitButton.setOnClickListener {
+            val item = mAdapter.getSelectItem()
+            item?.endCureAction()
         }
     }
 
@@ -224,6 +221,61 @@ class CureFragment : BaseFragment() {
             mSelectRecipeButton.visibility = View.INVISIBLE
             mStart.visibility = View.INVISIBLE
 
+        }
+    }
+
+    /**
+     * 切换控制器 相应变换
+     * */
+    fun switchDevice(item:CWDevice){
+        if (item.isPlay){
+            startStatus()
+            setIntensity(item.intensity)
+        }else{
+            stopStatus()
+        }
+        val time = item.mDuration - item.playDuration
+        setPlayTime(time)
+        setPower(item.power)
+
+    }
+
+    /**
+     * 强度相关
+     * */
+    fun setIntensity(value:Int){
+        activity?.runOnUiThread {
+            mProgress.setCurrent(value)
+            mIntensityText.text = "$value"
+            when(value){
+                in 0 .. 6 -> mIntensityDesc.text = "轻微"
+                in 7 .. 20 -> mIntensityDesc.text = "适中"
+                else -> mIntensityDesc.text = "强烈"
+            }
+        }
+    }
+
+    /**
+     * 时间相关
+     * */
+    fun setPlayTime(value: Int){
+        activity?.runOnUiThread {
+            val m = value / 60//分钟
+            val s = value % 60//秒
+            val str = "$m" + ":" + "$s"
+            mCountDown.text = str
+        }
+    }
+    /**
+     * 电池电量相关
+     * */
+    fun setPower(value: Int){
+        when(value) {
+            in 80 .. 100 -> Log.d(fm_tag,"电池->5")
+            in 50 .. 79 -> Log.d(fm_tag,"电池->4")
+            in 30 .. 49 -> Log.d(fm_tag,"电池->3")
+            in 10 .. 29 -> Log.d(fm_tag,"电池->2")
+            else -> Log.d(fm_tag,"电池->1")
         }
     }
 

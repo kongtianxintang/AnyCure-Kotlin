@@ -68,6 +68,21 @@
         android:id="@+id/cure_recycler_view"
         />
 
+    <!--波浪-->
+    <com.scwang.wave.MultiWaveHeader
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:id="@+id/cure_wave_view"
+        app:layout_constraintBottom_toBottomOf="@id/cure_select_recipe_button"
+        android:scaleY="-1"
+        app:mwhProgress="1"
+        app:mwhVelocity="5"
+        app:mwhIsRunning="true"
+        app:mwhStartColor="@color/white"
+        app:mwhColorAlpha="0.8"
+        app:mwhCloseColor="@color/white"
+        />
+
     <!--一键理疗-->
     <Button
         android:id="@+id/cure_fast_button"
@@ -232,20 +247,7 @@
         android:textSize="@dimen/text_size_small"
         android:layout_marginStart="@dimen/default_margin"
         />
-    <!--波浪-->
-    <com.scwang.wave.MultiWaveHeader
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:id="@+id/cure_wave_view"
-        app:layout_constraintBottom_toBottomOf="@id/cure_select_recipe_button"
-        android:scaleY="-1"
-        app:mwhProgress="1"
-        app:mwhVelocity="5"
-        app:mwhIsRunning="true"
-        app:mwhStartColor="@color/white"
-        app:mwhColorAlpha="0.8"
-        app:mwhCloseColor="@color/white"
-        />
+
 
     <!--显示方案名称-->
     <TextView

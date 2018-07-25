@@ -38,9 +38,11 @@ class CureAdapter(private val mContext:CureFragment,private val dataSet:List<CWD
             resetCallback()
         }
     }
-    private fun getSelectItem():CWDevice?{
+    /**
+     * 获取选择的设备
+     * */
+    fun getSelectItem():CWDevice?{
         if (dataSet.count() > mSelect){
-            Log.e("cure_adapter","mSelect->$mSelect")
             return dataSet[mSelect]
         }
         return null
@@ -55,6 +57,7 @@ class CureAdapter(private val mContext:CureFragment,private val dataSet:List<CWD
                     it.gattWrite.cwBleWriteSelectDevice(1)
                     Log.e("测试","设置回调->${it.mDevice.address}")
                     it.isSelect = true
+                    mContext.switchDevice(it)
                 } else {
                     it.mCallback = null
                     it.gattWrite.cwBleWriteSelectDevice(0)
@@ -97,16 +100,10 @@ class CureAdapter(private val mContext:CureFragment,private val dataSet:List<CWD
 
 
     override fun onClick(v: View?) {
-
-
-        /**
-        *  holder.itemView.setOnClickListener {
-            if (mSelect != position){
-                mSelect = position
-                notifyDataSetChanged()
-            }
+        v?.let {
+            val arg = it.tag as Int
+            setSelect(arg)
         }
-        * */
     }
 
     class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {

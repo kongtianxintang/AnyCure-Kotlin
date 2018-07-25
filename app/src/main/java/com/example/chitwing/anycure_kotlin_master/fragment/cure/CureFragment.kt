@@ -115,6 +115,16 @@ class CureFragment : BaseFragment() {
             val item = mAdapter.getSelectItem()
             item?.endCureAction()
         }
+
+        mStop.setOnClickListener {
+            val item = mAdapter.getSelectItem()
+            item?.stopCureAction()
+        }
+
+        mStart.setOnClickListener {
+            val item = mAdapter.getSelectItem()
+            item?.startCureAction()
+        }
     }
 
     /**
@@ -262,7 +272,7 @@ class CureFragment : BaseFragment() {
         activity?.runOnUiThread {
             val m = value / 60//分钟
             val s = value % 60//秒
-            val str = "$m" + ":" + "$s"
+            val str = "$m : $s"
             mCountDown.text = str
         }
     }

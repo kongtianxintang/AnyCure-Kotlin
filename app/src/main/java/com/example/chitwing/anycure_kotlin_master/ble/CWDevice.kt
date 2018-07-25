@@ -451,6 +451,15 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
         }
         setBleIntensity()
     }
+
+    /**
+     * 选择设备
+     * arg-> false 为取消选择 true为选择
+     * */
+    fun selectDevice(arg:Boolean){
+        val value = if (arg) 1 else 0
+        gattWrite.cwBleWriteSelectDevice(value)
+    }
     /**
      * 写入强度
      * */

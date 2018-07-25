@@ -54,14 +54,15 @@ class CureAdapter(private val mContext:CureFragment,private val dataSet:List<CWD
             dataSet.forEach {
                 if (current.mDevice.address == it.mDevice.address) {
                     it.mCallback = mContext.provider.callback
-                    it.gattWrite.cwBleWriteSelectDevice(1)
                     Log.e("测试","设置回调->${it.mDevice.address}")
                     it.isSelect = true
+                    it.selectDevice(true)
                     mContext.switchDevice(it)
                 } else {
                     it.mCallback = null
                     it.gattWrite.cwBleWriteSelectDevice(0)
                     it.isSelect = false
+                    it.selectDevice(false)
                     Log.e("测试","回调置空 ->${it.mDevice.address}")
                 }
             }

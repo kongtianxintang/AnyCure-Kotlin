@@ -84,6 +84,7 @@ object  CWBleManager {
 
     /*蓝牙开始扫描*/
     fun startScan(){
+        //todo:~~android 6.0需要请求定位权限
         val context = MyApp.getApp()
         val filter = IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED)
         context.registerReceiver(mBluetoothReceiver,filter)

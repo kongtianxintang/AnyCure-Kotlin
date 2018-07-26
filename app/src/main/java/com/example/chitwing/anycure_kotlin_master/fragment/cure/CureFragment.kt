@@ -2,7 +2,6 @@ package com.example.chitwing.anycure_kotlin_master.fragment.cure
 
 
 import android.os.Bundle
-import android.support.v7.widget.AppCompatButton
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -19,6 +18,7 @@ import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
 import com.example.chitwing.anycure_kotlin_master.ble.CWDevice
 import com.example.chitwing.anycure_kotlin_master.fragment.BaseFragment
 import com.example.chitwing.anycure_kotlin_master.ui.CWProgressView
+import java.text.DecimalFormat
 
 
 /**
@@ -245,7 +245,7 @@ class CureFragment : BaseFragment() {
             stopStatus()
         }
         val time = item.mDuration - item.playDuration
-        setPlayTime(time)
+        setLeftTime(time)
         setPower(item.power)
 
     }
@@ -268,11 +268,11 @@ class CureFragment : BaseFragment() {
     /**
      * 时间相关
      * */
-    fun setPlayTime(value: Int){
+    fun setLeftTime(value: Int){
         activity?.runOnUiThread {
-            val m = value / 60//分钟
-            val s = value % 60//秒
-            val str = "$m : $s"
+            val mm = DecimalFormat("00").format(value / 60) //分钟
+            val ss = DecimalFormat("00").format(value % 60) //秒
+            val str = "$mm : $ss"
             mCountDown.text = str
         }
     }

@@ -42,8 +42,7 @@ class CWCureProvider(private val fm:CureFragment) {
 
         override fun transferPlayDuration(value: Int, item: CWDevice) {
             Log.e(tag,"transferPlayDuration")
-            fm.setPlayTime(value)
-
+            fm.setLeftTime(value)
         }
 
         override fun deviceCloseEvent(item: CWDevice) {

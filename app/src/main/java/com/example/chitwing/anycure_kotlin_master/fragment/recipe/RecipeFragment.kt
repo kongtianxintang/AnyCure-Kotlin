@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import com.example.chitwing.anycure_kotlin_master.R
 import com.example.chitwing.anycure_kotlin_master.activity.prepare.PrepareActivity
 import com.example.chitwing.anycure_kotlin_master.base.CWOnItemClickListener
+import com.example.chitwing.anycure_kotlin_master.ble.CWCountDownTimer
 import com.example.chitwing.anycure_kotlin_master.database.DBHelper
 import com.example.chitwing.anycure_kotlin_master.dialog.BleDialog
 import com.example.chitwing.anycure_kotlin_master.dialog.BleDialogInterface
@@ -36,7 +37,6 @@ class RecipeFragment : BaseFragment() {
         super.onCreate(savedInstanceState)
 
         mProvider = RecipeProvider(this.context!!,this)
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,

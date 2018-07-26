@@ -2,8 +2,14 @@ package com.example.chitwing.anycure_kotlin_master.ble
 
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothGatt
+import android.os.CountDownTimer
+import android.os.Looper
 import android.util.Log
 import com.example.chitwing.anycure_kotlin_master.model.Recipe
+import kotlinx.coroutines.experimental.launch
+import java.util.*
+import kotlin.concurrent.thread
+import kotlin.coroutines.experimental.CoroutineContext
 
 /***********************************************************
  * 版权所有,2018,Chitwing.
@@ -90,7 +96,7 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
     /**
      * 设备的连接状态
      * */
-    var isConnect:Boolean = false
+    var isConnect:Boolean = true
 
     fun removeSelf(){
         isAutoDisconnect = true
@@ -132,9 +138,11 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
     override fun cwBleSoftwareStartCureCallback(flag: Boolean) {
         this.isPlay = true
         mCallback?.cureStartEvent(this)
+        startTimer()
     }
 
     override fun cwBleSoftwareStopCureCallback(flag: Boolean) {
+        pauseTimer()
         if (isExit) {
             gattWrite.cwBleWriteLoadingRecipe()
             return
@@ -246,8 +254,10 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
         isPlay = flag
         if (flag){
             mCallback?.cureStartEvent(this)
+            startTimer()
         }else{
             mCallback?.cureStopEvent(this)
+            pauseTimer()
         }
     }
 
@@ -274,7 +284,7 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
      * */
     override fun cwBleDeviceStatusQueryCallback(isPlay:Boolean,intensity:Int,recipeId:Int,playTime:Int){
         this.isPlay = isPlay
-        this.playDuration = this.mDuration - playTime
+        this.playDuration = playTime
         this.intensity = intensity
     }
 
@@ -347,11 +357,14 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
 
     /**********************  CWGattWriteInterface start  ************************/
     override fun cwGattWriteData(list: List<Int>) {
+        //todo:~~~需要做null判断
         val service = mGatt?.getService(CWGattAttributes.CW_SERVICE_UUID)
         val char = service?.getCharacteristic(CWGattAttributes.CW_CHARACTER_writeUUID)
         val bytes = list.map { it.toByte() }
-        char?.value = bytes.toByteArray()
-        mGatt?.writeCharacteristic(char)
+        char?.let {
+            it.value = bytes.toByteArray()
+            mGatt?.writeCharacteristic(it)
+        }
     }
     /**********************  CWGattWriteInterface end  ************************/
 
@@ -468,7 +481,55 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
         mCallback?.transferIntensity(intensity,this)
     }
 
+    /**
+     * 倒计时
+     * */
+    private var timer:Timer? = null
+    private var task:TimerTask? = null
+    /**
+     * 开始计时
+     * */
+    private fun startTimer() {
+        if (timer == null ){
+            timer = Timer()
+            task = object :TimerTask(){
+                override fun run() {
+                    playDuration += 1
+                    val left = mDuration - playDuration
+                    Log.d(tag,"剩余时间:->$left")
+                    mCallback?.transferPlayDuration(left,this@CWDevice)
+                }
+            }
+            timer?.schedule(task,Date(),1000)
+        }
+    }
+    /**
+     * 暂停
+     * */
+    private fun pauseTimer(){
+        timer?.cancel()
+        timer = null
+        task?.cancel()
+        task = null
+    }
+
+
 
 }
 
+ class CWCountDownTimer(private val millisInFuture:Long,private val countDownInterval:Long):CountDownTimer( millisInFuture,countDownInterval) {
+
+
+    private val tag = "定时器"
+    override fun onTick(millisUntilFinished: Long) {
+        Log.d(tag,"时间->${millisUntilFinished / 1000}秒")
+
+    }
+
+    override fun onFinish() {
+        Log.d(tag,"结束了")
+    }
+
+
+}
 

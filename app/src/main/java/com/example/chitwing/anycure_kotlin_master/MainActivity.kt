@@ -36,11 +36,9 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val job = launch {
-            initView()
-            fetchData()
-        }
-        job.start()
+        initView()
+        fetchData()
+
     }
 
     override fun initView() {

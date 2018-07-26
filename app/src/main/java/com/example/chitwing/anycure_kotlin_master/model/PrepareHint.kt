@@ -6,6 +6,7 @@ import android.text.SpannableStringBuilder
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.ForegroundColorSpan
 import android.util.Log
+import com.example.chitwing.anycure_kotlin_master.unit.Unit
 import io.objectbox.annotation.Entity
 
 /***********************************************************
@@ -33,7 +34,7 @@ class PrepareHint :BaseData(){
         val temp = title ?: "默认"
         val desc =  "\n" + (content ?:"默认")
         val color = ForegroundColorSpan(Color.BLUE)
-        val size = AbsoluteSizeSpan(30)
+        val size = AbsoluteSizeSpan(Unit.dip2px(20f))
 
         val spanBuilder = SpannableStringBuilder(temp)
 
@@ -43,7 +44,7 @@ class PrepareHint :BaseData(){
         spanBuilder.append(desc)
 
         val normal = ForegroundColorSpan(Color.RED)
-        val normalSize = AbsoluteSizeSpan(25)
+        val normalSize = AbsoluteSizeSpan(Unit.dip2px(17f))
         spanBuilder.setSpan(normal,temp.length,spanBuilder.length,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         spanBuilder.setSpan(normalSize,temp.length,spanBuilder.length,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 

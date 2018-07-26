@@ -2,14 +2,10 @@ package com.example.chitwing.anycure_kotlin_master.ble
 
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothGatt
-import android.os.CountDownTimer
-import android.os.Looper
 import android.util.Log
 import com.example.chitwing.anycure_kotlin_master.model.Recipe
-import kotlinx.coroutines.experimental.launch
 import java.util.*
-import kotlin.concurrent.thread
-import kotlin.coroutines.experimental.CoroutineContext
+
 
 /***********************************************************
  * 版权所有,2018,Chitwing.
@@ -213,6 +209,7 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
     override fun cwBleElectrodeNotify(isClose:Boolean,extensionIsInsert:Boolean,main:Int,extension1:Int,extension2:Int){
         if (isClose){
             this.isPlay = false
+            pauseTimer()
             mCallback?.deviceCloseEvent(this)
             removeSelf()
             return
@@ -234,7 +231,7 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
      * */
     override fun cwBlePlayCompleteNotify(flag: Boolean){
         isPlay = false
-        mCallback?.cureEndEvent(this)
+        endCureNotify()
     }
 
     /**
@@ -415,8 +412,8 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
     /**
      * 结束理疗
      * */
-
     private fun endCureNotify(){
+        pauseTimer()
         mCallback?.cureEndEvent(this)
         removeSelf()
     }
@@ -484,15 +481,15 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
     /**
      * 倒计时
      * */
-    private var timer:Timer? = null
-    private var task:TimerTask? = null
+    private var mTimer:Timer? = null
+    private var mTask:TimerTask? = null
     /**
      * 开始计时
      * */
     private fun startTimer() {
-        if (timer == null ){
-            timer = Timer()
-            task = object :TimerTask(){
+        if (mTimer == null ){
+            mTimer = Timer()
+            mTask = object :TimerTask(){
                 override fun run() {
                     playDuration += 1
                     val left = mDuration - playDuration
@@ -500,36 +497,21 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
                     mCallback?.transferPlayDuration(left,this@CWDevice)
                 }
             }
-            timer?.schedule(task,Date(),1000)
+            mTimer?.schedule(mTask,Date(),1000)
         }
     }
     /**
      * 暂停
      * */
     private fun pauseTimer(){
-        timer?.cancel()
-        timer = null
-        task?.cancel()
-        task = null
+        mTimer?.cancel()
+        mTimer = null
+        mTask?.cancel()
+        mTask = null
     }
 
 
 
 }
 
- class CWCountDownTimer(private val millisInFuture:Long,private val countDownInterval:Long):CountDownTimer( millisInFuture,countDownInterval) {
-
-
-    private val tag = "定时器"
-    override fun onTick(millisUntilFinished: Long) {
-        Log.d(tag,"时间->${millisUntilFinished / 1000}秒")
-
-    }
-
-    override fun onFinish() {
-        Log.d(tag,"结束了")
-    }
-
-
-}
 

@@ -130,15 +130,21 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
             }
         }
     }
-
+    /**
+     * 开始理疗->软件
+     * */
     override fun cwBleSoftwareStartCureCallback(flag: Boolean) {
         this.isPlay = true
         mCallback?.cureStartEvent(this)
-        startTimer()
+        startCountDownTimer()
+        resumeTimer()
     }
 
+    /**
+     * 暂停理疗->软件
+     * */
     override fun cwBleSoftwareStopCureCallback(flag: Boolean) {
-        pauseTimer()
+        pauseCountDownTimer()
         if (isExit) {
             gattWrite.cwBleWriteLoadingRecipe()
             return
@@ -209,7 +215,7 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
     override fun cwBleElectrodeNotify(isClose:Boolean,extensionIsInsert:Boolean,main:Int,extension1:Int,extension2:Int){
         if (isClose){
             this.isPlay = false
-            pauseTimer()
+            pauseCountDownTimer()
             mCallback?.deviceCloseEvent(this)
             removeSelf()
             return
@@ -240,6 +246,7 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
      * */
     override fun cwBleIntensityNotify(value: Int){
         this.intensity = value
+        this.mTrans = value
         mCallback?.transferIntensity(value,this)
     }
 
@@ -251,10 +258,10 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
         isPlay = flag
         if (flag){
             mCallback?.cureStartEvent(this)
-            startTimer()
+            startCountDownTimer()
         }else{
             mCallback?.cureStopEvent(this)
-            pauseTimer()
+            pauseCountDownTimer()
         }
     }
 
@@ -282,7 +289,10 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
     override fun cwBleDeviceStatusQueryCallback(isPlay:Boolean,intensity:Int,recipeId:Int,playTime:Int){
         this.isPlay = isPlay
         this.playDuration = playTime
-        this.intensity = intensity
+        if (isPlay) {
+            this.intensity = intensity
+            this.mTrans = intensity
+        }
     }
 
     /**
@@ -413,6 +423,7 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
      * 结束理疗
      * */
     private fun endCureNotify(){
+        pauseCountDownTimer()
         pauseTimer()
         mCallback?.cureEndEvent(this)
         removeSelf()
@@ -440,6 +451,8 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
      * */
     fun stopCureAction(){
         gattWrite.cwBleWriteStopCure()
+        pauseCountDownTimer()
+        pauseTimer()
     }
     /**
      * 强度增加
@@ -449,7 +462,8 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
         if (intensity > 50){
             intensity = 50
         }
-        setBleIntensity()
+        mTrans = intensity
+        setBleIntensity(intensity)
     }
     /**
      * 强度减少
@@ -459,7 +473,8 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
         if (intensity < 0 ){
             intensity = 0
         }
-        setBleIntensity()
+        mTrans = intensity
+        setBleIntensity(intensity)
     }
 
     /**
@@ -473,44 +488,89 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
     /**
      * 写入强度
      * */
-    private fun setBleIntensity(){
-        gattWrite.cwBleWriteIntensity(intensity)
-        mCallback?.transferIntensity(intensity,this)
+    private fun setBleIntensity(arg:Int){
+        gattWrite.cwBleWriteIntensity(arg)
+        mCallback?.transferIntensity(arg,this)
     }
 
     /**
-     * 倒计时
+     * 倒计时 --
      * */
-    private var mTimer:Timer? = null
-    private var mTask:TimerTask? = null
+    private var mCountDownTimer:Timer? = null
+    private var mCountDownTask:TimerTask? = null
     /**
      * 开始计时
      * */
-    private fun startTimer() {
-        if (mTimer == null ){
-            mTimer = Timer()
-            mTask = object :TimerTask(){
+    private fun startCountDownTimer() {
+        if (mCountDownTimer == null ){
+            mCountDownTimer = Timer()
+            mCountDownTask = object :TimerTask(){
                 override fun run() {
                     playDuration += 1
                     val left = mDuration - playDuration
                     Log.d(tag,"剩余时间:->$left")
                     mCallback?.transferPlayDuration(left,this@CWDevice)
+                    if (left <= 0){
+                        endCureAction()
+                    }
                 }
             }
-            mTimer?.schedule(mTask,Date(),1000)
+            mCountDownTimer?.schedule(mCountDownTask,Date(),1000)
         }
     }
     /**
      * 暂停
      * */
+    private fun pauseCountDownTimer(){
+        mCountDownTimer?.cancel()
+        mCountDownTimer = null
+        mCountDownTask?.cancel()
+        mCountDownTask = null
+    }
+
+    /**
+     * 幅度进度表 加减
+     * */
+    private var mTimer:Timer? = null
+    private var mTimerTask:TimerTask? = null
+    private var mTempIntensity:Int = 0//零时保存强度
+    private var mTrans:Int = 0//
+    /**
+     * 重启
+     * */
+    private fun resumeTimer(){
+        Log.d(tag,"步进->$intensity")
+        if (intensity <= 0) {
+            return
+        }
+       if (mTimer == null){
+           mTimer = Timer()
+           mTimerTask = object :TimerTask(){
+               override fun run() {
+                   mTempIntensity += 1
+                   if (mTempIntensity > intensity){
+                       pauseTimer()
+                       return
+                   }
+                   mTrans = mTempIntensity
+                   setBleIntensity(mTempIntensity)
+                   mCallback?.transferIntensity(mTempIntensity,this@CWDevice)
+               }
+           }
+           mTimer?.schedule(mTimerTask,Date(),500)
+       }
+    }
+    /**
+     * 暂停
+     */
     private fun pauseTimer(){
         mTimer?.cancel()
         mTimer = null
-        mTask?.cancel()
-        mTask = null
+        mTimerTask?.cancel()
+        mTimerTask = null
+        intensity = mTrans
+        mTempIntensity = 0
     }
-
-
 
 }
 

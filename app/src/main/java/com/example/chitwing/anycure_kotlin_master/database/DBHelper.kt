@@ -1,10 +1,10 @@
 package com.example.chitwing.anycure_kotlin_master.database
 
-import android.app.Activity
-import android.content.Context
 import com.example.chitwing.anycure_kotlin_master.app.MyApp
+import com.example.chitwing.anycure_kotlin_master.model.BaseData
 import com.example.chitwing.anycure_kotlin_master.model.BaseData_
 import io.objectbox.Box
+import io.objectbox.Property
 
 /***********************************************************
  * 版权所有,2018,Chitwing.
@@ -20,6 +20,12 @@ import io.objectbox.Box
  *************************************************************/
 object DBHelper {
 
+    /*查找 具体字段值*/
+    fun <T>find(property: Property,value:Long, entityClass:Class<T>):List<T>?{
+        val logs = syncLogs(entityClass)
+        val q = logs.query().equal(property,value).build()
+        return q.find()
+    }
     /*查找 单个id*/
     fun <T>find(id:Long,entityClass:Class<T>):T?{
         val logs = syncLogs(entityClass)

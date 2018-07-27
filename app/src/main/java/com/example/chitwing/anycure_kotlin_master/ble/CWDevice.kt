@@ -52,7 +52,7 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
     /**
      * 电池电量
      * */
-    var power:Int = 0
+    var power:Int = 100
 
 
     /**
@@ -145,12 +145,14 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
      * */
     override fun cwBleSoftwareStopCureCallback(flag: Boolean) {
         pauseCountDownTimer()
+        pauseTimer()
         if (isExit) {
             gattWrite.cwBleWriteLoadingRecipe()
             return
         }
         this.isPlay = false
         mCallback?.cureStopEvent(this)
+
     }
 
     /**
@@ -287,12 +289,27 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
      * - playTime: 已播放时长
      * */
     override fun cwBleDeviceStatusQueryCallback(isPlay:Boolean,intensity:Int,recipeId:Int,playTime:Int){
-        this.isPlay = isPlay
         this.playDuration = playTime
         if (isPlay) {
             this.intensity = intensity
             this.mTrans = intensity
+            mCallback?.transferIntensity(intensity,this)
+            if (!this.isPlay){
+                mCallback?.cureStartEvent(this)
+                startCountDownTimer()
+                resumeTimer()
+            }
+            this.isPlay = true
+        }else{
+            if (this.isPlay){
+                mCallback?.cureStopEvent(this)
+                pauseCountDownTimer()
+                pauseTimer()
+            }
+            this.isPlay = false
         }
+        val left = mDuration - playTime
+        mCallback?.transferPlayDuration(left,this)
     }
 
     /**
@@ -451,8 +468,6 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
      * */
     fun stopCureAction(){
         gattWrite.cwBleWriteStopCure()
-        pauseCountDownTimer()
-        pauseTimer()
     }
     /**
      * 强度增加
@@ -508,7 +523,6 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
                 override fun run() {
                     playDuration += 1
                     val left = mDuration - playDuration
-                    Log.d(tag,"剩余时间:->$left")
                     mCallback?.transferPlayDuration(left,this@CWDevice)
                     if (left <= 0){
                         endCureAction()
@@ -539,7 +553,6 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
      * 重启
      * */
     private fun resumeTimer(){
-        Log.d(tag,"步进->$intensity")
         if (intensity <= 0) {
             return
         }
@@ -570,6 +583,14 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
         mTimerTask = null
         intensity = mTrans
         mTempIntensity = 0
+    }
+
+    /**
+     * 设备的连接状况
+     * */
+    fun setDeviceConnect(arg:Boolean){
+        isConnect = arg
+        mCallback?.deviceConnect(arg,this)
     }
 
 }

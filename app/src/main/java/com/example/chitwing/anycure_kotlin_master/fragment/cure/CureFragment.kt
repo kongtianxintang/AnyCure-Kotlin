@@ -17,6 +17,7 @@ import com.example.chitwing.anycure_kotlin_master.R
 import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
 import com.example.chitwing.anycure_kotlin_master.ble.CWDevice
 import com.example.chitwing.anycure_kotlin_master.fragment.BaseFragment
+import com.example.chitwing.anycure_kotlin_master.model.Recipe
 import com.example.chitwing.anycure_kotlin_master.ui.CWProgressView
 import java.text.DecimalFormat
 
@@ -32,10 +33,10 @@ class CureFragment : BaseFragment() {
     /**
      *子控件
      */
-    lateinit var mProgress:CWProgressView//自定义进度条
+    private lateinit var mProgress:CWProgressView//自定义进度条
     private lateinit var mAddButton:Button//加
     private lateinit var mMinusButton:Button//减
-    lateinit var mIntensityText:TextView//强度
+    private lateinit var mIntensityText:TextView//强度
     private lateinit var mRecyclerView:RecyclerView
     private lateinit var mFastButton:Button //一键启动
     private lateinit var mSelectRecipeButton:Button //选择处方
@@ -51,7 +52,13 @@ class CureFragment : BaseFragment() {
     private lateinit var mLine:View//1dp的线
     private lateinit var mDevicePower:TextView//电池电量
     private lateinit var mDeviceLink:TextView//设备连接情况
+    private lateinit var mDeviceLinkIcon:ImageView//设备连接状态->图标
+    private lateinit var mDevicePowerIcon:ImageView//电池电量->图标
 
+    /**
+     * 当前所使用的处方
+     * */
+    private var mRecipe:Recipe? = null
 
     /**
      * 数据处理
@@ -92,6 +99,8 @@ class CureFragment : BaseFragment() {
         mLine = v.findViewById(R.id.cure_one_line)
         mDeviceLink = v.findViewById(R.id.cure_device_link)
         mDevicePower = v.findViewById(R.id.cure_device_power)
+        mDevicePowerIcon = v.findViewById(R.id.cure_device_power_icon)
+        mDeviceLinkIcon = v.findViewById(R.id.cure_device_link_icon)
 
         buttonAction()
         configureRecyclerView()
@@ -172,6 +181,8 @@ class CureFragment : BaseFragment() {
             mLine.visibility = View.VISIBLE
             mDeviceLink.visibility = View.VISIBLE
             mDevicePower.visibility = View.VISIBLE
+            mDeviceLinkIcon.visibility = View.VISIBLE
+            mDevicePowerIcon.visibility = View.VISIBLE
         }
     }
 
@@ -193,7 +204,8 @@ class CureFragment : BaseFragment() {
             mLine.visibility = View.INVISIBLE
             mDeviceLink.visibility = View.INVISIBLE
             mDevicePower.visibility = View.INVISIBLE
-
+            mDeviceLinkIcon.visibility = View.INVISIBLE
+            mDevicePowerIcon.visibility = View.INVISIBLE
 
             //显示
             mSelectRecipeButton.visibility = View.VISIBLE
@@ -224,6 +236,8 @@ class CureFragment : BaseFragment() {
             mLine.visibility = View.VISIBLE
             mDeviceLink.visibility = View.VISIBLE
             mDevicePower.visibility = View.VISIBLE
+            mDeviceLinkIcon.visibility = View.VISIBLE
+            mDevicePowerIcon.visibility = View.VISIBLE
 
             //隐藏
             mFastButton.visibility = View.INVISIBLE
@@ -247,7 +261,8 @@ class CureFragment : BaseFragment() {
         val time = item.mDuration - item.playDuration
         setLeftTime(time)
         setPower(item.power)
-
+        setLinkStatus(item.isConnect)
+        setCurrentRecipe(item)
     }
 
     /**
@@ -279,13 +294,41 @@ class CureFragment : BaseFragment() {
     /**
      * 电池电量相关
      * */
+    private var mImageId:Int? = null
     fun setPower(value: Int){
-        when(value) {
-            in 80 .. 100 -> Log.d(fm_tag,"电池->5")
-            in 50 .. 79 -> Log.d(fm_tag,"电池->4")
-            in 30 .. 49 -> Log.d(fm_tag,"电池->3")
-            in 10 .. 29 -> Log.d(fm_tag,"电池->2")
-            else -> Log.d(fm_tag,"电池->1")
+        val imgId = when(value) {
+            in 80 .. 100 -> R.mipmap.power_lev_1
+            in 50 .. 79 -> R.mipmap.power_lev_2
+            in 30 .. 49 -> R.mipmap.power_lev_3
+            in 10 .. 29 -> R.mipmap.power_lev_4
+            else -> R.mipmap.power_lev_5
+        }
+        activity?.runOnUiThread {
+            if (mImageId != null){
+                if (mImageId!! != imgId){
+                    mImageId = imgId
+                    mDevicePowerIcon.setImageResource(imgId)
+                }
+            }else{
+                mImageId = imgId
+                mDevicePowerIcon.setImageResource(imgId)
+            }
+        }
+    }
+    /**
+     * 设备连接情况
+     * */
+    fun setLinkStatus(arg:Boolean){
+        activity?.runOnUiThread {
+            val imgId = if (arg) R.mipmap.device_connect else R.mipmap.device_disconnect
+            mDeviceLinkIcon.setImageResource(imgId)
+        }
+    }
+
+    private fun setCurrentRecipe(item: CWDevice){
+        activity?.runOnUiThread {
+            mRecipe = item.recipe
+            mRecipeText.text = item.recipe?.recipeName
         }
     }
 

@@ -44,22 +44,22 @@
         android:layout_width="44dp"
         android:layout_height="44dp"
         android:background="@mipmap/add_highlight"
-        app:layout_constraintRight_toLeftOf="@id/cure_progress_view"
         app:layout_constraintBottom_toBottomOf="@id/cure_progress_view"
         app:layout_constraintTop_toTopOf="@id/cure_progress_view"
-        android:layout_marginEnd="10dp"
+        app:layout_constraintLeft_toRightOf="@id/cure_progress_view"
         android:layout_marginTop="20dp"
+        android:layout_marginStart="10dp"
         android:id="@+id/cure_add_button"
         />
     <Button
         android:layout_width="44dp"
         android:layout_height="44dp"
-        app:layout_constraintLeft_toRightOf="@id/cure_progress_view"
+        app:layout_constraintRight_toLeftOf="@id/cure_progress_view"
         app:layout_constraintTop_toTopOf="@id/cure_add_button"
         app:layout_constraintBottom_toBottomOf="@id/cure_add_button"
         android:background="@mipmap/minus_highlight"
         android:id="@+id/cure_minus_button"
-        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         />
 
     <android.support.v7.widget.RecyclerView
@@ -234,12 +234,38 @@
         android:textSize="@dimen/text_size_small"
         android:layout_marginEnd="@dimen/default_margin"
         />
+
+    <!--电池电量 图标-->
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/default_device_link"
+        android:src="@mipmap/power_lev_1"
+        app:layout_constraintRight_toLeftOf="@id/cure_device_power"
+        app:layout_constraintTop_toTopOf="@id/cure_one_line"
+        app:layout_constraintBottom_toBottomOf="@id/cure_one_line"
+        android:layout_marginEnd="@dimen/default_margin"
+        android:id="@+id/cure_device_power_icon"
+        />
+
+    <!--设备连接情况 图标-->
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/default_device_link"
+        app:layout_constraintLeft_toRightOf="@id/cure_one_line"
+        app:layout_constraintTop_toTopOf="@id/cure_one_line"
+        app:layout_constraintBottom_toBottomOf="@id/cure_one_line"
+        android:layout_marginStart="@dimen/default_margin"
+        android:src="@mipmap/device_connect"
+        android:id="@+id/cure_device_link_icon"
+        />
     <!--设备链接情况-->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/cure_device_link"
-        app:layout_constraintLeft_toRightOf="@id/cure_one_line"
+        app:layout_constraintLeft_toRightOf="@id/cure_device_link_icon"
         app:layout_constraintTop_toTopOf="@id/cure_one_line"
         app:layout_constraintBottom_toBottomOf="@id/cure_one_line"
         android:text="@string/default_device_link"
@@ -247,7 +273,6 @@
         android:textSize="@dimen/text_size_small"
         android:layout_marginStart="@dimen/default_margin"
         />
-
 
     <!--显示方案名称-->
     <TextView

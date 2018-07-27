@@ -233,6 +233,7 @@ object  CWBleManager {
                                 Log.d(tag,"重新链接的 gatt->$gatt")
                                 device.mGatt = gatt
                                 gatt?.discoverServices()
+                                device.setDeviceConnect(true)
                             }else{//新链接
                                 gatt?.let {
                                     it.discoverServices()
@@ -248,6 +249,7 @@ object  CWBleManager {
                             Log.d(tag,"断开链接")
                             val device = mCWDevices.find {  it.mDevice.address == gatt?.device?.address }
                             device?.let {
+                                it.setDeviceConnect(false)
                                 if (it.isAutoDisconnect){
                                     gatt?.close()
                                 }else{

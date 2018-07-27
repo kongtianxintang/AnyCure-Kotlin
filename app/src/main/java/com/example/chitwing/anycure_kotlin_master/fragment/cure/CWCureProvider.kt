@@ -41,7 +41,6 @@ class CWCureProvider(private val fm:CureFragment) {
         }
 
         override fun transferPlayDuration(value: Int, item: CWDevice) {
-            Log.e(tag,"transferPlayDuration")
             fm.setLeftTime(value)
         }
 
@@ -52,7 +51,7 @@ class CWCureProvider(private val fm:CureFragment) {
 
         override fun deviceConnect(flag: Boolean, item: CWDevice) {
             Log.e(tag,"deviceConnect")
-            //todo~~~~~设备连接情况
+            fm.setLinkStatus(flag)
         }
 
         override fun prepareComplete(item: CWDevice) {

@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.chitwing.anycure_kotlin_master.R
+import com.example.chitwing.anycure_kotlin_master.app.MyApp
 import com.example.chitwing.anycure_kotlin_master.ble.CWDevice
 import java.net.URI
 
@@ -65,6 +66,7 @@ class CureAdapter(private val mContext:CureFragment,private val dataSet:List<CWD
                     Log.e("测试","回调置空 ->${it.mDevice.address}")
                 }
             }
+            notifyDataSetChanged()
         }
     }
     private val mAnimator by lazy {
@@ -87,10 +89,11 @@ class CureAdapter(private val mContext:CureFragment,private val dataSet:List<CWD
         holder.icon.setImageResource(resId)
 
         if (item.isSelect){
-            mAnimator.setTarget(holder.line)
-            mAnimator.start()
+            holder.anim.setTarget(holder.line)
+            holder.anim.start()
         }else{
-            holder.line.clearAnimation()
+            holder.anim.end()
+            holder.anim.setupEndValues()
         }
     }
 
@@ -110,5 +113,6 @@ class CureAdapter(private val mContext:CureFragment,private val dataSet:List<CWD
         val icon: ImageView = v.findViewById(R.id.cure_item_icon)
         val name: TextView = v.findViewById(R.id.cure_item_name)
         val line: View = v.findViewById(R.id.cure_item_line)
+        val anim = AnimatorInflater.loadAnimator(MyApp.getApp(),R.animator.alpha)
     }
 }

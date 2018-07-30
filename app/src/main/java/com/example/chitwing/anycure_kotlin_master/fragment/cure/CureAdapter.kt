@@ -6,6 +6,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -89,11 +91,9 @@ class CureAdapter(private val mContext:CureFragment,private val dataSet:List<CWD
         holder.icon.setImageResource(resId)
 
         if (item.isSelect){
-            holder.anim.setTarget(holder.line)
-            holder.anim.start()
+            holder.line.startAnimation(holder.alphaAnimation)
         }else{
-            holder.anim.end()
-            holder.anim.setupEndValues()
+            holder.alphaAnimation.cancel()
         }
     }
 
@@ -113,6 +113,12 @@ class CureAdapter(private val mContext:CureFragment,private val dataSet:List<CWD
         val icon: ImageView = v.findViewById(R.id.cure_item_icon)
         val name: TextView = v.findViewById(R.id.cure_item_name)
         val line: View = v.findViewById(R.id.cure_item_line)
-        val anim = AnimatorInflater.loadAnimator(MyApp.getApp(),R.animator.alpha)
+        val alphaAnimation = AlphaAnimation(0.3f,1f)
+        init {
+            alphaAnimation.fillBefore = true
+            alphaAnimation.duration = 1000
+            alphaAnimation.repeatCount = -1
+            alphaAnimation.repeatMode = Animation.REVERSE
+        }
     }
 }

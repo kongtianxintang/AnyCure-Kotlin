@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/cure_corner"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:id="@+id/cw_dialog_title_bg"
+        >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:src="@mipmap/exit"
+            android:id="@+id/cw_dialog_icon"
+            android:contentDescription="@string/default_title"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/default_title"
+            app:layout_constraintLeft_toRightOf="@id/cw_dialog_icon"
+            android:textSize="@dimen/text_size_big"
+            android:textColor="@color/white"
+            android:id="@+id/cw_dialog_title"
+            />
+    </android.support.constraint.ConstraintLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/cw_dialog_title_bg"
+        android:id="@+id/cw_dialog_desc"
+        android:text="@string/default_title"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_default"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        />
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@drawable/dialog_down_bg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cw_dialog_desc"
+        >
+        <Button
+            android:id="@+id/cw_dialog_cancel_button"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="@string/button_cancel_text"
+            app:layout_constraintVertical_chainStyle="spread"
+            app:layout_constraintVertical_weight="1"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/cw_dialog_sure_button"
+            android:layout_marginEnd="@dimen/default_margin"
+            />
+
+        <Button
+            android:id="@+id/cw_dialog_sure_button"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="@string/button_sure_text"
+            app:layout_constraintVertical_weight="1"
+            app:layout_constraintLeft_toRightOf="@id/cw_dialog_cancel_button"
+            app:layout_constraintRight_toRightOf="parent"
+             />
+        <Button
+            android:layout_width="154dp"
+            android:layout_height="match_parent"
+            android:text="@string/button_sure_text"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:id="@+id/cw_dialog_alone_button"
+            android:visibility="gone"
+            />
+    </android.support.constraint.ConstraintLayout>
+
+
+</android.support.constraint.ConstraintLayout>

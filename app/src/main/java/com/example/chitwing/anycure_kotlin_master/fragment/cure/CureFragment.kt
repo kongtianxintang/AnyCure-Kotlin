@@ -16,6 +16,9 @@ import android.widget.TextView
 import com.example.chitwing.anycure_kotlin_master.R
 import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
 import com.example.chitwing.anycure_kotlin_master.ble.CWDevice
+import com.example.chitwing.anycure_kotlin_master.dialog.CWDialog
+import com.example.chitwing.anycure_kotlin_master.dialog.CWDialogInterface
+import com.example.chitwing.anycure_kotlin_master.dialog.CWDialogType
 import com.example.chitwing.anycure_kotlin_master.fragment.BaseFragment
 import com.example.chitwing.anycure_kotlin_master.model.Recipe
 import com.example.chitwing.anycure_kotlin_master.ui.CWProgressView
@@ -121,8 +124,7 @@ class CureFragment : BaseFragment() {
         }
 
         mExitButton.setOnClickListener {
-            val item = mAdapter.getSelectItem()
-            item?.endCureAction()
+            userEndCure()
         }
 
         mStop.setOnClickListener {
@@ -329,6 +331,35 @@ class CureFragment : BaseFragment() {
         activity?.runOnUiThread {
             mRecipe = item.recipe
             mRecipeText.text = item.recipe?.recipeName
+        }
+    }
+
+    /**
+     * 理疗中结束
+     * */
+    private fun userEndCure(){
+        val dialog = CWDialog.Builder().setTitle("提示").setDesc("你确定要停止理疗吗?").create()
+        dialog.setCallback(mDialogCallback)
+        dialog.show(activity!!.fragmentManager,"end_cure")
+    }
+
+    private val mDialogCallback = object :CWDialogInterface {
+        override fun onClickButton(flag: Boolean, item: CWDialog) {
+            if (flag) {
+                when (item.getType()){
+                    CWDialogType.Other -> {
+                        val device = mAdapter.getSelectItem()
+                        device?.endCureAction()
+                    }
+                    CWDialogType.Error -> {
+
+                    }
+                    CWDialogType.Hint -> {
+
+                    }
+                }
+            }
+            item.dismiss()
         }
     }
 

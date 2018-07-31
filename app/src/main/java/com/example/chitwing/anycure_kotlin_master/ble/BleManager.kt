@@ -74,9 +74,11 @@ object  CWBleManager {
             when (state) {
                 BluetoothAdapter.STATE_ON -> {
                     Log.d(tag,"蓝牙打开")
+                    mStatusCallback?.bleStatus(CWBleStatus.ON)
                 }
                 BluetoothAdapter.STATE_OFF -> {
                     Log.d(tag,"蓝牙关闭")
+                    mStatusCallback?.bleStatus(CWBleStatus.OFF)
                 }
             }
         }
@@ -224,8 +226,8 @@ object  CWBleManager {
         * */
         override fun onConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int) {
             super.onConnectionStateChange(gatt, status, newState)
-//            when(status){
-//                BluetoothGatt.GATT_SUCCESS -> {
+            when(status){
+                BluetoothGatt.GATT_SUCCESS -> {
                     when(newState){
                         BluetoothGatt.STATE_CONNECTED ->{
                             val device = mCWDevices.find { it.mDevice.address == gatt?.device?.address }
@@ -264,12 +266,12 @@ object  CWBleManager {
 
                         }
                     }
-//                }
-//                else -> {
-//                    Log.d(tag,"gatt不知道啥状态$status")
-//                    gatt?.close()
-//                }
-//            }
+                }
+                else -> {
+                    Log.d(tag,"gatt不知道啥状态$status")
+                    gatt?.close()
+                }
+            }
         }
 
         /**

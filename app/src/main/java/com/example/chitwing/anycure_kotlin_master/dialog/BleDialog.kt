@@ -90,11 +90,6 @@ class BleDialog : DialogFragment() {
     }
 
 
-//    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-//        val v = inflater.inflate(R.layout.ble_dialog, container, false)
-//
-//        return v
-//    }
 
     /**
      * 显示dialog

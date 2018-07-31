@@ -43,12 +43,16 @@
     <string name="bind">绑定</string>
 
     <!--设备准备页面-->
-    <string name="prepare_button">开始理疗</string>
+    <string name="prepare_button">设备初始化中</string>
 
     <!--activity 的label-->
     <string name="prepare_title">电极贴合</string>
     <string name="bind_title">设备绑定</string>
     <string name="search_title">设备搜索</string>
     <string name="main_title">主页</string>
+
+    <!--button的描述-->
+    <string name="button_cancel_text">取消</string>
+    <string name="button_sure_text">确定</string>
 
 </resources>

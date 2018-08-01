@@ -22,6 +22,8 @@ import com.example.chitwing.anycure_kotlin_master.dialog.CWDialogType
 import com.example.chitwing.anycure_kotlin_master.fragment.BaseFragment
 import com.example.chitwing.anycure_kotlin_master.model.Recipe
 import com.example.chitwing.anycure_kotlin_master.ui.CWProgressView
+import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.experimental.launch
 import java.text.DecimalFormat
 
 
@@ -360,6 +362,22 @@ class CureFragment : BaseFragment() {
                 }
             }
             item.dismiss()
+        }
+    }
+
+    /**
+     * 当理疗结束/设备关机的时候
+     * */
+    fun minusDevice(){
+        if (CWBleManager.mCWDevices.isNotEmpty()){
+            val count = CWBleManager.mCWDevices.count()
+            if (count > 0){
+                val job = launch {
+                    delay(500)
+                    mAdapter.setSelect(0)
+                }
+                job.start()
+            }
         }
     }
 

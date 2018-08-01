@@ -57,22 +57,19 @@ class CureAdapter(private val mContext:CureFragment,private val dataSet:List<CWD
             dataSet.forEach {
                 if (current.mDevice.address == it.mDevice.address) {
                     it.mCallback = mContext.provider.callback
-                    Log.e("测试","设置回调->${it.mDevice.address}")
+                    it.statusCallback = null
                     it.isSelect = true
                     it.selectDevice(true)
                     mContext.switchDevice(it)
                 } else {
                     it.mCallback = null
+                    it.statusCallback = mContext.provider.statusCallback
                     it.isSelect = false
                     it.selectDevice(false)
-                    Log.e("测试","回调置空 ->${it.mDevice.address}")
                 }
             }
             notifyDataSetChanged()
         }
-    }
-    private val mAnimator by lazy {
-        return@lazy AnimatorInflater.loadAnimator(mContext.activity!!,R.animator.alpha)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

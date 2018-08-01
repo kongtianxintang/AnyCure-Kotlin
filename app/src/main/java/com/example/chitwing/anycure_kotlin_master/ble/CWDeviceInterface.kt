@@ -74,3 +74,10 @@ interface CWDeviceInterface {
      * */
     fun transferMainElectrodeQuery(value: Int,item: CWDevice)
 }
+
+interface CWDeviceStatusInterface{
+    /*关机*/
+    fun transferDeviceClose(item: CWDevice)
+    /*播放结束*/
+    fun transferDevicePlayComplete(item: CWDevice)
+}

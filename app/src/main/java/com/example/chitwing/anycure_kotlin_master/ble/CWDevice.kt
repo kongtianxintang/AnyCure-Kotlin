@@ -42,6 +42,10 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
      * */
     var mCallback:CWDeviceInterface? = null
     /**
+     * 暂时只传输关机信息/播放结束
+     * */
+    var statusCallback:CWDeviceStatusInterface? = null
+    /**
      * 处方是否在播放
      * */
     var isPlay:Boolean = false
@@ -219,6 +223,7 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
             this.isPlay = false
             pauseCountDownTimer()
             mCallback?.deviceCloseEvent(this)
+            statusCallback?.transferDeviceClose(this)
             removeSelf()
             return
         }
@@ -443,6 +448,7 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
         pauseCountDownTimer()
         pauseTimer()
         mCallback?.cureEndEvent(this)
+        statusCallback?.transferDevicePlayComplete(this)
         removeSelf()
     }
 

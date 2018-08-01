@@ -1,13 +1,9 @@
 package com.example.chitwing.anycure_kotlin_master.dialog
 
-import android.app.Dialog
 import android.app.DialogFragment
-import android.content.Context
 import android.content.DialogInterface
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,17 +33,19 @@ enum class CWDialogType{
 
 class CWDialog :DialogFragment(){
 
-    private  var mTitle:TextView? = null
-    private  var mDesc:TextView? = null
-    private  var mCancel:Button? = null
-    private  var mSure:Button? = null
-    private  var mIcon:ImageView? = null
-    private  var mAlone:Button? = null
+    private var mTitle:TextView? = null
+    private var mDesc:TextView? = null
+    private var mCancel:Button? = null
+    private var mSure:Button? = null
+    private var mIcon:ImageView? = null
+    private var mAlone:Button? = null
     private var mCallback:CWDialogInterface? = null
+
     fun setCallback(callback:CWDialogInterface){
         this.mCallback = callback
     }
     private var mBuilder:CWDialog.Builder? = null
+
     fun getType():CWDialogType{
         if (mBuilder != null){
             return mBuilder!!.getType()
@@ -109,17 +107,34 @@ class CWDialog :DialogFragment(){
 
             when (it.getType()){
                 CWDialogType.Other -> {
-
+                    hiddenAloneButton(true)
+                    hiddenSureAndCancelButton(false)
                 }
                 CWDialogType.Error -> {
-
+                    hiddenAloneButton(false)
+                    hiddenSureAndCancelButton(true)
                 }
                 CWDialogType.Hint -> {
-
+                    hiddenSureAndCancelButton(true)
+                    hiddenAloneButton(false)
                 }
             }
         }
     }
+
+
+    private fun hiddenAloneButton(arg:Boolean){
+        val flag = if (arg) View.GONE else View.VISIBLE
+        mAlone?.visibility = flag
+    }
+
+    private fun hiddenSureAndCancelButton(arg:Boolean){
+        val flag = if (arg) View.GONE else View.VISIBLE
+        mSure?.visibility = flag
+        mCancel?.visibility = flag
+    }
+
+
 
     override fun onDismiss(dialog: DialogInterface?) {
         super.onDismiss(dialog)

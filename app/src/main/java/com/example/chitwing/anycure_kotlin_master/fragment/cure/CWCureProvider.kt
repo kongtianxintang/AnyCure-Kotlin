@@ -3,6 +3,7 @@ package com.example.chitwing.anycure_kotlin_master.fragment.cure
 import android.util.Log
 import com.example.chitwing.anycure_kotlin_master.ble.CWDevice
 import com.example.chitwing.anycure_kotlin_master.ble.CWDeviceInterface
+import com.example.chitwing.anycure_kotlin_master.ble.CWDeviceStatusInterface
 
 /***********************************************************
  * 版权所有,2018,Chitwing.
@@ -84,6 +85,18 @@ class CWCureProvider(private val fm:CureFragment) {
         }
 
     }
+
+    val statusCallback = object :CWDeviceStatusInterface {
+
+        override fun transferDeviceClose(item: CWDevice) {
+            fm.minusDevice()
+        }
+
+        override fun transferDevicePlayComplete(item: CWDevice) {
+            fm.minusDevice()
+        }
+    }
+
 
 
 }

@@ -31,6 +31,11 @@
     <string name="default_cure_count_down">19:59</string>
     <string name="default_device_power">电池电量</string>
     <string name="default_device_link">设备连接正常</string>
+    <string name="default_device_link_status">正常</string>
+    <string name="default_intensity_desc">强度</string>
+    <string name="default_intensity_num">0</string>
+    <string name="default_clock_desc">时间</string>
+    <string name="default_clock_num">00:00</string>
 
     <!--底部栏-->
     <string name="item_recipe">处方</string>
@@ -54,5 +59,6 @@
     <!--button的描述-->
     <string name="button_cancel_text">取消</string>
     <string name="button_sure_text">确定</string>
+
 
 </resources>

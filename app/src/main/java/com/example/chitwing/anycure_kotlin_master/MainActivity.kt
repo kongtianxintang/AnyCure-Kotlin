@@ -11,6 +11,7 @@ import com.example.chitwing.anycure_kotlin_master.fragment.BaseFragment
 import com.example.chitwing.anycure_kotlin_master.fragment.cure.CureFragment
 import com.example.chitwing.anycure_kotlin_master.fragment.mall.MallFragment
 import com.example.chitwing.anycure_kotlin_master.fragment.mine.MineFragment
+import com.example.chitwing.anycure_kotlin_master.fragment.otCure.OtCureFragment
 import com.example.chitwing.anycure_kotlin_master.fragment.recipe.RecipeFragment
 import com.example.chitwing.anycure_kotlin_master.unit.BottomNavigationViewHelper
 import kotlinx.android.synthetic.main.activity_main.*
@@ -27,7 +28,7 @@ class MainActivity : BaseActivity() {
      * 首页的四个fragment
      * */
     private var mRecipeFragment:RecipeFragment? = null
-    private var mCureFragment:CureFragment? = null
+    private var mCureFragment:OtCureFragment? = null
     private var mMallFragment:MallFragment? = null
     private var mMineFragment:MineFragment? = null
 
@@ -83,7 +84,7 @@ class MainActivity : BaseActivity() {
                 }
                 R.id.action_cure -> {
                     if (mCureFragment == null){
-                        mCureFragment = CureFragment()
+                        mCureFragment = OtCureFragment()
                         transaction.add(R.id.linear_view,mCureFragment!!)
                     }
                     showItem = mCureFragment!!
@@ -141,12 +142,11 @@ class MainActivity : BaseActivity() {
      * */
     private fun switchCure(){
         //todo:～～理疗页面做相应处理
-        mCureFragment?.let {
-            val arg = CWBleManager.mCWDevices.count()
-            it.mAdapter.setSelect(arg - 1)
-            it.mAdapter.notifyDataSetChanged()
-        }
+//        mCureFragment?.let {
+//            val arg = CWBleManager.mCWDevices.count()
+//            it.mAdapter.setSelect(arg - 1)
+//            it.mAdapter.notifyDataSetChanged()
+//        }
         mBottomNavView!!.selectedItemId = R.id.action_cure
-
     }
 }

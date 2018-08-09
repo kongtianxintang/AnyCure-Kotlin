@@ -13,7 +13,7 @@
 
 
     <!--主题颜色-->
-    <color name="main">#3cb3ff</color>
+    <color name="main">#6A88FD</color>
     <!--一键理疗button的背景色-->
     <color name="fast_button_color">#ff7c14</color>
     <!--倒计时字体颜色-->

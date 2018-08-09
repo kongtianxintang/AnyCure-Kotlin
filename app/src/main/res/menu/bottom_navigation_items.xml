@@ -8,8 +8,7 @@
               android:icon="@mipmap/cure_normal" />
     <item android:id="@+id/action_mall"
               android:title="@string/item_mall"
-              android:icon="@mipmap/mall_normal"
-        />
+              android:icon="@mipmap/mall_normal" />
     <item android:id="@+id/action_mine"
         android:title="@string/item_mine"
         android:icon="@mipmap/mine_normal"/>

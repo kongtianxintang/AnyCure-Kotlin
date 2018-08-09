@@ -22,7 +22,7 @@
     <!--字体大小-->
     <dimen name="default_button_text_size">20sp</dimen>
     <dimen name="text_view_size">15sp</dimen>
-    <dimen name="intensity_size">30sp</dimen>
+    <dimen name="intensity_size">45sp</dimen>
     <dimen name="text_size_small">12sp</dimen>
     <dimen name="text_size_big">20sp</dimen>
     <dimen name="text_size_default">15sp</dimen>

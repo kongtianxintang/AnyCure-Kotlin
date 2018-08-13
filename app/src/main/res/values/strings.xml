@@ -36,6 +36,8 @@
     <string name="default_intensity_num">0</string>
     <string name="default_clock_desc">时间</string>
     <string name="default_clock_num">00:00</string>
+    <string name="default_resume_desc"> 播放</string>
+    <string name="default_stop_desc"> 暂停</string>
 
     <!--底部栏-->
     <string name="item_recipe">处方</string>
@@ -58,7 +60,7 @@
 
     <!--button的描述-->
     <string name="button_cancel_text">取消</string>
-    <string name="button_sure_text">确定</string>
+    <string name="button_sure_text">退出</string>
 
 
 </resources>

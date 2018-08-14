@@ -16,7 +16,7 @@
         />
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="127dp"
+        android:layout_height="wrap_content"
         android:contentDescription="@string/button_sure_text"
         app:layout_constraintTop_toBottomOf="@id/ot_cure_recycler_view"
         android:id="@+id/ot_cure_icon"
@@ -170,7 +170,7 @@
         />
 
     <Button
-        android:id="@+id/ot_cure_resume_text_view"
+        android:id="@+id/ot_cure_resume_button"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:text="@string/default_resume_desc"
@@ -181,12 +181,11 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="12dp"
         android:drawableStart="@mipmap/ot_resume"
-        android:textAlignment="textStart"
-        android:paddingLeft="48dp"
-        android:paddingRight="48dp"
+        android:textAlignment="center"
         android:background="@drawable/resume_btn_bg"
-        android:drawablePadding="5dp"
         android:textColor="@color/main"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
         />
 
     <Button
@@ -194,14 +193,25 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:text="@string/button_sure_text"
-        app:layout_constraintBottom_toBottomOf="@id/ot_cure_resume_text_view"
-        app:layout_constraintLeft_toRightOf="@id/ot_cure_resume_text_view"
+        app:layout_constraintBottom_toBottomOf="@id/ot_cure_resume_button"
+        app:layout_constraintLeft_toRightOf="@id/ot_cure_resume_button"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@id/ot_cure_resume_text_view"
+        app:layout_constraintTop_toTopOf="@id/ot_cure_resume_button"
         android:layout_marginEnd="20dp"
         android:background="@drawable/exit_btn_bg"
         android:textColor="@color/white"
         />
+    <TextView
+        android:id="@+id/ot_cure_countdown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/default_clock_num"
+        app:layout_constraintLeft_toLeftOf="@id/ot_cure_exit_button"
+        app:layout_constraintRight_toRightOf="@id/ot_cure_exit_button"
+        app:layout_constraintTop_toTopOf="@id/ot_cure_clock_icon"
+        app:layout_constraintBottom_toBottomOf="@id/ot_cure_clock_icon"
+        />
+
 
 
 </android.support.constraint.ConstraintLayout>

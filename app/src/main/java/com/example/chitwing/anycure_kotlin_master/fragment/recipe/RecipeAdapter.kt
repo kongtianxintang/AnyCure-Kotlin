@@ -2,6 +2,7 @@ package com.example.chitwing.anycure_kotlin_master.fragment.recipe
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,6 +39,7 @@ class RecipeAdapter(private val dataSet:List<Recipe>,val context: Context) :Recy
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeAdapter.ViewHolder {
         val v = LayoutInflater.from(parent.context)
                 .inflate(R.layout.recipe_item, parent, false)
+        Log.d("测绘","onCreateViewHolder")
         return RecipeAdapter.ViewHolder(v)
     }
 
@@ -61,6 +63,11 @@ class RecipeAdapter(private val dataSet:List<Recipe>,val context: Context) :Recy
 
     override fun getItemCount(): Int {
         return dataSet.size
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        Log.d("测绘","getItemViewType")
+        return super.getItemViewType(position)
     }
 
 

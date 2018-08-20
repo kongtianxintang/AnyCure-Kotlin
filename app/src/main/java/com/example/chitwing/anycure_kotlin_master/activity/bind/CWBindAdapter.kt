@@ -26,7 +26,6 @@ import com.example.chitwing.anycure_kotlin_master.model.BindDevice
  *************************************************************/
 class CWBindAdapter(private val dataSet:List<BindDevice>?, private val context: BindActivity) :RecyclerView.Adapter<CWBindAdapter.ViewHolder>() {
 
-    private val tag = "CWBindAdapter"
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CWBindAdapter.ViewHolder {
         val v = LayoutInflater.from(parent.context)
@@ -59,10 +58,6 @@ class CWBindAdapter(private val dataSet:List<BindDevice>?, private val context: 
         return  0
     }
 
-    override fun getItemViewType(position: Int): Int {
-        Log.d(tag,"type")
-        return super.getItemViewType(position)
-    }
 
     class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
         val mMac: TextView = v.findViewById(R.id.bind_item_device_mac)

@@ -19,7 +19,6 @@ import com.example.chitwing.anycure_kotlin_master.dialog.CWDialog
 import com.example.chitwing.anycure_kotlin_master.dialog.CWDialogInterface
 import com.example.chitwing.anycure_kotlin_master.fragment.BaseFragment
 import com.example.chitwing.anycure_kotlin_master.model.Recipe
-import com.example.chitwing.anycure_kotlin_master.ot.recipe.OtRecipeAdapter
 
 
 /**
@@ -65,8 +64,7 @@ class RecipeFragment : BaseFragment() {
         }
         mAdapter = RecipeAdapter(mDataSet,this.context!!)
 
-        val ad = OtRecipeAdapter()
-        mRecyclerView!!.adapter = ad
+        mRecyclerView!!.adapter = mAdapter
         mAdapter!!.onItemClickListener = onClickItemCallback
 
         mProvider!!.fetchDataSource()

@@ -41,7 +41,7 @@ class RecipeProvider(private val context: Context,private val fm:RecipeFragment)
                     fm.mDataSet.clear()
                     fm.mDataSet.addAll(it)
                     saveRecipe(it)
-                    fm.mAdapter!!.notifyDataSetChanged()
+//                    fm.mAdapter!!.notifyDataSetChanged()
                     if(fm.refreshView!!.isRefreshing){
                         fm.refreshView!!.isRefreshing = false
                     }

@@ -1,7 +1,5 @@
 package com.example.chitwing.anycure_kotlin_master.model
 
-import com.chad.library.adapter.base.entity.SectionEntity
-
 /***********************************************************
  * 版权所有,2018,Chitwing.
  * Copyright(C),2018,Chitwing co. LTD.All rights reserved.
@@ -14,10 +12,22 @@ import com.chad.library.adapter.base.entity.SectionEntity
  * Modifier:
  * Reason:
  *************************************************************/
-class RecipeSection(obj:Recipe) :SectionEntity<Recipe>(obj){
+class RecipeSection {
+    var isHead:Boolean = false
+    var name:String? = null
+    var isMore:Boolean = false
+    var data:List<Recipe>? = null
+    var type:Int = 0x01
 
+    constructor(isHead:Boolean,name:String,isMore:Boolean){
+        this.isHead = isHead
+        this.name = name
+        this.isMore = isMore
+    }
 
-
-
+    constructor(type:Int,data:List<Recipe>){
+        this.data = data
+        this.type = type
+    }
 
 }

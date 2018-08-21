@@ -26,17 +26,14 @@ import com.example.chitwing.anycure_kotlin_master.unit.loadRadius
  * Modifier:
  * Reason:
  *************************************************************/
-class RecipeAdapter(private val dataSet:List<Recipe>,val context: Context) :RecyclerView.Adapter<RecipeAdapter.ViewHolder>(){
-
-
-    private val tag = "RecipeAdapter"
+class RecipeAdapter(private val dataSet:List<Recipe>,val context: Context) :RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     /**
      * 点击事件
      * */
     var onItemClickListener: CWOnItemClickListener? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val v = LayoutInflater.from(parent.context)
                 .inflate(R.layout.recipe_item, parent, false)
         Log.d("测绘","onCreateViewHolder")
@@ -44,8 +41,9 @@ class RecipeAdapter(private val dataSet:List<Recipe>,val context: Context) :Recy
     }
 
 
-    override fun onBindViewHolder(holder: RecipeAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = dataSet[position]
+        holder as RecipeAdapter.ViewHolder
         holder.mTextView.text = item.recipeName
         holder.mDesc.text = item.recipeUse
         item.recipeIcon?.let {
@@ -76,4 +74,5 @@ class RecipeAdapter(private val dataSet:List<Recipe>,val context: Context) :Recy
         val mImg: ImageView = v.findViewById(R.id.recipe_item_img)
         val mDesc: TextView = v.findViewById(R.id.recipe_item_desc)
     }
+
 }

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <View
+        android:id="@+id/recipe_section_header_line"
+        android:layout_width="3dp"
+        android:layout_height="20dp"
+        android:background="@color/main"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginStart="12dp"
+        />
+    <TextView
+        android:id="@+id/recipe_section_header_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/default_desc"
+        app:layout_constraintLeft_toRightOf="@id/recipe_section_header_line"
+        app:layout_constraintTop_toTopOf="@id/recipe_section_header_line"
+        app:layout_constraintBottom_toBottomOf="@id/recipe_section_header_line"
+        android:layout_marginStart="12dp"
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/default_more"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:background="@null"
+        android:padding="0dp"
+        android:id="@+id/recipe_section_header_button"
+        />
+
+</android.support.constraint.ConstraintLayout>

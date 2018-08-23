@@ -63,11 +63,6 @@ class RecipeAdapter(private val dataSet:List<Recipe>,val context: Context) :Recy
         return dataSet.size
     }
 
-    override fun getItemViewType(position: Int): Int {
-        Log.d("测绘","getItemViewType")
-        return super.getItemViewType(position)
-    }
-
 
     class ViewHolder(v: View): RecyclerView.ViewHolder(v) {
         val mTextView: TextView = v.findViewById(R.id.recipe_item_title)

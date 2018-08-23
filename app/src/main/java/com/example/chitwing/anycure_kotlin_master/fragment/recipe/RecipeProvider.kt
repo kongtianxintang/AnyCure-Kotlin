@@ -32,14 +32,14 @@ class RecipeProvider(private val context: Context,private val fm:RecipeFragment)
             fm.refreshView!!.isRefreshing = true
         }
 
-        val map = mapOf("channels" to CWBleManager.configure.channel.NUM_CODE)
+        val map = mapOf("channels" to "00000006")
         val api = NetRequest.fetchRecipeAction(map)
         api.enqueue(object : Callback<List<Recipe>> {
 
             override fun onResponse(call: Call<List<Recipe>>?, response: Response<List<Recipe>>?) {
                 response?.body()?.let {
-                    fm.mDataSet.clear()
-                    fm.mDataSet.addAll(it)
+//                    fm.mDataSet.clear()
+//                    fm.mDataSet.addAll(it)
                     saveRecipe(it)
 //                    fm.mAdapter!!.notifyDataSetChanged()
                     if(fm.refreshView!!.isRefreshing){

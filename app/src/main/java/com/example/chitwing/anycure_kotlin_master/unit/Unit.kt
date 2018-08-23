@@ -2,6 +2,7 @@ package com.example.chitwing.anycure_kotlin_master.unit
 
 import android.content.Context
 import android.content.res.Resources
+import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
 import com.bumptech.glide.Glide
@@ -10,6 +11,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.chitwing.anycure_kotlin_master.R
 import android.util.TypedValue
 import com.example.chitwing.anycure_kotlin_master.app.MyApp
+import com.example.chitwing.anycure_kotlin_master.network.NetRequest
 
 
 /***********************************************************
@@ -58,8 +60,15 @@ object Unit {
  * //todo:请ui给个占位图 及 错误图
  * */
 fun ImageView.loader(context: Context, url:String?){
-    val options = RequestOptions().placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_foreground)
-    Glide.with(context).load(url).apply(options).into(this)
+    val options = RequestOptions().placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_background)
+    url?.let {
+        val path = NetRequest.IMAGE_BASE_PATH + it
+        Glide.with(context).load(path).apply(options).into(this)
+    }
+
+//    Glide.with(context).load(url).apply(options).into(this)
+    Log.d("图片加载->地址","$url")
+
 }
 /**
 * 扩展imageView 切圆角
@@ -69,6 +78,7 @@ fun ImageView.loadRadius(context: Context,url: String?,radius:Int){
     val corners = RoundedCorners(radius)
     val options = RequestOptions().placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_foreground).transform(corners)
     Glide.with(context).load(url).apply(options).into(this)
+
 }
 
 /**

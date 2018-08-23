@@ -73,7 +73,7 @@ class RecipeFragment : BaseFragment() {
                 RecipeSection(0x02,list!!.filter { it.partId == 0 }),
                 RecipeSection(true,"处方库",false),
                 RecipeSection(0x03,list.filter { it.partId == 1 }))
-        val ad = RecipeSectionAdapter(data)
+        val ad = RecipeSectionAdapter(activity!!,data)
         mRecyclerView!!.adapter = ad
 
         mProvider!!.fetchDataSource()

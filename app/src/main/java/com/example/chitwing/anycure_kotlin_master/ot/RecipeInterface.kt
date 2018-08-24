@@ -1,5 +1,7 @@
 package com.example.chitwing.anycure_kotlin_master.ot
 
+import com.example.chitwing.anycure_kotlin_master.model.Recipe
+
 /***********************************************************
  * 版权所有,2018,Chitwing.
  * Copyright(C),2018,Chitwing co. LTD.All rights reserved.
@@ -21,6 +23,6 @@ package com.example.chitwing.anycure_kotlin_master.ot
 data class IndexPath(val section:Int,val row:Int)
 
 interface RecipeInterface {
-    fun didSelectItem(indexPath: IndexPath)
+    fun didSelectItem(obj:Recipe)
 }
 

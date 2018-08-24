@@ -20,6 +20,8 @@ import com.example.chitwing.anycure_kotlin_master.dialog.CWDialogInterface
 import com.example.chitwing.anycure_kotlin_master.fragment.BaseFragment
 import com.example.chitwing.anycure_kotlin_master.model.Recipe
 import com.example.chitwing.anycure_kotlin_master.model.RecipeSection
+import com.example.chitwing.anycure_kotlin_master.ot.IndexPath
+import com.example.chitwing.anycure_kotlin_master.ot.RecipeInterface
 import com.example.chitwing.anycure_kotlin_master.ot.RecipeSectionAdapter
 
 
@@ -64,16 +66,14 @@ class RecipeFragment : BaseFragment() {
         list?.let {
             mDataSet.addAll(it)
         }
-        //todo:~测试
-//        mAdapter = RecipeAdapter(mDataSet,this.context!!)
-//        mRecyclerView!!.adapter = mAdapter
-//        mAdapter!!.onItemClickListener = onClickItemCallback
-        //todo:测试
-        val data = listOf(RecipeSection(true,"精品",false),
+
+        val data = listOf( RecipeSection(0x00,list!!.filter { it.partId == 0 }),
+                RecipeSection(true,"精品",false),
                 RecipeSection(0x02,list!!.filter { it.partId == 0 }),
                 RecipeSection(true,"处方库",false),
                 RecipeSection(0x03,list.filter { it.partId == 1 }))
         val ad = RecipeSectionAdapter(activity!!,data)
+        ad.callback = onClickItem
         mRecyclerView!!.adapter = ad
 
         mProvider!!.fetchDataSource()
@@ -84,26 +84,23 @@ class RecipeFragment : BaseFragment() {
     }
 
 
-    private val onClickItemCallback = object : CWOnItemClickListener {
-        override fun onItemClick(view: View, position: Int) {
-
-            val item = mDataSet[position]
-            val dialog = BleDialog()
-            dialog.setRecipe(item)
-            dialog.showBleDialog(activity!!.supportFragmentManager)
-            dialog.setCallback(onBleDiaCallback)
-        }
-    }
-
     private val onBleDiaCallback = object :BleDialogInterface {
         override fun connectDevice() {
-            //todo--去准备页面
             Log.e("测试","走了几次")
             val intent = Intent(activity!!,PrepareActivity ::class.java)
             startActivityForResult(intent,0x01)
         }
     }
 
+    private val onClickItem = object :RecipeInterface {
+        override fun didSelectItem(obj: Recipe) {
+            Log.d("选择的","处方名->${obj.recipeName}")
+            val dialog = BleDialog()
+            dialog.setRecipe(obj)
+            dialog.showBleDialog(activity!!.supportFragmentManager)
+            dialog.setCallback(onBleDiaCallback)
+        }
+    }
 
 
 }

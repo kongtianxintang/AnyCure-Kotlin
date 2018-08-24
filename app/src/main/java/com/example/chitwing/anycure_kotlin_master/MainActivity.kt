@@ -147,6 +147,7 @@ class MainActivity : BaseActivity() {
 //            it.mAdapter.setSelect(arg - 1)
 //            it.mAdapter.notifyDataSetChanged()
 //        }
+
         mBottomNavView!!.selectedItemId = R.id.action_cure
     }
 }

@@ -27,6 +27,7 @@ import com.example.chitwing.anycure_kotlin_master.unit.loader
  *************************************************************/
 class RecipeNormalAdapter(val context:Context) :RecyclerView.Adapter<RecipeNormalAdapter.NormalItemView> (){
 
+    var callback:RecipeInterface? = null
     private var mDataSource:List<Recipe>? = null
     fun setDataSource(list:List<Recipe>?){
         mDataSource = list
@@ -46,6 +47,11 @@ class RecipeNormalAdapter(val context:Context) :RecyclerView.Adapter<RecipeNorma
         val obj = mDataSource!![position]
         holder.textView.text = obj.recipeName
         holder.imageView.loader(context,obj.recipeIcon)
+        holder.itemView.setOnClickListener {
+            if (callback != null){
+                callback!!.didSelectItem(obj)
+            }
+        }
     }
 
     class NormalItemView(v:View) :RecyclerView.ViewHolder(v){

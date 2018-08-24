@@ -160,6 +160,7 @@ class BleDialog : DialogFragment() {
         super.onDestroy()
         mCallback = null
         mDialog = null
+        mRecipe = null
     }
 
 

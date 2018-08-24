@@ -2,6 +2,7 @@ package com.example.chitwing.anycure_kotlin_master.ot
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +27,7 @@ import com.example.chitwing.anycure_kotlin_master.unit.loader
  *************************************************************/
 class RecipeBoutiqueAdapter(val context:Context)  :RecyclerView.Adapter<RecipeBoutiqueAdapter.BoutiqueItemView>(){
 
+    var callback:RecipeInterface? = null
     private var mDataSource:List<Recipe>? = null
     fun setDataSource(list: List<Recipe>?){
         this.mDataSource = list
@@ -45,6 +47,11 @@ class RecipeBoutiqueAdapter(val context:Context)  :RecyclerView.Adapter<RecipeBo
         val obj = mDataSource!![position]
         holder.textView.text = obj.recipeName
         holder.imageView.loader(context,obj.recipeIcon)
+        holder.itemView.setOnClickListener {
+            if (callback != null){
+                callback!!.didSelectItem(obj)
+            }
+        }
     }
 
 

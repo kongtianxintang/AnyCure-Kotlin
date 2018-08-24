@@ -31,7 +31,7 @@ class PrepareStatusProvider(private val context: PrepareActivity) :CWBaseProvide
     }
 
     /**
-     * 开始写入数据
+     * 开始写入数据   
      * */
     fun beginWriteData(){
         if (CWBleManager.mCWDevices.isNotEmpty()){

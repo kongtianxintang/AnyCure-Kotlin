@@ -18,5 +18,7 @@
     <color name="fast_button_color">#ff7c14</color>
     <!--倒计时字体颜色-->
     <color name="count_down_color">#ff4000</color>
+
+    <color name="prepare_color">#F0EFFE</color>
     
 </resources>

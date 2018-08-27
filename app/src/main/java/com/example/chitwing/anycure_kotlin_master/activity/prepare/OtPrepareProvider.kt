@@ -1,0 +1,112 @@
+package com.example.chitwing.anycure_kotlin_master.activity.prepare
+
+import com.example.chitwing.anycure_kotlin_master.base.CWBaseProvider
+import com.example.chitwing.anycure_kotlin_master.ble.CWDevice
+import com.example.chitwing.anycure_kotlin_master.ble.CWDeviceInterface
+import com.example.chitwing.anycure_kotlin_master.database.DBHelper
+import com.example.chitwing.anycure_kotlin_master.model.PrepareHint
+import com.example.chitwing.anycure_kotlin_master.unit.showToast
+import kotlinx.android.synthetic.main.activity_ot_prepare.*
+
+/***********************************************************
+ * 版权所有,2018,Chitwing.
+ * Copyright(C),2018,Chitwing co. LTD.All rights reserved.
+ * project:AnyCure-Kotlin
+ * Author:chitwing
+ * Date:  2018/8/27
+ * QQ/Tel/Mail:383118832
+ * Description:
+ * Others:新手勿喷
+ * Modifier:
+ * Reason:
+ *************************************************************/
+class OtPrepareProvider (private val context:OtPrepareActivity): CWBaseProvider(context){
+
+    private var mDataSet:List<PrepareHint>? = null
+
+    override fun fetchDataSource() {
+            getDataSource()
+            switchIndex(0)
+    }
+
+    /**
+     * 获取数据
+     * */
+    private fun getDataSource(){
+        mDataSet = DBHelper.findAll(PrepareHint ::class.java)
+    }
+
+    fun switchIndex(arg:Int){
+        val index = arg + 1
+        mDataSet?.let {
+            if (it.count() > index) {
+                val item = it[index]
+                context.midTextView.text = item.getReplaceContent()
+            }
+        }
+    }
+    /**
+     * 关机
+     * */
+    private fun deviceClose(){
+        context.runOnUiThread {
+            context.onBackPressed()
+        }
+    }
+
+    /**
+     * 外设回调接口
+     * */
+    val deviceInterface = object :CWDeviceInterface {
+
+        override fun cureEndEvent(item: CWDevice) {
+            deviceClose()
+        }
+
+        override fun cureStartEvent(item: CWDevice) {
+
+        }
+
+        override fun cureStopEvent(item: CWDevice) {
+
+        }
+
+        override fun deviceCloseEvent(item: CWDevice) {
+            deviceClose()
+        }
+
+        override fun deviceConnect(flag: Boolean, item: CWDevice) {
+
+        }
+
+        override fun prepareComplete(item: CWDevice) {
+
+        }
+
+        override fun prepareFail(error: String, item: CWDevice) {
+            context.runOnUiThread {
+                context.showToast(error)
+            }
+        }
+
+        override fun transferIntensity(value: Int, item: CWDevice) {
+
+        }
+
+        override fun transferMainElectrodeNotify(value: Int, item: CWDevice) {
+
+        }
+
+        override fun transferMainElectrodeQuery(value: Int, item: CWDevice) {
+
+        }
+
+        override fun transferPlayDuration(value: Int, item: CWDevice) {
+
+        }
+
+        override fun transferPower(value: Int, item: CWDevice) {
+
+        }
+    }
+}

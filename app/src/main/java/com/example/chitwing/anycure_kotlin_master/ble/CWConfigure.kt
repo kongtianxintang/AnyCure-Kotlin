@@ -14,6 +14,6 @@ package com.example.chitwing.anycure_kotlin_master.ble
  *************************************************************/
 class CWConfigure {
 
-    val channel:CWChannel = CWChannel.PingAn
+    val channel:CWChannel = CWChannel.MingYi
 
 }

@@ -31,7 +31,7 @@ class Recipe :BaseData(){
         @SerializedName("recipe_help")
         var recipeHelp:String? = null
         @SerializedName("recipe_doctor_advice")
-        var recipeDoctoraAvice:String? = null
+        var recipeDoctorAdvice:String? = null
         @SerializedName("recipe_text")
         var recipeText:String? = null
         var extend:String? = null
@@ -57,4 +57,11 @@ class Recipe :BaseData(){
             }
             return set
         }
+
+    fun getFinalRecipeHelp() :String?{
+        val str = if (recipeHelp != null) recipeHelp!! else "默认"
+        val f = str.replace(" ","")
+        return  f
+    }
+
 }

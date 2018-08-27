@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.chitwing.anycure_kotlin_master.R
+import com.example.chitwing.anycure_kotlin_master.activity.prepare.OtPrepareActivity
 import com.example.chitwing.anycure_kotlin_master.activity.prepare.PrepareActivity
 import com.example.chitwing.anycure_kotlin_master.base.CWOnItemClickListener
 import com.example.chitwing.anycure_kotlin_master.database.DBHelper
@@ -87,7 +88,7 @@ class RecipeFragment : BaseFragment() {
     private val onBleDiaCallback = object :BleDialogInterface {
         override fun connectDevice() {
             Log.e("测试","走了几次")
-            val intent = Intent(activity!!,PrepareActivity ::class.java)
+            val intent = Intent(activity!!, OtPrepareActivity ::class.java)
             startActivityForResult(intent,0x01)
         }
     }

@@ -96,7 +96,6 @@ class RecipeSectionAdapter(val context:Context,val data:List<RecipeSection>) :Re
                         .inflate(R.layout.recipe_header_view, parent, false)
                 val holder = RecipeSectionAdapter.HeaderView(v)
                 holder.itemView.setOnClickListener {
-                    Log.d("页头","banner")
                     if (data.count() > 2){
                         val list = data[2].data
                         val first = list?.firstOrNull()
@@ -116,6 +115,10 @@ class RecipeSectionAdapter(val context:Context,val data:List<RecipeSection>) :Re
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val obj = data[position]
         when(holder.itemViewType){
+            0x00 -> {
+                holder as RecipeSectionAdapter.HeaderView
+                //todo:～设置图片
+            }
             0x01 -> {
                 holder as RecipeSectionAdapter.SectionHeaderView
                 holder.title.text = obj.name

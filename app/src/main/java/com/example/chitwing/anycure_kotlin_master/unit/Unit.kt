@@ -65,10 +65,6 @@ fun ImageView.loader(context: Context, url:String?){
         val path = NetRequest.IMAGE_BASE_PATH + it
         Glide.with(context).load(path).apply(options).into(this)
     }
-
-//    Glide.with(context).load(url).apply(options).into(this)
-    Log.d("图片加载->地址","$url")
-
 }
 /**
 * 扩展imageView 切圆角

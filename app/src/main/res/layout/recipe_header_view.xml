@@ -9,6 +9,7 @@
         android:contentDescription="@string/default_desc"
         android:id="@+id/recipe_header_view"
         android:src="@mipmap/banner"
+        android:scaleType="fitXY"
         />
 
 </android.support.constraint.ConstraintLayout>

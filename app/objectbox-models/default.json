@@ -49,7 +49,7 @@
     },
     {
       "id": "3:8538193856090455265",
-      "lastPropertyId": "18:8940883957196067652",
+      "lastPropertyId": "19:9053654123671129735",
       "name": "Recipe",
       "properties": [
         {
@@ -75,10 +75,6 @@
         {
           "id": "6:158156423095277528",
           "name": "recipeUse"
-        },
-        {
-          "id": "7:5416082768830741831",
-          "name": "recipeUseage"
         },
         {
           "id": "8:8782149233309470823",
@@ -119,6 +115,10 @@
         {
           "id": "18:8940883957196067652",
           "name": "recipeDoctorAdvice"
+        },
+        {
+          "id": "19:9053654123671129735",
+          "name": "recipeUsage"
         }
       ],
       "relations": []
@@ -160,17 +160,26 @@
       "relations": []
     }
   ],
-  "lastEntityId": "5:8417888934958215054",
+  "lastEntityId": "6:8835691410299244921",
   "lastIndexId": "0:0",
-  "lastRelationId": "0:0",
+  "lastRelationId": "1:620830414476383873",
   "lastSequenceId": "0:0",
   "modelVersion": 4,
   "modelVersionParserMinimum": 4,
-  "retiredEntityUids": [],
+  "retiredEntityUids": [
+    8835691410299244921
+  ],
   "retiredIndexUids": [],
   "retiredPropertyUids": [
-    4583979258910817696
+    4583979258910817696,
+    5416082768830741831,
+    2623389984593119209,
+    5586897095526884622,
+    1299476137220887913,
+    2915261193976515688
   ],
-  "retiredRelationUids": [],
+  "retiredRelationUids": [
+    620830414476383873
+  ],
   "version": 1
 }

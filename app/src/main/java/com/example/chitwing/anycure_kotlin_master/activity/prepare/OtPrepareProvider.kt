@@ -1,6 +1,7 @@
 package com.example.chitwing.anycure_kotlin_master.activity.prepare
 
 import com.example.chitwing.anycure_kotlin_master.base.CWBaseProvider
+import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
 import com.example.chitwing.anycure_kotlin_master.ble.CWDevice
 import com.example.chitwing.anycure_kotlin_master.ble.CWDeviceInterface
 import com.example.chitwing.anycure_kotlin_master.database.DBHelper
@@ -29,6 +30,7 @@ class OtPrepareProvider (private val context:OtPrepareActivity): CWBaseProvider(
             switchIndex(0)
     }
 
+
     /**
      * 获取数据
      * */
@@ -55,6 +57,14 @@ class OtPrepareProvider (private val context:OtPrepareActivity): CWBaseProvider(
     }
 
     /**
+     * 进入理疗页面
+     * */
+    private fun enterCurePage(){
+        context.setResult(0x01)
+        context.finish()
+    }
+
+    /**
      * 外设回调接口
      * */
     val deviceInterface = object :CWDeviceInterface {
@@ -64,7 +74,7 @@ class OtPrepareProvider (private val context:OtPrepareActivity): CWBaseProvider(
         }
 
         override fun cureStartEvent(item: CWDevice) {
-
+            enterCurePage()
         }
 
         override fun cureStopEvent(item: CWDevice) {
@@ -80,7 +90,9 @@ class OtPrepareProvider (private val context:OtPrepareActivity): CWBaseProvider(
         }
 
         override fun prepareComplete(item: CWDevice) {
-
+            context.runOnUiThread {
+                context.prepareButton.isEnabled = true
+            }
         }
 
         override fun prepareFail(error: String, item: CWDevice) {
@@ -94,11 +106,37 @@ class OtPrepareProvider (private val context:OtPrepareActivity): CWBaseProvider(
         }
 
         override fun transferMainElectrodeNotify(value: Int, item: CWDevice) {
-
+            context.runOnUiThread {
+                when(value){
+                    0 ->{
+                        context.showToast("电极贴合异常,请贴合于患处")
+                    }
+                    30 ->{
+                        context.showToast("电极短路,请贴合于患处")
+                    }
+                    else -> {
+                        context.showToast("正常,可以去理疗页面了")
+                    }
+                }
+            }
         }
 
         override fun transferMainElectrodeQuery(value: Int, item: CWDevice) {
-
+            context.runOnUiThread {
+                when(value){
+                    0 ->{
+                        context.showToast("电极贴合异常,请贴合于患处")
+                    }
+                    30 ->{
+                        context.showToast("电极短路,请贴合于患处")
+                    }
+                    else -> {
+                        context.showToast("正常,可以去理疗页面了")
+                        val last = CWBleManager.mCWDevices.lastOrNull()
+                        last?.gattWrite?.cwBleWriteStartCure()
+                    }
+                }
+            }
         }
 
         override fun transferPlayDuration(value: Int, item: CWDevice) {

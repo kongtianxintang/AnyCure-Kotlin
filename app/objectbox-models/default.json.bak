@@ -49,7 +49,7 @@
     },
     {
       "id": "3:8538193856090455265",
-      "lastPropertyId": "17:8261527712933907601",
+      "lastPropertyId": "18:8940883957196067652",
       "name": "Recipe",
       "properties": [
         {
@@ -77,16 +77,8 @@
           "name": "recipeUse"
         },
         {
-          "id": "7:5416082768830741831",
-          "name": "recipeUseage"
-        },
-        {
           "id": "8:8782149233309470823",
           "name": "recipeHelp"
-        },
-        {
-          "id": "9:4583979258910817696",
-          "name": "recipeDoctoraAvice"
         },
         {
           "id": "10:3868267576650267242",
@@ -119,9 +111,18 @@
         {
           "id": "17:8261527712933907601",
           "name": "recipeBigIcon"
+        },
+        {
+          "id": "18:8940883957196067652",
+          "name": "recipeDoctorAdvice"
         }
       ],
-      "relations": []
+      "relations": [
+        {
+          "id": "1:620830414476383873",
+          "name": "recipeUsage"
+        }
+      ]
     },
     {
       "id": "4:8543839204498169699",
@@ -158,17 +159,44 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "6:8835691410299244921",
+      "lastPropertyId": "4:2915261193976515688",
+      "name": "RecipeUsage",
+      "properties": [
+        {
+          "id": "1:2623389984593119209",
+          "name": "id"
+        },
+        {
+          "id": "2:5586897095526884622",
+          "name": "img"
+        },
+        {
+          "id": "3:1299476137220887913",
+          "name": "count"
+        },
+        {
+          "id": "4:2915261193976515688",
+          "name": "desc"
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "5:8417888934958215054",
+  "lastEntityId": "6:8835691410299244921",
   "lastIndexId": "0:0",
-  "lastRelationId": "0:0",
+  "lastRelationId": "1:620830414476383873",
   "lastSequenceId": "0:0",
   "modelVersion": 4,
   "modelVersionParserMinimum": 4,
   "retiredEntityUids": [],
   "retiredIndexUids": [],
-  "retiredPropertyUids": [],
+  "retiredPropertyUids": [
+    4583979258910817696,
+    5416082768830741831
+  ],
   "retiredRelationUids": [],
   "version": 1
 }

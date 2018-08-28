@@ -27,7 +27,7 @@ class Recipe :BaseData(){
         @SerializedName("recipe_use")
         var recipeUse:String? = null
         @SerializedName("recipe_usage")
-        var recipeUseage:String? = null
+        var recipeUsage:String? = null
         @SerializedName("recipe_help")
         var recipeHelp:String? = null
         @SerializedName("recipe_doctor_advice")

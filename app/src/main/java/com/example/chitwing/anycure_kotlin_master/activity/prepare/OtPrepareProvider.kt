@@ -86,7 +86,11 @@ class OtPrepareProvider (private val context:OtPrepareActivity): CWBaseProvider(
         }
 
         override fun deviceConnect(flag: Boolean, item: CWDevice) {
-
+            context.runOnUiThread {
+                context.prepareButton.isEnabled = flag
+                val desc = if (flag) "设备连接成功" else "设备断开连接"
+                context.showToast(desc)
+            }
         }
 
         override fun prepareComplete(item: CWDevice) {

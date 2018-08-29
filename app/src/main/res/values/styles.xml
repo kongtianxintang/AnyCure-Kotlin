@@ -13,9 +13,11 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
     <style name="AppTheme.Full" parent="AppTheme.NoActionBar">
         <item name="android:windowFullscreen">true</item>
     </style>
+
     <style name="AppTheme.Launch" parent="AppTheme.Full">
         <item name="android:windowBackground">@drawable/splash_bg</item>
     </style>
@@ -24,12 +26,22 @@
     <style name="AppTheme.Push" parent="AppTheme">
         <item name="android:windowAnimationStyle">@style/MyWindowAnimTheme</item>
     </style>
+
     <style name="MyWindowAnimTheme">
         <item name="android:activityOpenEnterAnimation">@anim/push_left_in</item>
         <item name="android:activityOpenExitAnimation">@anim/push_left_out</item>
         <item name="android:activityCloseEnterAnimation">@anim/push_right_in</item>
         <item name="android:activityCloseExitAnimation">@anim/push_right_out</item>
     </style>
+
+    <style name="AppTheme.Push.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.Push.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.Push.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 
 </resources>

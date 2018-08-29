@@ -23,13 +23,18 @@ import android.widget.TextView
 
 import java.util.ArrayList
 import android.Manifest.permission.READ_CONTACTS
+import android.content.Context
 import android.content.Intent
 import android.util.Log
+import android.view.MotionEvent
+import android.view.inputmethod.InputMethodManager
 import com.example.chitwing.anycure_kotlin_master.MainActivity
 import com.example.chitwing.anycure_kotlin_master.R
+import com.example.chitwing.anycure_kotlin_master.activity.register.RegisterActivity
 import com.example.chitwing.anycure_kotlin_master.database.DBHelper
 import com.example.chitwing.anycure_kotlin_master.model.Login
 import com.example.chitwing.anycure_kotlin_master.network.NetRequest
+import com.example.chitwing.anycure_kotlin_master.unit.showToast
 
 import kotlinx.android.synthetic.main.activity_login.*
 
@@ -46,8 +51,6 @@ class LoginActivity : BaseActivity(), LoaderCallbacks<Cursor> {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        // Set up the login form.
-        populateAutoComplete()
         password.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
             if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
                 attemptLogin()
@@ -57,53 +60,25 @@ class LoginActivity : BaseActivity(), LoaderCallbacks<Cursor> {
         })
 
         email_sign_in_button.setOnClickListener { attemptLogin() }
+        initView()
+        fetchData()
     }
 
     override fun initView() {
+
+        registerView.setOnClickListener {
+            val intent = Intent(this@LoginActivity,RegisterActivity ::class.java)
+            startActivity(intent)
+        }
+        forgetPassword.setOnClickListener {
+            showToast("忘记密码功能未开放")
+        }
 
     }
 
     override fun fetchData() {
 
     }
-
-    private fun populateAutoComplete() {
-        if (!mayRequestContacts()) {
-            return
-        }
-
-        loaderManager.initLoader(0, null, this)
-    }
-
-    private fun mayRequestContacts(): Boolean {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true
-        }
-        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-            return true
-        }
-        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(email, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok,
-                            { requestPermissions(arrayOf(READ_CONTACTS), REQUEST_READ_CONTACTS) })
-        } else {
-            requestPermissions(arrayOf(READ_CONTACTS), REQUEST_READ_CONTACTS)
-        }
-        return false
-    }
-
-    /**
-     * Callback received when a permissions request has been completed.
-     */
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
-                                            grantResults: IntArray) {
-        if (requestCode == REQUEST_READ_CONTACTS) {
-            if (grantResults.size == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                populateAutoComplete()
-            }
-        }
-    }
-
 
     /**
      * Attempts to sign in or register the account specified by the login form.
@@ -158,7 +133,6 @@ class LoginActivity : BaseActivity(), LoaderCallbacks<Cursor> {
     }
 
     private fun isEmailValid(email: String): Boolean {
-//        return email.contains("@")
         return email.isNotEmpty()
     }
 
@@ -252,6 +226,8 @@ class LoginActivity : BaseActivity(), LoaderCallbacks<Cursor> {
         val IS_PRIMARY = 1
     }
 
+
+
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
@@ -288,7 +264,6 @@ class LoginActivity : BaseActivity(), LoaderCallbacks<Cursor> {
         }
 
         private fun insert(arg:Login){
-            Log.d(tag,"登录成功")
             DBHelper.insert(arg,Login::class.java)
         }
 
@@ -312,16 +287,4 @@ class LoginActivity : BaseActivity(), LoaderCallbacks<Cursor> {
         }
     }
 
-    companion object {
-
-        /**
-         * Id to identity READ_CONTACTS permission request.
-         */
-        private val REQUEST_READ_CONTACTS = 0
-
-        /**
-         * A dummy authentication store containing known user names and passwords.
-         */
-        private val DUMMY_CREDENTIALS = arrayOf("foo@example.com:hello", "bar@example.com:world")
-    }
 }

@@ -2,12 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.chitwing.anycure_kotlin_master.activity.LoginActivity">
 
     <!-- Login progress -->
@@ -21,6 +18,7 @@
 
     <ScrollView
         android:id="@+id/login_form"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -28,9 +26,49 @@
             android:id="@+id/email_login_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:orientation="vertical">
 
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="218dp"
+                    android:background="@drawable/gradient_bg"
+                    android:id="@+id/login_gradient_view"
+                    />
+                <!--波浪-->
+                <com.scwang.wave.MultiWaveHeader
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:id="@+id/cw_login_wave_view"
+                    android:scaleY="-1"
+                    app:mwhProgress="1"
+                    app:mwhVelocity="5"
+                    app:mwhIsRunning="true"
+                    app:mwhStartColor="@android:color/white"
+                    app:mwhColorAlpha="0.8"
+                    app:mwhCloseColor="@color/white"
+                    app:layout_constraintBottom_toBottomOf="@id/login_gradient_view"
+                    />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/default_desc"
+                    android:src="@mipmap/ic_launcher"
+                    app:layout_constraintLeft_toLeftOf="@id/login_gradient_view"
+                    app:layout_constraintRight_toRightOf="@id/login_gradient_view"
+                    app:layout_constraintTop_toTopOf="@id/login_gradient_view"
+                    android:layout_marginTop="64dp"
+                    />
+
+            </android.support.constraint.ConstraintLayout>
             <android.support.design.widget.TextInputLayout
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -41,11 +79,14 @@
                     android:hint="@string/prompt_email"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    />
 
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -67,11 +108,51 @@
                 android:id="@+id/email_sign_in_button"
                 style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:text="@string/action_sign_in"
-                android:textStyle="bold" />
-
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:background="@drawable/prepare_button_bg"
+                />
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp">
+                <View
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@color/main"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/cw_login_v_line"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/register"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/cw_login_v_line"
+                    android:paddingEnd="20dp"
+                    android:paddingStart="20dp"
+                    android:id="@+id/registerView"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/forget_password"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/cw_login_v_line"
+                    android:paddingEnd="20dp"
+                    android:paddingStart="20dp"
+                    android:id="@+id/forgetPassword"
+                    />
+            </android.support.constraint.ConstraintLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

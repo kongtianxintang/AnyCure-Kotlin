@@ -7,6 +7,7 @@ import com.example.chitwing.anycure_kotlin_master.R
 import com.example.chitwing.anycure_kotlin_master.activity.BaseActivity
 
 import kotlinx.android.synthetic.main.activity_cwregister.*
+import kotlinx.android.synthetic.main.fragment_register.*
 
 class CWRegisterActivity : BaseActivity() {
 
@@ -17,7 +18,7 @@ class CWRegisterActivity : BaseActivity() {
     //用户信息
     private var mUserInfoFragment:RegisterFragment? = null
     //服务器下发的验证码～
-    private var mCode:Int = 0
+    var mCode:Int = 0
     // let body = ["mobile":phone,"passwd":pw,"sex":sexStr,"birthdate":dateStr,"imei":imei,"city":city];
     //密码
     private var mPassWord:String? = null
@@ -25,7 +26,8 @@ class CWRegisterActivity : BaseActivity() {
     private var mSex:String? = null
     //生日
     private var mBirthday:String? = null
-
+    //手机号码
+    var phone:String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +56,7 @@ class CWRegisterActivity : BaseActivity() {
             finish()
         }
         override fun onFragmentNextStep() {
+            phone = mRegisterFragment!!.registerPhone.text.toString()
             switchSMSFragment()
         }
     }

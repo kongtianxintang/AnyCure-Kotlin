@@ -45,9 +45,8 @@ class RegisterFragment : BaseFragment() {
         fetchData(type)
     }
 
-    fun initView() {
+    private fun initView() {
         registerNextStep.setOnClickListener {
-            //todo:去短信验证码 ac
             onButtonPressed()
         }
         registerHasAccount.setOnClickListener {
@@ -59,7 +58,7 @@ class RegisterFragment : BaseFragment() {
         listener?.onFragmentNextStep()
     }
 
-    fun fetchData(type:Int?) {
+    private fun fetchData(type:Int?) {
         type?.let {
             configureTitle(it)
             when(it){

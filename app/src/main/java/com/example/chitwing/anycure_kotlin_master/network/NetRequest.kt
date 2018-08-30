@@ -1,8 +1,10 @@
 package com.example.chitwing.anycure_kotlin_master.network
 
+import android.util.Log
 import com.example.chitwing.anycure_kotlin_master.model.Login
 import com.example.chitwing.anycure_kotlin_master.model.PrepareHint
 import com.example.chitwing.anycure_kotlin_master.model.Recipe
+import com.example.chitwing.anycure_kotlin_master.model.SMSCode
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -25,6 +27,7 @@ import java.util.concurrent.TimeUnit
 object NetRequest {
 
 
+    private val mTag = "网络请求"
     /**
      * 主机地址
      * */
@@ -69,10 +72,21 @@ object NetRequest {
     }
 
     /**
+     * 获取验证码
+     * */
+    fun fetchSMSCode(map: Map<String, String>) :Call<SMSCode>{
+        val body = createPair(map)
+        return api.fetchSMSCode(body)
+    }
+
+    /**
      * 配置参数
      * */
     private fun createPair(map: Map<String, String>) :Map<String,String>{
         val json = gson.toJson(map)
+        Log.d(mTag,"请求参数->$json")
         return mapOf("data" to json)
     }
+
+
 }

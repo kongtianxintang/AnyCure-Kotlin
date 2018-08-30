@@ -4,8 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.register.RegisterActivity">
+    tools:context=".activity.register.CWRegisterActivity">
 
-    <include layout="@layout/content_register" />
+
+    <include layout="@layout/content_cwregister" />
+
 
 </android.support.design.widget.CoordinatorLayout>

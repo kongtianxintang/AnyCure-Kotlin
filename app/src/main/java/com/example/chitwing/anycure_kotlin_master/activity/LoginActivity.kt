@@ -3,9 +3,6 @@ package com.example.chitwing.anycure_kotlin_master.activity
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.TargetApi
-import android.content.pm.PackageManager
-import android.support.design.widget.Snackbar
-import android.support.v7.app.AppCompatActivity
 import android.app.LoaderManager.LoaderCallbacks
 import android.content.CursorLoader
 import android.content.Loader
@@ -22,19 +19,13 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 
 import java.util.ArrayList
-import android.Manifest.permission.READ_CONTACTS
-import android.content.Context
 import android.content.Intent
-import android.util.Log
-import android.view.MotionEvent
-import android.view.inputmethod.InputMethodManager
 import com.example.chitwing.anycure_kotlin_master.MainActivity
 import com.example.chitwing.anycure_kotlin_master.R
-import com.example.chitwing.anycure_kotlin_master.activity.register.RegisterActivity
+import com.example.chitwing.anycure_kotlin_master.activity.register.CWRegisterActivity
 import com.example.chitwing.anycure_kotlin_master.database.DBHelper
 import com.example.chitwing.anycure_kotlin_master.model.Login
 import com.example.chitwing.anycure_kotlin_master.network.NetRequest
-import com.example.chitwing.anycure_kotlin_master.unit.showToast
 
 import kotlinx.android.synthetic.main.activity_login.*
 
@@ -67,13 +58,21 @@ class LoginActivity : BaseActivity(), LoaderCallbacks<Cursor> {
     override fun initView() {
 
         registerView.setOnClickListener {
-            val intent = Intent(this@LoginActivity,RegisterActivity ::class.java)
-            startActivity(intent)
+            createRegisterActivity(1)
         }
         forgetPassword.setOnClickListener {
-            showToast("忘记密码功能未开放")
+            createRegisterActivity(2)
         }
 
+    }
+
+    /**
+     * 创建--1 注册 2 忘记密码
+     * */
+    private fun createRegisterActivity(type:Int){
+        val intent = Intent(this@LoginActivity, CWRegisterActivity ::class.java)
+        intent.putExtra("type",type)
+        startActivity(intent)
     }
 
     override fun fetchData() {

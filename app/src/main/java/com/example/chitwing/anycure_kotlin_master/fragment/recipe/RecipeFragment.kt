@@ -70,7 +70,7 @@ class RecipeFragment : BaseFragment() {
 
         val data = listOf( RecipeSection(0x00,list!!.filter { it.partId == 0 }),
                 RecipeSection(true,"精品",false),
-                RecipeSection(0x02,list!!.filter { it.partId == 0 }),
+                RecipeSection(0x02,list.filter { it.partId == 0 }),
                 RecipeSection(true,"处方库",false),
                 RecipeSection(0x03,list.filter { it.partId == 1 }))
         val ad = RecipeSectionAdapter(activity!!,data)

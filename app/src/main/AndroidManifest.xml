@@ -45,8 +45,9 @@
             android:label="@string/prepare_title" />
         <activity android:name=".activity.prepare.OtPrepareActivity" />
         <activity
-            android:name=".activity.register.RegisterActivity"
-            android:label="@string/title_activity_register"/>
+            android:name=".activity.register.CWRegisterActivity"
+            android:label="@string/title_activity_cwregister"
+            android:theme="@style/AppTheme.Push"/>
     </application>
 
 </manifest>

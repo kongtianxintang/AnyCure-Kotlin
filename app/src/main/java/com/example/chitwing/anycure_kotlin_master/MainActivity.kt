@@ -123,7 +123,6 @@ class MainActivity : BaseActivity() {
         this.title = "处方"
         val ac = supportActionBar
         ac?.setDisplayHomeAsUpEnabled(false)
-
     }
 
 

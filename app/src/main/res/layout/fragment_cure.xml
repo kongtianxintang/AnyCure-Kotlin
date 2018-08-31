@@ -240,7 +240,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/default_device_link"
-        android:src="@mipmap/power_lev_1"
+        android:src="@mipmap/ot_power_lev_1"
         app:layout_constraintRight_toLeftOf="@id/cure_device_power"
         app:layout_constraintTop_toTopOf="@id/cure_one_line"
         app:layout_constraintBottom_toBottomOf="@id/cure_one_line"

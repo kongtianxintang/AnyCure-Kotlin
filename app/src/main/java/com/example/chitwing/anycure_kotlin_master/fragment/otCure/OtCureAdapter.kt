@@ -3,6 +3,7 @@ package com.example.chitwing.anycure_kotlin_master.fragment.otCure
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.example.chitwing.anycure_kotlin_master.R
+import com.example.chitwing.anycure_kotlin_master.ble.CWDevice
 import com.example.chitwing.anycure_kotlin_master.model.Recipe
 import kotlinx.android.synthetic.main.ot_cure_item.view.*
 
@@ -18,11 +19,11 @@ import kotlinx.android.synthetic.main.ot_cure_item.view.*
  * Modifier:
  * Reason:
  *************************************************************/
-class OtCureAdapter(layoutResId: Int,data:List<String>) :BaseQuickAdapter<String,BaseViewHolder>(layoutResId,data){
+class OtCureAdapter(layoutResId: Int,data:List<CWDevice>) :BaseQuickAdapter<CWDevice,BaseViewHolder>(layoutResId,data){
 
 
-    override fun convert(helper: BaseViewHolder?, item: String?) {
-        helper?.setText(R.id.otCureRecipeName,item)
+    override fun convert(helper: BaseViewHolder?, item: CWDevice?) {
+        helper?.setText(R.id.otCureRecipeName,item?.recipe?.recipeName)
     }
 
 }

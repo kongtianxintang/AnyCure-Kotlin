@@ -74,6 +74,7 @@ class OtPrepareProvider (private val context:OtPrepareActivity): CWBaseProvider(
         }
 
         override fun cureStartEvent(item: CWDevice) {
+            item.mCallback = null
             enterCurePage()
         }
 

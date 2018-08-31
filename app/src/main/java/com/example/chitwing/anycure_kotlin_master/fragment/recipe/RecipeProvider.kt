@@ -6,6 +6,7 @@ import com.example.chitwing.anycure_kotlin_master.base.CWBaseProvider
 import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
 import com.example.chitwing.anycure_kotlin_master.database.DBHelper
 import com.example.chitwing.anycure_kotlin_master.model.Recipe
+import com.example.chitwing.anycure_kotlin_master.model.RecipeSection
 import com.example.chitwing.anycure_kotlin_master.network.NetRequest
 import com.example.chitwing.anycure_kotlin_master.unit.showToast
 import retrofit2.Call
@@ -38,10 +39,15 @@ class RecipeProvider(private val context: Context,private val fm:RecipeFragment)
 
             override fun onResponse(call: Call<List<Recipe>>?, response: Response<List<Recipe>>?) {
                 response?.body()?.let {
-//                    fm.mDataSet.clear()
-//                    fm.mDataSet.addAll(it)
+                    fm.mDataSet.clear()
+                    val data = listOf( RecipeSection(0x00,it.filter { it.partId == 0 }),
+                            RecipeSection(true,"精品",false),
+                            RecipeSection(0x02,it.filter { it.partId == 0 }),
+                            RecipeSection(true,"处方库",false),
+                            RecipeSection(0x03,it.filter { it.partId == 1 }))
+                    fm.mDataSet.addAll(data)
                     saveRecipe(it)
-//                    fm.mAdapter!!.notifyDataSetChanged()
+                    fm.mAdapter!!.notifyDataSetChanged()
                     if(fm.refreshView!!.isRefreshing){
                         fm.refreshView!!.isRefreshing = false
                     }

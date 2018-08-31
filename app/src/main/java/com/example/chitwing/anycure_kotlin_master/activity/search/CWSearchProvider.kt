@@ -108,10 +108,6 @@ class CWSearchProvider(private val context: SearchActivity) :CWBaseProvider(cont
     }
 
     private fun startScan(){
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-        }
-
         CWBleManager.startScan()
         stopScan(15000)
     }

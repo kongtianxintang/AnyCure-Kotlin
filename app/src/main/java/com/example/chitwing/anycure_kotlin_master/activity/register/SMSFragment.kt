@@ -109,30 +109,34 @@ class SMSFragment : BaseFragment() {
     private fun fetchSuccess(obj:SMSCode){
         getAC()?.let {
             it.mCode = obj.data!!.code
-            smsCountdown.visibility = View.VISIBLE
-            smsRegain.visibility = View.INVISIBLE
+            showCountdown()
             resumeTimer()
+            smsStatus.text = "短信已下发到${it.phone}"
         }
     }
 
     private fun fetchFailure(){
-        smsRegain.visibility = View.VISIBLE
-        smsCountdown.visibility = View.INVISIBLE
+        showRegainButton()
+        getAC()?.let {
+            smsStatus.text = "短信发送失败"
+        }
     }
 
     private fun resumeTimer(){
         deInitTimer()
+        mCount = 60
         if (mTimer == null){
             mTimer = Timer()
         }
         if (mTimerTask == null){
             mTimerTask = object :TimerTask() {
                 override fun run() {
-                    configureCountdown()
                     mCount -= 1
                     if (mCount <= 0){
                         deInitTimer()
+                        showRegainButton()
                     }
+                    configureCountdown()
                 }
             }
         }
@@ -146,9 +150,24 @@ class SMSFragment : BaseFragment() {
         mTimerTask = null
     }
 
+    private fun showRegainButton(){
+        getAC()?.runOnUiThread {
+            smsRegain.visibility = View.VISIBLE
+            smsCountdown.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun showCountdown(){
+        getAC()?.runOnUiThread {
+            smsCountdown.visibility = View.VISIBLE
+            smsRegain.visibility = View.INVISIBLE
+        }
+    }
 
     private fun configureCountdown(){
-        smsCountdown.text = "${mCount}秒后重新获取验证码"
+        getAC()?.runOnUiThread {
+            smsCountdown.text = "${mCount}秒后重新获取验证码"
+        }
     }
 
     override fun onDestroy() {

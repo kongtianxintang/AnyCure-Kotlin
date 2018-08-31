@@ -51,7 +51,7 @@
     <string name="bind">绑定</string>
 
     <!--设备准备页面-->
-    <string name="prepare_button">设备初始化中</string>
+    <string name="prepare_button">开始理疗</string>
 
     <!--activity 的label-->
     <string name="prepare_title">电极贴合</string>

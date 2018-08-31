@@ -32,6 +32,7 @@ class OtCureProvider(private val fm:OtCureFragment) {
         override fun cureStartEvent(item: CWDevice) {
             Log.e(tag,"cureStartEvent")
             fm.playStatus()
+            item.selectDevice(true)
         }
 
         override fun cureStopEvent(item: CWDevice) {

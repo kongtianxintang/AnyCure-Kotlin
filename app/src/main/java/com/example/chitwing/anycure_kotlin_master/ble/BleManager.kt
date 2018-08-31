@@ -132,10 +132,11 @@ object  CWBleManager {
      * */
     fun stopScanDevice(){
         mBleAdapter?.let {
-            val scanner = it.bluetoothLeScanner
-            scanner.stopScan(mScannerCallback)
-            mStatusCallback?.bleStatus(CWBleStatus.StopScan)
-            mDevices.clear()
+            it.bluetoothLeScanner?.let {
+                it.stopScan(mScannerCallback)
+                mStatusCallback?.bleStatus(CWBleStatus.StopScan)
+                mDevices.clear()
+            }
         }
     }
 
@@ -166,8 +167,8 @@ object  CWBleManager {
                     val type = it.device.deviceType()
                     when(type){
                         CWDeviceType.Old -> {
-                            mDevices.add(it.device)
-                            mScanCallback!!.discoveryDevice(it.device,this@CWBleManager)
+//                            mDevices.add(it.device)
+//                            mScanCallback!!.discoveryDevice(it.device,this@CWBleManager)
                         }
                         else -> {
                             when(configure.channel){//如果为自己有渠道 则都可以链接

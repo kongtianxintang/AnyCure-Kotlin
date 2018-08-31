@@ -89,7 +89,6 @@ class SearchActivity : BaseActivity() {
             if (g == PackageManager.PERMISSION_GRANTED){
                 fetchData()
             }else{
-                //todo:
                 showToast("使用蓝牙需要定位权限")
             }
         }

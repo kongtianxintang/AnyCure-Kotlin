@@ -1,5 +1,6 @@
 package com.example.chitwing.anycure_kotlin_master.fragment.otCure
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -15,6 +16,9 @@ import android.widget.TextView
 import com.example.chitwing.anycure_kotlin_master.R
 import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
 import com.example.chitwing.anycure_kotlin_master.ble.CWDevice
+import com.example.chitwing.anycure_kotlin_master.dialog.CWDialog
+import com.example.chitwing.anycure_kotlin_master.dialog.CWDialogInterface
+import com.example.chitwing.anycure_kotlin_master.dialog.CWDialogType
 import com.example.chitwing.anycure_kotlin_master.fragment.BaseFragment
 import com.example.chitwing.anycure_kotlin_master.unit.loader
 import java.text.DecimalFormat
@@ -34,6 +38,7 @@ import java.text.DecimalFormat
  *************************************************************/
 class OtCureFragment : BaseFragment() {
 
+    //子控件
     private lateinit var mRecyclerView:RecyclerView
     private lateinit var mIcon:ImageView
     private lateinit var mLinkTitle:TextView
@@ -48,6 +53,13 @@ class OtCureFragment : BaseFragment() {
     private lateinit var mStopButton:Button
     private lateinit var mRecipeName:TextView
 
+    //数据处理类
+    private val mProvider:OtCureProvider by lazy {
+        return@lazy OtCureProvider(this)
+    }
+    //当前的设备
+    private var mCurrentDevice:CWDevice? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v = inflater.inflate(R.layout.fragment_ot_cure, container, false)
         v?.let {
@@ -55,6 +67,15 @@ class OtCureFragment : BaseFragment() {
         }
         return v
     }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        configureButtonAction()
+        initAdapter()
+        endStatus()
+        defaultItem()
+    }
+
 
     /**
      * 绑定子控件
@@ -74,16 +95,13 @@ class OtCureFragment : BaseFragment() {
         mStopButton = v.findViewById(R.id.ot_cure_stop_button)
         mRecipeName = v.findViewById(R.id.ot_cure_recipe_name)
 
-        configureButtonAction()
-        initAdapter()
-        endStatus()
+
     }
 
     private fun initAdapter(){
         val layout = LinearLayoutManager(this.context!!, LinearLayoutManager.HORIZONTAL,false)
         mRecyclerView.layoutManager = layout
-        val list = listOf("你好","不好","很不好","非常不好")
-        val adapter = OtCureAdapter(R.layout.ot_cure_item,list)
+        val adapter = OtCureAdapter(R.layout.ot_cure_item,CWBleManager.mCWDevices)
 
         adapter.setOnItemClickListener { _, _, position ->
             Log.d("点击","位置->$position")
@@ -102,25 +120,30 @@ class OtCureFragment : BaseFragment() {
      * button 的点击事件
      * */
     private fun configureButtonAction(){
-        val tag = "ot_cure点击事件"
         mResumeButton.setOnClickListener {
-            Log.d(tag,"开始播放按钮")
+            mCurrentDevice?.startCureAction()
         }
         mStopButton.setOnClickListener {
-            Log.d(tag,"暂停播放按钮")
+            mCurrentDevice?.stopCureAction()
         }
         mExitButton.setOnClickListener {
-            Log.d(tag,"退出按钮")
+            userEndCure()
         }
         mAddButton.setOnClickListener {
-            Log.d(tag,"加强度按钮")
+            mCurrentDevice?.addIntensity()
         }
         mMinusButton.setOnClickListener {
-            Log.d(tag,"减强度按钮")
+            mCurrentDevice?.minusIntensity()
         }
 
     }
 
+    private fun defaultItem(){
+        val last = CWBleManager.mCWDevices.lastOrNull()
+        last?.let {
+            switchItem(it)
+        }
+    }
     /**
      * 结束状态
      * */
@@ -128,7 +151,7 @@ class OtCureFragment : BaseFragment() {
         activity?.runOnUiThread {
             mLinkTitle.text = "正常"
             mLinkDesc.text = "设备连接正常"
-            mPowerIcon.setImageResource(R.mipmap.power_lev_1)
+            mPowerIcon.setImageResource(R.mipmap.ot_power_lev_1)
             configureAddAndMinus(false)
             mIntensityLabel.text = "0"
             mCountdown.setText(R.string.default_clock_num)
@@ -154,7 +177,7 @@ class OtCureFragment : BaseFragment() {
         }
     }
 
-    fun configureAddAndMinus(flag:Boolean){
+     private fun configureAddAndMinus(flag:Boolean){
         activity?.runOnUiThread {
             mAddButton.isEnabled = flag
             mMinusButton.isEnabled = flag
@@ -175,6 +198,11 @@ class OtCureFragment : BaseFragment() {
      * 切换设备
      * */
     fun switchItem(obj:CWDevice){
+        mCurrentDevice?.selectDevice(false)
+        mCurrentDevice?.mCallback = null
+        obj.selectDevice(true)
+        obj.mCallback = mProvider.callback
+        mCurrentDevice = obj
         when (obj.isPlay){
             true -> playStatus()
             else -> stopStatus()
@@ -220,11 +248,11 @@ class OtCureFragment : BaseFragment() {
 
     fun setPowerIcon(arg:Int){
         val resId = when(arg){
-            in 80 .. 100 -> R.mipmap.power_lev_1
-            in 50 .. 79 -> R.mipmap.power_lev_2
-            in 30 .. 49 -> R.mipmap.power_lev_3
-            in 10 .. 29 -> R.mipmap.power_lev_4
-            else -> R.mipmap.power_lev_5
+            in 80 .. 100 -> R.mipmap.ot_power_lev_1
+            in 50 .. 79 -> R.mipmap.ot_power_lev_2
+            in 30 .. 49 -> R.mipmap.ot_power_lev_3
+            in 10 .. 29 -> R.mipmap.ot_power_lev_4
+            else -> R.mipmap.ot_power_lev_5
         }
         activity?.runOnUiThread {
             mPowerIcon.setImageResource(resId)
@@ -246,6 +274,34 @@ class OtCureFragment : BaseFragment() {
             val ss = DecimalFormat("00").format(arg % 60) //秒
             val str = "$mm : $ss"
             mCountdown.text = str
+        }
+    }
+
+    /**
+     * 理疗中结束
+     * */
+    private fun userEndCure(){
+        val dialog = CWDialog.Builder().setTitle("提示").setDesc("你确定要停止理疗吗?").create()
+        dialog.setCallback(mDialogCallback)
+        dialog.show(activity!!.fragmentManager,"end_cure")
+    }
+
+    private val mDialogCallback = object : CWDialogInterface {
+        override fun onClickButton(flag: Boolean, item: CWDialog) {
+            if (flag) {
+                when (item.getType()){
+                    CWDialogType.Other -> {
+                        mCurrentDevice?.endCureAction()
+                    }
+                    CWDialogType.Error -> {
+
+                    }
+                    CWDialogType.Hint -> {
+
+                    }
+                }
+            }
+            item.dismiss()
         }
     }
 

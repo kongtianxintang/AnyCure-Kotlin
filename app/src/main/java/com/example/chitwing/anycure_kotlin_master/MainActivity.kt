@@ -141,12 +141,12 @@ class MainActivity : BaseActivity() {
      * */
     private fun switchCure(){
         //todo:～～理疗页面做相应处理
-//        mCureFragment?.let {
-//            val arg = CWBleManager.mCWDevices.count()
-//            it.mAdapter.setSelect(arg - 1)
-//            it.mAdapter.notifyDataSetChanged()
-//        }
-
+        mCureFragment?.let {
+            val last = CWBleManager.mCWDevices.lastOrNull()
+            last?.let {
+                mCureFragment!!.switchItem(it)
+            }
+        }
         mBottomNavView!!.selectedItemId = R.id.action_cure
     }
 }

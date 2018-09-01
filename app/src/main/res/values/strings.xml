@@ -61,7 +61,8 @@
 
     <!--button的描述-->
     <string name="button_cancel_text">取消</string>
-    <string name="button_sure_text">退出</string>
+    <string name="button_sure_text">确定</string>
+    <string name="button_exit_text">退出</string>
     <string name="register">注册</string>
     <string name="forget_password">忘记密码</string>
     <string name="title_activity_register">RegisterActivity</string>

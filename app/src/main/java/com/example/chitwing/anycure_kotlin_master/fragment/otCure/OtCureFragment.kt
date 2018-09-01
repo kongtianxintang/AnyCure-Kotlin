@@ -14,6 +14,7 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import com.example.chitwing.anycure_kotlin_master.MainActivity
 import com.example.chitwing.anycure_kotlin_master.R
 import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
 import com.example.chitwing.anycure_kotlin_master.ble.CWDevice
@@ -53,6 +54,7 @@ class OtCureFragment : BaseFragment() {
     private lateinit var mCountdown:TextView
     private lateinit var mStopButton:ConstraintLayout
     private lateinit var mRecipeName:TextView
+    private lateinit var mEmptyView: ConstraintLayout
 
     //数据处理类
     private val mProvider:OtCureProvider by lazy {
@@ -95,7 +97,7 @@ class OtCureFragment : BaseFragment() {
         mCountdown = v.findViewById(R.id.ot_cure_countdown)
         mStopButton = v.findViewById(R.id.ot_cure_stop_button)
         mRecipeName = v.findViewById(R.id.ot_cure_recipe_name)
-
+        mEmptyView = v.findViewById(R.id.ot_cure_empty_view)
 
     }
 
@@ -136,7 +138,10 @@ class OtCureFragment : BaseFragment() {
         mMinusButton.setOnClickListener {
             mCurrentDevice?.minusIntensity()
         }
-
+        mEmptyView.setOnClickListener {
+            val ac = activity as? MainActivity
+            ac?.switchRecipeFragment()
+        }
     }
 
     private fun defaultItem(){
@@ -218,6 +223,7 @@ class OtCureFragment : BaseFragment() {
         setRecipeIcon(obj.recipe?.recipeBigIcon)
         setRecipeName(obj.recipe?.recipeName)
         setPlayDuration(obj.playDuration)
+        mEmptyView.visibility = View.GONE
     }
 
     /// 配置resumeButton的 文字及 图标
@@ -310,7 +316,23 @@ class OtCureFragment : BaseFragment() {
         }
     }
 
+    /**
+     * 设备减除
+     * */
     fun minusDevice(){
+        reloadData()
+        if (CWBleManager.mCWDevices.isEmpty()){
+            mCurrentDevice?.statusCallback = null
+            mCurrentDevice?.mCallback = null
+            mCurrentDevice = null
+            mEmptyView.visibility = View.VISIBLE
+        }
+    }
+    /**
+     * 刷新数据
+     * */
+    fun reloadData(){
         mRecyclerView.adapter.notifyDataSetChanged()
     }
+
 }

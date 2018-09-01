@@ -75,6 +75,7 @@
     <string name="sms_regain_code">重新获取验证码</string>
     <string name="title_activity_cwregister">CWRegisterActivity</string>
     <string name="action_settings">Settings</string>
+    <string name="empty_text">空空如也</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

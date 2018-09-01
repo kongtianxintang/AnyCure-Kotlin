@@ -15,22 +15,15 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.chitwing.anycure_kotlin_master.R
 import com.example.chitwing.anycure_kotlin_master.activity.prepare.OtPrepareActivity
-import com.example.chitwing.anycure_kotlin_master.activity.prepare.PrepareActivity
-import com.example.chitwing.anycure_kotlin_master.base.CWOnItemClickListener
-import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
 import com.example.chitwing.anycure_kotlin_master.database.DBHelper
 import com.example.chitwing.anycure_kotlin_master.dialog.BleDialog
 import com.example.chitwing.anycure_kotlin_master.dialog.BleDialogInterface
-import com.example.chitwing.anycure_kotlin_master.dialog.CWDialog
-import com.example.chitwing.anycure_kotlin_master.dialog.CWDialogInterface
 import com.example.chitwing.anycure_kotlin_master.fragment.BaseFragment
 import com.example.chitwing.anycure_kotlin_master.model.Recipe
 import com.example.chitwing.anycure_kotlin_master.model.RecipeSection
-import com.example.chitwing.anycure_kotlin_master.ot.IndexPath
 import com.example.chitwing.anycure_kotlin_master.ot.RecipeInterface
 import com.example.chitwing.anycure_kotlin_master.ot.RecipeSectionAdapter
 import com.example.chitwing.anycure_kotlin_master.unit.showToast
-import java.util.jar.Manifest
 
 
 /**
@@ -162,10 +155,9 @@ class RecipeFragment : BaseFragment() {
             1 -> {
                 grantResults.firstOrNull()?.let {
                     if (it == PackageManager.PERMISSION_GRANTED){
-                        Log.d("fm","请求权限成功")
                         checkBleSupported()
                     }else{
-                        Log.d("fm","请求权限失败")
+                        activity?.showToast("请求权限失败")
                     }
                 }
             }

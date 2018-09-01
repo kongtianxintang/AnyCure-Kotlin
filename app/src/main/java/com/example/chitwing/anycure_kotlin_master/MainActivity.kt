@@ -46,7 +46,7 @@ class MainActivity : BaseActivity() {
         mBottomNavView = findViewById(R.id.bottom_navigation)
         BottomNavigationViewHelper.disableShiftMode(mBottomNavView!!)
 
-        switchTab()
+        defaultBottomNavigationView()
 
         defaultData()
     }
@@ -57,7 +57,10 @@ class MainActivity : BaseActivity() {
 
     }
 
-    private fun switchTab(){
+    /**
+     * 配置底部导航条的点击事件
+     * */
+    private fun defaultBottomNavigationView(){
         mBottomNavView!!.setOnNavigationItemSelectedListener {
             /**
              * 选择同样的fragment 不切换
@@ -140,7 +143,7 @@ class MainActivity : BaseActivity() {
      * 切换到理疗页
      * */
     private fun switchCure(){
-        //todo:～～理疗页面做相应处理
+        this.title = "控制器"
         mCureFragment?.let {
             val last = CWBleManager.mCWDevices.lastOrNull()
             last?.let {
@@ -149,4 +152,12 @@ class MainActivity : BaseActivity() {
         }
         mBottomNavView!!.selectedItemId = R.id.action_cure
     }
+
+    /**
+     * 切换到处方页
+     * */
+    fun switchRecipeFragment(){
+        mBottomNavView!!.selectedItemId = R.id.action_recipe
+    }
+
 }

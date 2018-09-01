@@ -86,7 +86,7 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
 
     /**
      * 记录是否主动断开
-     * 默认为否 当非主动断开时候 需要重连
+     * 默认为是 当非主动断开时候 需要重连
      * */
     var isAutoDisconnect:Boolean = true
     /**

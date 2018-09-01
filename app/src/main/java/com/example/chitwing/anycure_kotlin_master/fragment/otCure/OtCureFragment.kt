@@ -3,6 +3,7 @@ package com.example.chitwing.anycure_kotlin_master.fragment.otCure
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -47,10 +48,10 @@ class OtCureFragment : BaseFragment() {
     private lateinit var mAddButton: ImageButton
     private lateinit var mMinusButton:ImageButton
     private lateinit var mIntensityLabel:TextView
-    private lateinit var mResumeButton:Button
-    private lateinit var mExitButton:Button
+    private lateinit var mResumeButton: ConstraintLayout
+    private lateinit var mExitButton:ConstraintLayout
     private lateinit var mCountdown:TextView
-    private lateinit var mStopButton:Button
+    private lateinit var mStopButton:ConstraintLayout
     private lateinit var mRecipeName:TextView
 
     //数据处理类

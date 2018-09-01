@@ -201,8 +201,12 @@ class OtCureFragment : BaseFragment() {
     fun switchItem(obj:CWDevice){
         mCurrentDevice?.selectDevice(false)
         mCurrentDevice?.mCallback = null
+        mCurrentDevice?.statusCallback = mProvider.statusCallback
+
         obj.selectDevice(true)
         obj.mCallback = mProvider.callback
+        obj.statusCallback = null
+
         mCurrentDevice = obj
         when (obj.isPlay){
             true -> playStatus()

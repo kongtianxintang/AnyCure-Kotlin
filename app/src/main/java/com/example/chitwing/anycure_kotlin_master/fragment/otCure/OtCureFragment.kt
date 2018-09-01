@@ -305,4 +305,7 @@ class OtCureFragment : BaseFragment() {
         }
     }
 
+    fun minusDevice(){
+        mRecyclerView.adapter.notifyDataSetChanged()
+    }
 }

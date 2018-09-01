@@ -88,11 +88,11 @@ class OtCureProvider(private val fm:OtCureFragment) {
     val statusCallback = object : CWDeviceStatusInterface {
 
         override fun transferDeviceClose(item: CWDevice) {
-//            fm.minusDevice()
+            fm.minusDevice()
         }
 
         override fun transferDevicePlayComplete(item: CWDevice) {
-//            fm.minusDevice()
+            fm.minusDevice()
         }
     }
 

@@ -40,7 +40,8 @@ enum class CWBleStatus{
             Connect -> return@lazy "链接设备成功"
             Disconnect -> return@lazy "断开链接"
             BeginScan -> return@lazy "开始扫描"
-            else -> return@lazy "停止扫描"
+            StopScan -> return@lazy "停止扫描"
+            else -> return@lazy "未知"
         }
     }
 }

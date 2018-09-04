@@ -81,7 +81,6 @@ class RecipeFragment : BaseFragment() {
         }
     }
 
-
     private val onBleDiaCallback = object :BleDialogInterface {
         override fun connectDevice() {
             Log.e("测试","走了几次")
@@ -103,6 +102,7 @@ class RecipeFragment : BaseFragment() {
     /**
      * 推出弹框
      * */
+
     private fun pushScannerDialog(){
         mRecipe?.let {
             val dialog = BleDialog()

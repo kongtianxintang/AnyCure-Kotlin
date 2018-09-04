@@ -47,6 +47,10 @@
         <activity
             android:name=".activity.register.CWRegisterActivity"
             android:label="@string/title_activity_cwregister"
+            android:theme="@style/AppTheme.Push" />
+        <activity
+            android:name=".activity.about.AboutActivity"
+            android:label="@string/title_activity_about"
             android:theme="@style/AppTheme.Push"/>
     </application>
 

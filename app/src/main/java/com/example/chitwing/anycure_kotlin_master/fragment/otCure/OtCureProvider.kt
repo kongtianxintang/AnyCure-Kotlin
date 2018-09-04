@@ -24,9 +24,10 @@ class OtCureProvider(private val fm:OtCureFragment) {
      * 接口
      * */
     val callback = object : CWDeviceInterface {
-        override fun cureEndEvent(item: CWDevice) {
+        override fun cureEndEvent(index: Int,item: CWDevice) {
             Log.e(tag,"cureEndEvent")
             fm.endStatus()
+            fm.currentMinusDevice(index)
         }
 
         override fun cureStartEvent(item: CWDevice) {
@@ -44,9 +45,10 @@ class OtCureProvider(private val fm:OtCureFragment) {
             fm.setPlayDuration(value)
         }
 
-        override fun deviceCloseEvent(item: CWDevice) {
+        override fun deviceCloseEvent(index: Int,item: CWDevice) {
             Log.e(tag,"deviceCloseEvent")
             fm.endStatus()
+            fm.currentMinusDevice(index)
         }
 
         override fun deviceConnect(flag: Boolean, item: CWDevice) {
@@ -61,7 +63,15 @@ class OtCureProvider(private val fm:OtCureFragment) {
 
         override fun transferMainElectrodeNotify(value: Int, item: CWDevice) {
             Log.e(tag,"transferMainElectrodeNotify")
-            //todo:电极贴贴合状态～～硬件通知
+            when(value){
+                0 -> {
+                    fm.showTips("电极未贴合,请贴于患处")
+                }
+                30 -> {
+                    fm.showTips("电极短路,请检查")
+                }
+                else -> {}
+            }
         }
 
         override fun transferIntensity(value: Int, item: CWDevice) {
@@ -70,7 +80,17 @@ class OtCureProvider(private val fm:OtCureFragment) {
 
         override fun transferMainElectrodeQuery(value: Int, item: CWDevice) {
             Log.e(tag,"transferMainElectrodeQuery")
-            //todo:电极贴贴合状态～～查询
+            when (value){
+                0 -> {
+                    fm.showTips("电极未贴合,请贴于患处")
+                }
+                30 -> {
+                    fm.showTips("电极短路,请检查")
+                }
+                else -> {
+                    item.startCureAction()
+                }
+            }
         }
 
         override fun transferPower(value: Int, item: CWDevice) {
@@ -86,12 +106,11 @@ class OtCureProvider(private val fm:OtCureFragment) {
     }
 
     val statusCallback = object : CWDeviceStatusInterface {
-
-        override fun transferDeviceClose(item: CWDevice) {
+        override fun transferDeviceClose(index: Int, item: CWDevice) {
             fm.minusDevice()
         }
 
-        override fun transferDevicePlayComplete(item: CWDevice) {
+        override fun transferDevicePlayComplete(index: Int, item: CWDevice) {
             fm.minusDevice()
         }
     }

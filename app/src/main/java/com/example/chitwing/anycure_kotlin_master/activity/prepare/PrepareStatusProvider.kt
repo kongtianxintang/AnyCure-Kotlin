@@ -52,7 +52,7 @@ class PrepareStatusProvider(private val context: PrepareActivity) :CWBaseProvide
 
 
     private val deviceDataCallback = object :CWDeviceInterface {
-        override fun cureEndEvent(item: CWDevice) {
+        override fun cureEndEvent(index:Int,item: CWDevice) {
 
         }
 
@@ -64,7 +64,7 @@ class PrepareStatusProvider(private val context: PrepareActivity) :CWBaseProvide
 
         }
 
-        override fun deviceCloseEvent(item: CWDevice) {
+        override fun deviceCloseEvent(index:Int,item: CWDevice) {
             //todo:推出
         }
 

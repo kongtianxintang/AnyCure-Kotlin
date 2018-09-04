@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.chitwing.anycure_kotlin_master.R
+import com.example.chitwing.anycure_kotlin_master.activity.about.AboutActivity
 import com.example.chitwing.anycure_kotlin_master.activity.bind.BindActivity
 import com.example.chitwing.anycure_kotlin_master.model.MineModel
 import com.example.chitwing.anycure_kotlin_master.unit.showToast
@@ -41,7 +42,11 @@ class MineAdapter(private val mDataSet:List<MineModel>,private val context: Mine
             when(position){
                 0 -> {
                     val intent = Intent(context.activity!!,BindActivity ::class.java)
-                    context.startActivity(intent)
+                    context.activity!!.startActivity(intent)
+                }
+                2 -> {
+                    val intent = Intent(context.activity!!, AboutActivity ::class.java)
+                    context.activity!!.startActivity(intent)
                 }
                 else -> {
                     context.activity?.showToast("功能暂未开放")

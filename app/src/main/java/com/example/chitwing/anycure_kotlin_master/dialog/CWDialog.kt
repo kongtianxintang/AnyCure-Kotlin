@@ -138,7 +138,6 @@ class CWDialog :DialogFragment(){
 
     override fun onDismiss(dialog: DialogInterface?) {
         super.onDismiss(dialog)
-        //todo:~~做一些操作 比如晴空接口
         mCallback = null
     }
 

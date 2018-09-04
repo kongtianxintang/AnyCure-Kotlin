@@ -86,7 +86,7 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
 
     /**
      * 记录是否主动断开
-     * 默认为是 当非主动断开时候 需要重连
+     * 默认为否 当非主动断开时候 需要重连
      * */
     var isAutoDisconnect:Boolean = true
     /**
@@ -103,7 +103,6 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
         mGatt?.disconnect()
         mGatt?.close()
         mGatt = null
-        mCallback = null
         val isRemove = CWBleManager.mCWDevices.remove(this)
         Log.d(tag,"删除外接设备成功与否:$isRemove")
     }
@@ -220,11 +219,13 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
      * */
     override fun cwBleElectrodeNotify(isClose:Boolean,extensionIsInsert:Boolean,main:Int,extension1:Int,extension2:Int){
         if (isClose){
+            val index = CWBleManager.mCWDevices.indexOf(this)
             this.isPlay = false
             pauseCountDownTimer()
-            mCallback?.deviceCloseEvent(this)
-            statusCallback?.transferDeviceClose(this)
             removeSelf()
+            mCallback?.deviceCloseEvent(index,this)
+            statusCallback?.transferDeviceClose(index,this)
+            deInitDevice()
             return
         }
         mCallback?.transferMainElectrodeNotify(main,this)
@@ -445,11 +446,13 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
      * 结束理疗
      * */
     private fun endCureNotify(){
+        val index = CWBleManager.mCWDevices.indexOf(this)
         pauseCountDownTimer()
         pauseTimer()
-        mCallback?.cureEndEvent(this)
-        statusCallback?.transferDevicePlayComplete(this)
         removeSelf()
+        mCallback?.cureEndEvent(index,this)
+        statusCallback?.transferDevicePlayComplete(index,this)
+        deInitDevice()
     }
 
     /**
@@ -512,6 +515,12 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
     private fun setBleIntensity(arg:Int){
         gattWrite.cwBleWriteIntensity(arg)
         mCallback?.transferIntensity(arg,this)
+    }
+    /**
+     * 查询电极状态
+     * */
+    fun qeuryElectrode(){
+        gattWrite.cwBleWriteElectrodeQuery()
     }
 
     /**
@@ -597,6 +606,13 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
     fun setDeviceConnect(arg:Boolean){
         isConnect = arg
         mCallback?.deviceConnect(arg,this)
+    }
+    /**
+     * 回调 置null
+     * */
+    private fun deInitDevice(){
+        statusCallback = null
+        mCallback = null
     }
 
 }

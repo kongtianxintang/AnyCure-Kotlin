@@ -200,6 +200,7 @@ object  CWBleManager {
      * */
     fun connect(device: BluetoothDevice){
         val gatt = device.connectGatt(MyApp.getApp(),false, mGattCallback)
+        stopScanDevice()
         Log.d(tag,"链接gatt->$gatt")
     }
 
@@ -269,8 +270,34 @@ object  CWBleManager {
                     }
                 }
                 else -> {
-                    Log.d(tag,"gatt不知道啥状态$status")
-                    gatt?.close()
+                    when (status) {
+                        8 -> {
+                            when(newState) {
+                                BluetoothGatt.STATE_DISCONNECTED -> {
+                                    Log.d(tag,"断开链接")
+                                    val device = mCWDevices.find {  it.mDevice.address == gatt?.device?.address }
+                                    device?.let {
+                                        it.setDeviceConnect(false)
+                                        if (it.isAutoDisconnect){
+                                            gatt?.close()
+                                        }else{
+                                            gatt?.disconnect()
+                                            val isReConnect = gatt?.connect()
+                                            Log.d(tag,"重连->$isReConnect 断开链接gatt对象->$gatt")
+                                        }
+                                    }
+                                    mStatusCallback?.bleStatus(CWBleStatus.Disconnect)
+                                }
+                                else -> {
+
+                                }
+                            }
+                        }
+                        else -> {
+                            Log.d(tag,"gatt不知道啥状态$status")
+                            gatt?.close()
+                        }
+                    }
                 }
             }
         }
@@ -346,11 +373,9 @@ object  CWBleManager {
 
     private fun checkBluetoothSupport(context: Context,bluetoothAdapter: BluetoothAdapter?): Boolean {
         if (bluetoothAdapter == null) {
-            Log.d(tag, "Bluetooth is not supported")
             return false
         }
         if (!context.packageManager.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-            Log.d(tag, "Bluetooth LE is not supported")
             return false
         }
         return true

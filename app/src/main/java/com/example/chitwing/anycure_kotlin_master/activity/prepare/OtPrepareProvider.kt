@@ -69,7 +69,7 @@ class OtPrepareProvider (private val context:OtPrepareActivity): CWBaseProvider(
      * */
     val deviceInterface = object :CWDeviceInterface {
 
-        override fun cureEndEvent(item: CWDevice) {
+        override fun cureEndEvent(index:Int,item: CWDevice) {
             deviceClose()
         }
 
@@ -82,7 +82,7 @@ class OtPrepareProvider (private val context:OtPrepareActivity): CWBaseProvider(
 
         }
 
-        override fun deviceCloseEvent(item: CWDevice) {
+        override fun deviceCloseEvent(index:Int,item: CWDevice) {
             deviceClose()
         }
 

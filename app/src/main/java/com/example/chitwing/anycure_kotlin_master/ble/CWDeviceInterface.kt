@@ -37,12 +37,12 @@ interface CWDeviceInterface {
     /**
      * 结束
      * */
-    fun cureEndEvent(item: CWDevice)
+    fun cureEndEvent(index:Int,item: CWDevice)
 
     /**
      * 设备关机
      * */
-    fun deviceCloseEvent(item: CWDevice)
+    fun deviceCloseEvent(index:Int,item: CWDevice)
 
     /**
      * 传输强度
@@ -77,7 +77,7 @@ interface CWDeviceInterface {
 
 interface CWDeviceStatusInterface{
     /*关机*/
-    fun transferDeviceClose(item: CWDevice)
+    fun transferDeviceClose(index:Int,item: CWDevice)
     /*播放结束*/
-    fun transferDevicePlayComplete(item: CWDevice)
+    fun transferDevicePlayComplete(index:Int,item: CWDevice)
 }

@@ -26,7 +26,7 @@ class CWCureProvider(private val fm:CureFragment) {
      * 接口
      * */
     val callback = object :CWDeviceInterface {
-        override fun cureEndEvent(item: CWDevice) {
+        override fun cureEndEvent(index:Int,item: CWDevice) {
             Log.e(tag,"cureEndEvent")
             fm.endStatus()
         }
@@ -45,7 +45,7 @@ class CWCureProvider(private val fm:CureFragment) {
             fm.setLeftTime(value)
         }
 
-        override fun deviceCloseEvent(item: CWDevice) {
+        override fun deviceCloseEvent(index:Int,item: CWDevice) {
             Log.e(tag,"deviceCloseEvent")
             fm.endStatus()
         }
@@ -88,11 +88,11 @@ class CWCureProvider(private val fm:CureFragment) {
 
     val statusCallback = object :CWDeviceStatusInterface {
 
-        override fun transferDeviceClose(item: CWDevice) {
+        override fun transferDeviceClose(index:Int,item: CWDevice) {
             fm.minusDevice()
         }
 
-        override fun transferDevicePlayComplete(item: CWDevice) {
+        override fun transferDevicePlayComplete(index:Int,item: CWDevice) {
             fm.minusDevice()
         }
     }

@@ -1,7 +1,10 @@
 package com.example.chitwing.anycure_kotlin_master.unit
 
+import android.app.Activity
+import android.app.Application
 import android.content.Context
 import android.content.res.Resources
+import android.support.annotation.NonNull
 import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
@@ -10,6 +13,10 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.chitwing.anycure_kotlin_master.R
 import android.util.TypedValue
+import android.view.Gravity
+import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.TextView
 import com.example.chitwing.anycure_kotlin_master.app.MyApp
 import com.example.chitwing.anycure_kotlin_master.network.NetRequest
 
@@ -52,6 +59,33 @@ object Unit {
     fun dip2px(dipValue: Float): Int {
         val scale = Resources.getSystem().displayMetrics.density
         return (dipValue * scale + 0.5f).toInt()
+    }
+
+    /**
+     * 头条技术团队 屏幕自适应解决方案
+     * */
+    private var mNoncompatDensity:Float = 0f
+    private var mNoncompatScaledDensity:Float = 0f
+    fun customDensity(ac:Activity,app:Application){
+
+        val appDisplayMetrics = app.resources.displayMetrics
+        if (mNoncompatDensity == 0f){
+            mNoncompatDensity = appDisplayMetrics.density
+            mNoncompatScaledDensity = appDisplayMetrics.scaledDensity
+        }
+
+        val targetDensity = appDisplayMetrics.widthPixels / 360
+        val targetScaledDensity = targetDensity * (mNoncompatScaledDensity / mNoncompatDensity)
+        val targetDensityDpi = 160 * targetScaledDensity
+        appDisplayMetrics.density = targetDensity.toFloat()
+        appDisplayMetrics.scaledDensity = targetScaledDensity
+        appDisplayMetrics.densityDpi = targetDensityDpi.toInt()
+
+        val acDisplayMetrics = ac.resources.displayMetrics
+        acDisplayMetrics.density = targetDensity.toFloat()
+        acDisplayMetrics.scaledDensity = targetScaledDensity
+        acDisplayMetrics.densityDpi = targetDensityDpi.toInt()
+
     }
 }
 

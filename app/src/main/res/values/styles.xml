@@ -25,6 +25,7 @@
     <!--带push动画主题-->
     <style name="AppTheme.Push" parent="AppTheme">
         <item name="android:windowAnimationStyle">@style/MyWindowAnimTheme</item>
+        <item name="actionBarSize">40dp</item>
     </style>
 
     <style name="MyWindowAnimTheme">

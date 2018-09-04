@@ -6,10 +6,6 @@
     android:background="@color/white"
     tools:context="com.example.chitwing.anycure_kotlin_master.fragment.otCure.OtCureFragment">
 
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -20,6 +16,8 @@
                 app:layout_constraintTop_toTopOf="parent"
                 android:id="@+id/ot_cure_recycler_view"
                 android:background="@color/main"
+                android:paddingStart="40dp"
+                android:paddingEnd="40dp"
                 />
             <ImageView
                 android:layout_width="match_parent"
@@ -43,7 +41,7 @@
                 />
             <View
                 android:layout_width="1dp"
-                android:layout_height="92dp"
+                android:layout_height="90dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/ot_cure_icon"
@@ -193,7 +191,7 @@
                 app:layout_constraintRight_toLeftOf="@id/ot_cure_exit_button"
                 app:layout_constraintTop_toBottomOf="@id/ot_cure_clock_icon"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
+                android:layout_height="36dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="40dp"
@@ -235,7 +233,7 @@
                 app:layout_constraintRight_toRightOf="@id/ot_cure_resume_button"
                 app:layout_constraintTop_toTopOf="@id/ot_cure_resume_button"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
+                android:layout_height="36dp"
                 android:background="@drawable/resume_btn_bg"
                 >
                 <android.support.constraint.Guideline
@@ -271,7 +269,7 @@
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/ot_cure_exit_button"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
+                android:layout_height="36dp"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintLeft_toRightOf="@id/ot_cure_resume_button"
                 app:layout_constraintTop_toTopOf="@id/ot_cure_resume_button"
@@ -298,14 +296,14 @@
                 app:layout_constraintRight_toRightOf="@id/ot_cure_exit_button"
                 app:layout_constraintTop_toTopOf="@id/ot_cure_clock_icon"
                 app:layout_constraintBottom_toBottomOf="@id/ot_cure_clock_icon"
+                android:textSize="@dimen/count_down_size"
                 />
 
         </android.support.constraint.ConstraintLayout>
 
-    </ScrollView>
-
     <android.support.constraint.ConstraintLayout
         android:id="@+id/ot_cure_empty_view"
+        android:background="@color/white"
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent">

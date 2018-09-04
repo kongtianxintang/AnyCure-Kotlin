@@ -69,7 +69,7 @@ class BleDialog : DialogFragment() {
 
         builder.setTitle("链接蓝牙")
 
-        builder.setMessage("请打开蓝牙~")
+        builder.setMessage("开始扫描~")
 
         builder.setPositiveButton("确定", object  :DialogInterface.OnClickListener {
             override fun onClick(dialog: DialogInterface?, which: Int) {
@@ -90,6 +90,12 @@ class BleDialog : DialogFragment() {
     }
 
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        CWBleManager.setScanCallback(mScanCallback)
+        CWBleManager.setStatusCallback(mBleStatusCallback)
+        CWBleManager.startScan()
+    }
 
     /**
      * 显示dialog
@@ -97,9 +103,7 @@ class BleDialog : DialogFragment() {
     fun showBleDialog(m:android.support.v4.app.FragmentManager){
 
         show(m,"BleDialog")
-        CWBleManager.setScanCallback(mScanCallback)
-        CWBleManager.setStatusCallback(mBleStatusCallback)
-        CWBleManager.startScan()
+
     }
 
     /**
@@ -121,6 +125,7 @@ class BleDialog : DialogFragment() {
     private val mBleStatusCallback = object :CWBleStatusInterface {
         override fun bleStatus(arg: CWBleStatus) {
 
+            Log.d("扫描","${arg.desc}")
             activity?.runOnUiThread {
                 mDialog?.setMessage(arg.desc)
             }

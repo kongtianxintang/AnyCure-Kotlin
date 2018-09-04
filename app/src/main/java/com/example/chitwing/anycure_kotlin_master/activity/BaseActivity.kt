@@ -2,9 +2,9 @@ package com.example.chitwing.anycure_kotlin_master.activity
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
-import com.example.chitwing.anycure_kotlin_master.R
+import com.example.chitwing.anycure_kotlin_master.app.MyApp
+import com.example.chitwing.anycure_kotlin_master.unit.Unit
 
 abstract class BaseActivity : AppCompatActivity() {
 
@@ -17,10 +17,6 @@ abstract class BaseActivity : AppCompatActivity() {
          defaultSetting()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d(tag,"销毁$this")
-    }
 
     abstract fun initView()
     abstract fun fetchData()
@@ -33,8 +29,13 @@ abstract class BaseActivity : AppCompatActivity() {
         /**
          * 带有返回按钮
          * */
-        val ac = supportActionBar
-        ac?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        /**
+        * 自适应
+        * */
+        Unit.customDensity(this,MyApp.getApp())
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

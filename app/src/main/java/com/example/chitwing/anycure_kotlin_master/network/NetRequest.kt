@@ -31,7 +31,7 @@ object NetRequest {
     /**
      * 主机地址
      * */
-    private val CW_HOST_IP = "http://ancure.mayable.com.cn/"
+    val CW_HOST_IP = "http://ancure.mayable.com.cn/"
 
     /**
      * 图片url前缀

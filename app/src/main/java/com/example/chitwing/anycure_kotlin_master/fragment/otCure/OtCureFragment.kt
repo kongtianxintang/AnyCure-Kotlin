@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.LinearSnapHelper
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -22,8 +23,16 @@ import com.example.chitwing.anycure_kotlin_master.dialog.CWDialog
 import com.example.chitwing.anycure_kotlin_master.dialog.CWDialogInterface
 import com.example.chitwing.anycure_kotlin_master.dialog.CWDialogType
 import com.example.chitwing.anycure_kotlin_master.fragment.BaseFragment
+import com.example.chitwing.anycure_kotlin_master.ui.CWLayoutManager
 import com.example.chitwing.anycure_kotlin_master.unit.loader
+import com.example.chitwing.anycure_kotlin_master.unit.showToast
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.experimental.launch
 import java.text.DecimalFormat
+import travel.ithaka.android.horizontalpickerlib.PickerLayoutManager
+
+
 
 
 /***********************************************************
@@ -41,7 +50,7 @@ import java.text.DecimalFormat
 class OtCureFragment : BaseFragment() {
 
     //子控件
-    private lateinit var mRecyclerView:RecyclerView
+    lateinit var mRecyclerView:RecyclerView
     private lateinit var mIcon:ImageView
     private lateinit var mLinkTitle:TextView
     private lateinit var mLinkDesc:TextView
@@ -98,7 +107,6 @@ class OtCureFragment : BaseFragment() {
         mStopButton = v.findViewById(R.id.ot_cure_stop_button)
         mRecipeName = v.findViewById(R.id.ot_cure_recipe_name)
         mEmptyView = v.findViewById(R.id.ot_cure_empty_view)
-
     }
 
     private fun initAdapter(){
@@ -116,7 +124,7 @@ class OtCureFragment : BaseFragment() {
         }
         mRecyclerView.adapter = adapter
 
-
+        checkEmpty()
     }
 
     /**
@@ -124,7 +132,7 @@ class OtCureFragment : BaseFragment() {
      * */
     private fun configureButtonAction(){
         mResumeButton.setOnClickListener {
-            mCurrentDevice?.startCureAction()
+            mCurrentDevice?.qeuryElectrode()
         }
         mStopButton.setOnClickListener {
             mCurrentDevice?.stopCureAction()
@@ -207,10 +215,12 @@ class OtCureFragment : BaseFragment() {
         mCurrentDevice?.selectDevice(false)
         mCurrentDevice?.mCallback = null
         mCurrentDevice?.statusCallback = mProvider.statusCallback
+        mCurrentDevice?.isSelect = false
 
         obj.selectDevice(true)
         obj.mCallback = mProvider.callback
         obj.statusCallback = null
+        obj.isSelect = true
 
         mCurrentDevice = obj
         when (obj.isPlay){
@@ -222,8 +232,9 @@ class OtCureFragment : BaseFragment() {
         setPowerIcon(obj.power)
         setRecipeIcon(obj.recipe?.recipeBigIcon)
         setRecipeName(obj.recipe?.recipeName)
-        setPlayDuration(obj.playDuration)
+        setPlayDuration(obj.mDuration - obj.playDuration)
         mEmptyView.visibility = View.GONE
+        mRecyclerView.adapter.notifyDataSetChanged()
     }
 
     /// 配置resumeButton的 文字及 图标
@@ -316,23 +327,61 @@ class OtCureFragment : BaseFragment() {
         }
     }
 
+
+    /**
+     * 当前的设备播放完成or关机
+     * */
+    fun currentMinusDevice(index:Int){
+        checkEmpty()
+        val count = CWBleManager.mCWDevices.count()
+        var target = index - 1
+        if (target < 0) {
+            target = 0
+        }
+        if (count > target){
+            val obj = CWBleManager.mCWDevices[target]
+            switchItem(obj)
+        }
+    }
+
     /**
      * 设备减除
      * */
     fun minusDevice(){
-        reloadData()
-        if (CWBleManager.mCWDevices.isEmpty()){
-            mCurrentDevice?.statusCallback = null
-            mCurrentDevice?.mCallback = null
-            mCurrentDevice = null
-            mEmptyView.visibility = View.VISIBLE
+        activity?.runOnUiThread {
+            reloadData()
+            checkEmpty()
         }
     }
+
     /**
      * 刷新数据
      * */
-    fun reloadData(){
+    private fun reloadData(){
         mRecyclerView.adapter.notifyDataSetChanged()
     }
 
+    private fun checkEmpty(){
+        activity?.runOnUiThread {
+            if (CWBleManager.mCWDevices.isEmpty()){
+                mCurrentDevice?.statusCallback = null
+                mCurrentDevice?.mCallback = null
+                mCurrentDevice = null
+                mEmptyView.visibility = View.VISIBLE
+            }else{
+                mEmptyView.visibility = View.GONE
+            }
+        }
+    }
+
+    /**
+     * toast提示
+     * */
+    fun showTips(arg:String){
+        activity?.let {
+            it.runOnUiThread {
+                it.showToast(arg)
+            }
+        }
+    }
 }

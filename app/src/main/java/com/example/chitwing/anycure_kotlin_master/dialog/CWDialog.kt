@@ -4,6 +4,7 @@ import android.app.DialogFragment
 import android.content.DialogInterface
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -139,6 +140,11 @@ class CWDialog :DialogFragment(){
     override fun onDismiss(dialog: DialogInterface?) {
         super.onDismiss(dialog)
         mCallback = null
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("dialog","销毁")
     }
 
     class Builder{

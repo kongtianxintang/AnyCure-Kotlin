@@ -1,0 +1,36 @@
+body{
+	font-size: 30px;
+	background: #f2f2f2;
+}
+.icon{
+	padding: 120px;
+	width: 180px;
+	height: 180px;
+	border-radius: 300px;
+}
+.cell{
+	display: flex;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	padding-right: 10px;
+	background: #fff;
+	margin: 10px;
+	border-radius: 10px;
+}
+.cell_right{
+	text-align: right;
+	flex: 1;
+}
+.cell_left{
+	text-align: left;
+	flex: 1;
+}
+
+.footer{
+	width: 100%;
+	padding: 10px;
+	text-align: center;
+}
+
+

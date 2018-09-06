@@ -363,14 +363,6 @@ object  CWBleManager {
     }
 
 
-    private val bleAdapterCallback = object :BluetoothAdapter.LeScanCallback {
-        override fun onLeScan(device: BluetoothDevice?, rssi: Int, scanRecord: ByteArray?) {
-            Log.d(tag,"扫描蓝牙:${device!!.address} rssi:$rssi")
-        }
-    }
-
-
-
     private fun checkBluetoothSupport(context: Context,bluetoothAdapter: BluetoothAdapter?): Boolean {
         if (bluetoothAdapter == null) {
             return false

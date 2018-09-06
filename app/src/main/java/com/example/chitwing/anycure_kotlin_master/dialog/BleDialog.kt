@@ -1,22 +1,22 @@
 package com.example.chitwing.anycure_kotlin_master.dialog
 
-import android.app.AlertDialog
-import android.app.Dialog
-import android.app.FragmentManager
 import android.bluetooth.BluetoothDevice
-import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
+import android.app.DialogFragment
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import com.example.chitwing.anycure_kotlin_master.R
 import com.example.chitwing.anycure_kotlin_master.ble.*
 import com.example.chitwing.anycure_kotlin_master.database.DBHelper
 import com.example.chitwing.anycure_kotlin_master.model.BindDevice
 import com.example.chitwing.anycure_kotlin_master.model.Recipe
+import java.util.*
 
 /***********************************************************
  * 版权所有,2018,Chitwing.
@@ -33,10 +33,6 @@ import com.example.chitwing.anycure_kotlin_master.model.Recipe
 class BleDialog : DialogFragment() {
 
     /**
-     *
-     * */
-    private var mDialog:AlertDialog? = null
-    /**
      * 处方
      * */
     private var mRecipe:Recipe? = null
@@ -52,41 +48,28 @@ class BleDialog : DialogFragment() {
         this.mCallback = m
     }
 
+    /**
+     * 描述label
+     * */
+    private lateinit var mDesc: TextView
+    private lateinit var mTitle: TextView
+    private lateinit var mButton: Button
+    private var mTimer: Timer? = null
+    private var mTimerTask: TimerTask? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val dia = dialog
-        Log.e(tag,"dia->$dia")
+        isCancelable = false
+        setStyle(DialogFragment.STYLE_NO_TITLE,android.R.style.Theme_Holo_Dialog_MinWidth)
     }
 
-    /**
-     * 创建系统的dialog
-     * */
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-
-        val builder = AlertDialog.Builder(activity!!)
-
-        builder.setCancelable(true)
-
-        builder.setTitle("链接蓝牙")
-
-        builder.setMessage("开始扫描~")
-
-        builder.setPositiveButton("确定", object  :DialogInterface.OnClickListener {
-            override fun onClick(dialog: DialogInterface?, which: Int) {
-
-            }
-        })
-
-        builder.setNegativeButton("取消",object  :DialogInterface.OnClickListener {
-            override fun onClick(dialog: DialogInterface?, which: Int) {
-
-            }
-        })
-        Log.e(tag,"onCreateDialog")
-
-        mDialog = builder.create()
-
-        return mDialog!!
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.ble_dialog,container)
+        mDesc = view.findViewById(R.id.ble_dialog_desc)
+        mTitle = view.findViewById(R.id.ble_dialog_title)
+        mButton = view.findViewById(R.id.ble_dialog_cancel_button)
+        configureSubviews()
+        return view
     }
 
 
@@ -95,15 +78,15 @@ class BleDialog : DialogFragment() {
         CWBleManager.setScanCallback(mScanCallback)
         CWBleManager.setStatusCallback(mBleStatusCallback)
         CWBleManager.startScan()
+        resumeTimer()
     }
 
-    /**
-     * 显示dialog
-     * */
-    fun showBleDialog(m:android.support.v4.app.FragmentManager){
-
-        show(m,"BleDialog")
-
+    private fun configureSubviews(){
+        mTitle.text = "提示"
+        mButton.setOnClickListener {
+            dismiss()
+            mCallback?.onClickButton(false)
+        }
     }
 
     /**
@@ -125,15 +108,13 @@ class BleDialog : DialogFragment() {
     private val mBleStatusCallback = object :CWBleStatusInterface {
         override fun bleStatus(arg: CWBleStatus) {
 
-            Log.d("扫描","${arg.desc}")
             activity?.runOnUiThread {
-                mDialog?.setMessage(arg.desc)
+                mDesc.text = arg.desc
             }
 
 
             when(arg){
                 CWBleStatus.Able -> {
-                    Log.e(tag,"已经连上了～～")
                     mCallback?.connectDevice()
                     onDismiss(null)
                 }
@@ -148,6 +129,14 @@ class BleDialog : DialogFragment() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        dialog?.let {
+            val dm = DisplayMetrics()
+            activity!!.windowManager!!.defaultDisplay.getMetrics(dm)
+            it.window.setLayout((dm.widthPixels * 0.75).toInt(),ViewGroup.LayoutParams.WRAP_CONTENT)
+        }
+    }
 
     /**
      * 保存在本地的设备地址
@@ -156,15 +145,44 @@ class BleDialog : DialogFragment() {
         return@lazy DBHelper.findAll(BindDevice ::class.java)
     }
 
+    private fun scanNullDevice(){
+        activity?.runOnUiThread {
+            mDesc.text = "未找到控制器,请打开控制器"
+        }
+    }
+
+    private fun resumeTimer(){
+        var count = 30
+        mTimer = Timer()
+        mTimerTask = object :TimerTask(){
+            override fun run() {
+                count -= 1
+                if (count <= 0){
+                    deInitTimer()
+                    scanNullDevice()
+                }
+            }
+        }
+        mTimer!!.schedule(mTimerTask!!,Date(),1000)
+    }
+
+    private fun deInitTimer(){
+        mTimer?.cancel()
+        mTimer = null
+        mTimerTask?.cancel()
+        mTimerTask = null
+    }
+
+
     override fun onDismiss(dialog: DialogInterface?) {
         super.onDismiss(dialog)
         CWBleManager.stopScanDevice()
+        resumeTimer()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         mCallback = null
-        mDialog = null
         mRecipe = null
     }
 

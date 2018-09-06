@@ -20,5 +20,6 @@
     <color name="count_down_color">#ff4000</color>
 
     <color name="prepare_color">#F0EFFE</color>
+    <color name="theme_ignore_gray">#676c80</color>
     
 </resources>

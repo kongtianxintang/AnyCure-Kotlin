@@ -14,11 +14,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.chitwing.anycure_kotlin_master.R
+import com.example.chitwing.anycure_kotlin_master.activity.bind.BindActivity
 import com.example.chitwing.anycure_kotlin_master.activity.prepare.OtPrepareActivity
 import com.example.chitwing.anycure_kotlin_master.database.DBHelper
 import com.example.chitwing.anycure_kotlin_master.dialog.BleDialog
 import com.example.chitwing.anycure_kotlin_master.dialog.BleDialogInterface
+import com.example.chitwing.anycure_kotlin_master.dialog.CWDialog
+import com.example.chitwing.anycure_kotlin_master.dialog.CWDialogInterface
 import com.example.chitwing.anycure_kotlin_master.fragment.BaseFragment
+import com.example.chitwing.anycure_kotlin_master.model.BindDevice
 import com.example.chitwing.anycure_kotlin_master.model.Recipe
 import com.example.chitwing.anycure_kotlin_master.model.RecipeSection
 import com.example.chitwing.anycure_kotlin_master.ot.RecipeInterface
@@ -83,9 +87,12 @@ class RecipeFragment : BaseFragment() {
 
     private val onBleDiaCallback = object :BleDialogInterface {
         override fun connectDevice() {
-            Log.e("测试","走了几次")
             val intent = Intent(activity!!, OtPrepareActivity ::class.java)
             startActivityForResult(intent,0x01)
+        }
+
+        override fun onClickButton(flag: Boolean) {
+            Log.d("测试","点击了dialog cancel button")
         }
     }
 
@@ -94,7 +101,6 @@ class RecipeFragment : BaseFragment() {
     private val onClickItem = object :RecipeInterface {
         override fun didSelectItem(obj: Recipe) {
             mRecipe = obj
-            Log.d("选择的","处方名->${obj.recipeName}")
             requestLocationPermission()
         }
     }
@@ -104,11 +110,30 @@ class RecipeFragment : BaseFragment() {
      * */
 
     private fun pushScannerDialog(){
-        mRecipe?.let {
-            val dialog = BleDialog()
-            dialog.setRecipe(it)
-            dialog.showBleDialog(activity!!.supportFragmentManager)
-            dialog.setCallback(onBleDiaCallback)
+        if (mRecipe == null){ return }
+        //todo: 判断是否有绑定的设备 如果没有则去提示用户绑定设备
+        val list = DBHelper.findAll(BindDevice ::class.java)
+        if (list == null || list.isEmpty()){//提示用户去绑定设备
+            val dialog = CWDialog.Builder().setTitle("提示").setDesc("未绑定设备,无法进行方案").create()
+            dialog.setCallback(mCWDialogCallback)
+            dialog.show(activity!!.fragmentManager,"nullDevice")
+        }else{
+            mRecipe?.let {
+                val dialog = BleDialog()
+                dialog.setRecipe(it)
+                dialog.setCallback(onBleDiaCallback)
+                dialog.show(activity!!.fragmentManager,"bleDialog")
+            }
+        }
+    }
+
+    private val mCWDialogCallback = object :CWDialogInterface {
+        override fun onClickButton(flag: Boolean, item: CWDialog) {
+            if (flag){
+                val intent = Intent(activity!!,BindActivity ::class.java)
+                activity!!.startActivity(intent)
+            }
+            item.dismiss()
         }
     }
 

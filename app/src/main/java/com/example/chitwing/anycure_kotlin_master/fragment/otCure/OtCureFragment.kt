@@ -11,7 +11,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -23,14 +22,9 @@ import com.example.chitwing.anycure_kotlin_master.dialog.CWDialog
 import com.example.chitwing.anycure_kotlin_master.dialog.CWDialogInterface
 import com.example.chitwing.anycure_kotlin_master.dialog.CWDialogType
 import com.example.chitwing.anycure_kotlin_master.fragment.BaseFragment
-import com.example.chitwing.anycure_kotlin_master.ui.CWLayoutManager
 import com.example.chitwing.anycure_kotlin_master.unit.loader
 import com.example.chitwing.anycure_kotlin_master.unit.showToast
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.launch
 import java.text.DecimalFormat
-import travel.ithaka.android.horizontalpickerlib.PickerLayoutManager
 
 
 

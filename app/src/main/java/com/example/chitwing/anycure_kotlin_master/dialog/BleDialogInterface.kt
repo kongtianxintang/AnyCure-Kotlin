@@ -17,4 +17,8 @@ interface BleDialogInterface {
      * 表明已经链接到了一个设备
      * */
     fun connectDevice()
+    /**
+     * 点击了button cancel or sure
+     * */
+    fun onClickButton(flag:Boolean)
 }

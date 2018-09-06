@@ -6,13 +6,14 @@
     android:background="@drawable/cure_corner"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
     <android.support.constraint.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:id="@+id/cw_dialog_title_bg"
+        android:layout_marginTop="@dimen/default_margin"
         >
         <ImageView
             android:layout_width="wrap_content"
@@ -42,8 +43,7 @@
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="@dimen/text_size_default"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
+        android:layout_marginTop="@dimen/default_margin"
         />
 
     <android.support.constraint.ConstraintLayout
@@ -52,6 +52,7 @@
         android:background="@drawable/dialog_down_bg"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cw_dialog_desc"
+        android:layout_marginTop="@dimen/default_margin"
         >
         <Button
             android:id="@+id/cw_dialog_cancel_button"

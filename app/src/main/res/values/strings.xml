@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AnyCure-Kotlin-master</string>
+    <string name="app_name">迈瑞铂</string>
     <string name="default_string">捷荣</string>
     <string name="title_activity_login">登录</string>
 
@@ -67,6 +67,7 @@
     <string name="forget_password">忘记密码</string>
     <string name="title_activity_register">注册</string>
     <string name="title_activity_sms">验证码</string>
+    <string name="log_out">退出登录</string>
 
     <string name="register_phone">请输入手机号</string>
     <string name="next_step">下一步</string>

@@ -43,14 +43,29 @@ class MineFragment : BaseFragment() {
         val about = MineModel("","关于我们")
         val share = MineModel("","分享软件")
 
-        val list = listOf(device,help,about,share)
+        val data = listOf(device,help,about,share)
+        val mad = OtMineAdapter(data,R.layout.mine_item)
 
-        mAdapter = MineAdapter(list,this)
+//        val list = listOf(device,help,about,share)
+//        mAdapter = MineAdapter(list,this)
 
-        mRecyclerView.adapter = mAdapter
+        mRecyclerView.adapter = mad
 
         mRecyclerView.layoutManager = LinearLayoutManager(this.context!!, LinearLayoutManager.VERTICAL,false)
 
+        val header = getHeaderView()
+        mad.addHeaderView(header)
+        val footer = getFooterView()
+        mad.addFooterView(footer)
+
     }
 
+
+    private fun getHeaderView(): View {
+        return layoutInflater.inflate(R.layout.mine_header_view, mRecyclerView.parent as ViewGroup, false)
+    }
+
+    private fun getFooterView(): View {
+        return layoutInflater.inflate(R.layout.mine_footer_view, mRecyclerView.parent as ViewGroup, false)
+    }
 }

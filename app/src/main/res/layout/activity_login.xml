@@ -58,7 +58,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/default_desc"
-                    android:src="@mipmap/ic_launcher"
+                    android:src="@mipmap/app_icon_round"
                     app:layout_constraintLeft_toLeftOf="@id/login_gradient_view"
                     app:layout_constraintRight_toRightOf="@id/login_gradient_view"
                     app:layout_constraintTop_toTopOf="@id/login_gradient_view"

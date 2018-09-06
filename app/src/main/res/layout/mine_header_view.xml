@@ -6,8 +6,8 @@
 
     <ImageView
         android:id="@+id/mine_header_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dp_80"
+        android:layout_height="@dimen/dp_80"
         android:contentDescription="@string/default_stop_desc"
         android:src="@mipmap/app_icon_round"
         app:layout_constraintTop_toTopOf="parent"

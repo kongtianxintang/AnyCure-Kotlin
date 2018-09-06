@@ -6,13 +6,20 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 
 import com.example.chitwing.anycure_kotlin_master.R
+import com.example.chitwing.anycure_kotlin_master.database.DBHelper
 import com.example.chitwing.anycure_kotlin_master.fragment.BaseFragment
+import com.example.chitwing.anycure_kotlin_master.model.Login
 import com.example.chitwing.anycure_kotlin_master.model.MineModel
+import com.example.chitwing.anycure_kotlin_master.unit.Unit
+import com.example.chitwing.anycure_kotlin_master.unit.loadRadius
+import com.example.chitwing.anycure_kotlin_master.unit.loader
 
 /**
  * 个人页面
@@ -54,6 +61,16 @@ class MineFragment : BaseFragment() {
         mRecyclerView.layoutManager = LinearLayoutManager(this.context!!, LinearLayoutManager.VERTICAL,false)
 
         val header = getHeaderView()
+        val icon = header.findViewById<ImageView>(R.id.mine_header_icon)
+        val logs = DBHelper.findAll(Login ::class.java)
+        val log = logs?.lastOrNull()
+        log?.let {
+            val px = Unit.Dp2Px(activity!!,160)
+            icon.loadRadius(this.activity!!,it.icon,px)
+            Log.d("个人中心","用户头像${it.icon} px->$px")
+        }
+
+
         mad.addHeaderView(header)
         val footer = getFooterView()
         mad.addFooterView(footer)

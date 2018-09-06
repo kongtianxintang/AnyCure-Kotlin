@@ -107,7 +107,11 @@ fun ImageView.loader(context: Context, url:String?){
 fun ImageView.loadRadius(context: Context,url: String?,radius:Int){
     val corners = RoundedCorners(radius)
     val options = RequestOptions().placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_foreground).transform(corners)
-    Glide.with(context).load(url).apply(options).into(this)
+    url?.let {
+        val path = NetRequest.IMAGE_BASE_PATH + it
+        Glide.with(context).load(path).apply(options).into(this)
+    }
+
 
 }
 

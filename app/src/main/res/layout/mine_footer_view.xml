@@ -14,6 +14,9 @@
         android:background="@drawable/dialog_sure_button_bg"
         android:text="@string/log_out"
         android:textColor="@color/white"
-        android:layout_margin="@dimen/dp_40"
+        android:layout_marginRight="@dimen/dp_40"
+        android:layout_marginLeft="@dimen/dp_40"
+        android:layout_marginTop="@dimen/dp_40"
+        android:id="@+id/mine_footer_log_out_button"
         />
 </android.support.constraint.ConstraintLayout>

@@ -16,8 +16,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 android:id="@+id/ot_cure_recycler_view"
                 android:background="@color/main"
-                android:paddingStart="40dp"
-                android:paddingEnd="40dp"
                 />
             <ImageView
                 android:layout_width="match_parent"

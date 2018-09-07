@@ -68,7 +68,7 @@ class MineAdapter(private val mDataSet:List<MineModel>,private val context: Mine
     }
 }
 
-class OtMineAdapter(private val mDataSet:List<MineModel>,private val layoutResId: Int) : BaseQuickAdapter<MineModel, BaseViewHolder>(layoutResId,mDataSet){
+class OtMineAdapter( mDataSet:List<MineModel>,layoutResId: Int) : BaseQuickAdapter<MineModel, BaseViewHolder>(layoutResId,mDataSet){
 
     override fun convert(helper: BaseViewHolder?, item: MineModel?) {
         helper?.setText(R.id.mine_item_title,item?.title)

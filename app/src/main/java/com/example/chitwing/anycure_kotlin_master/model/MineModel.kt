@@ -1,5 +1,6 @@
 package com.example.chitwing.anycure_kotlin_master.model
 
+import android.app.Activity
 import com.example.chitwing.anycure_kotlin_master.activity.BaseActivity
 import com.example.chitwing.anycure_kotlin_master.activity.prepare.PrepareActivity
 
@@ -15,4 +16,5 @@ import com.example.chitwing.anycure_kotlin_master.activity.prepare.PrepareActivi
  * Modifier:
  * Reason:
  *************************************************************/
-data class MineModel (var icon:String?,var title:String?) {}
+data class MineModel(var icon:String?,var title:String?) {
+}

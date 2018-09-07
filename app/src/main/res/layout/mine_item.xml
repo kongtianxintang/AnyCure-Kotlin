@@ -4,9 +4,6 @@
     android:layout_height="44dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/mine_item_bg"
-    android:layout_marginRight="@dimen/dp_8"
-    android:layout_marginLeft="@dimen/dp_8"
-    android:layout_marginBottom="@dimen/dp_8"
     >
 
     <TextView
@@ -17,7 +14,12 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginStart="@dimen/dp_8"
+        android:layout_marginStart="@dimen/dp_12"
         />
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:background="@color/app_gray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
 </android.support.constraint.ConstraintLayout>

@@ -1,11 +1,9 @@
 package com.example.chitwing.anycure_kotlin_master.fragment.otCure
 
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.LinearSnapHelper
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -29,6 +27,9 @@ import java.text.DecimalFormat
 
 
 
+
+
+
 /***********************************************************
  * 版权所有,2018,Chitwing.
  * Copyright(C),2018,Chitwing co. LTD.All rights reserved.
@@ -44,7 +45,7 @@ import java.text.DecimalFormat
 class OtCureFragment : BaseFragment() {
 
     //子控件
-    lateinit var mRecyclerView:RecyclerView
+    private lateinit var mRecyclerView:RecyclerView
     private lateinit var mIcon:ImageView
     private lateinit var mLinkTitle:TextView
     private lateinit var mLinkDesc:TextView
@@ -104,6 +105,7 @@ class OtCureFragment : BaseFragment() {
     }
 
     private fun initAdapter(){
+
         val layout = LinearLayoutManager(this.context!!, LinearLayoutManager.HORIZONTAL,false)
         mRecyclerView.layoutManager = layout
         val adapter = OtCureAdapter(R.layout.ot_cure_item,CWBleManager.mCWDevices)
@@ -117,6 +119,7 @@ class OtCureFragment : BaseFragment() {
             }
         }
         mRecyclerView.adapter = adapter
+
 
         checkEmpty()
     }
@@ -206,6 +209,8 @@ class OtCureFragment : BaseFragment() {
      * 切换设备
      * */
     fun switchItem(obj:CWDevice){
+        if (mCurrentDevice == obj){ return }
+
         mCurrentDevice?.selectDevice(false)
         mCurrentDevice?.mCallback = null
         mCurrentDevice?.statusCallback = mProvider.statusCallback

@@ -101,6 +101,7 @@ class RecipeFragment : BaseFragment() {
     private val onClickItem = object :RecipeInterface {
         override fun didSelectItem(obj: Recipe) {
             mRecipe = obj
+            Log.d("处方","id->${obj.recipeId} name->${obj.recipeName}")
             requestLocationPermission()
         }
     }

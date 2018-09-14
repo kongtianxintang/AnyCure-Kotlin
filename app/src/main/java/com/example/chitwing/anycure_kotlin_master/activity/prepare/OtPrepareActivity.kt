@@ -74,6 +74,7 @@ class OtPrepareActivity : BaseActivity() {
             //设置回调
             it.mCallback = mProvider.deviceInterface
             it.writeData()
+
         }
         switchTopSegment(0)
         switchMidSegment(0)

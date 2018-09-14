@@ -9,5 +9,5 @@ class SMSCode {
 }
 class VerificationCode {
     @SerializedName("verificationcode")
-    var code:Int = 0
+    var code:String? = null
 }

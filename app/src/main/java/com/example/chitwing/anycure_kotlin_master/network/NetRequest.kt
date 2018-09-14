@@ -1,10 +1,7 @@
 package com.example.chitwing.anycure_kotlin_master.network
 
 import android.util.Log
-import com.example.chitwing.anycure_kotlin_master.model.Login
-import com.example.chitwing.anycure_kotlin_master.model.PrepareHint
-import com.example.chitwing.anycure_kotlin_master.model.Recipe
-import com.example.chitwing.anycure_kotlin_master.model.SMSCode
+import com.example.chitwing.anycure_kotlin_master.model.*
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -77,6 +74,14 @@ object NetRequest {
     fun fetchSMSCode(map: Map<String, String>) :Call<SMSCode>{
         val body = createPair(map)
         return api.fetchSMSCode(body)
+    }
+
+    /**
+     * 注册
+     * */
+    fun registerAction(map: Map<String, String>):Call<CWRegister>{
+        val body = createPair(map)
+        return api.register(body)
     }
 
     /**

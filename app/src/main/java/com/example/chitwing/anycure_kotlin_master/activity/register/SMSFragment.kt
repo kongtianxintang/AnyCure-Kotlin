@@ -3,6 +3,8 @@ package com.example.chitwing.anycure_kotlin_master.activity.register
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +14,7 @@ import com.example.chitwing.anycure_kotlin_master.R
 import com.example.chitwing.anycure_kotlin_master.fragment.BaseFragment
 import com.example.chitwing.anycure_kotlin_master.model.SMSCode
 import com.example.chitwing.anycure_kotlin_master.network.NetRequest
+import com.example.chitwing.anycure_kotlin_master.unit.showToast
 import kotlinx.android.synthetic.main.fragment_sm.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -55,6 +58,30 @@ class SMSFragment : BaseFragment() {
         smsRegain.setOnClickListener {
             fetchCode()
         }
+
+        smsNum.addTextChangedListener( object :TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    s?.let {
+                        if (it.length >= 6){
+                            val tCode = it.toString()
+                            Log.d(mTag,"用户输入的验证码$tCode")
+                            val ac = getAC()
+                            if (tCode == ac?.mCodes){
+                                //切换到密码页面
+                                ac.switchPasswordFragment()
+                            }
+                        }
+                    }
+            }
+        })
     }
 
     /**
@@ -73,7 +100,6 @@ class SMSFragment : BaseFragment() {
         call.enqueue( object :Callback<SMSCode> {
             override fun onResponse(call: Call<SMSCode>?, response: Response<SMSCode>?) {
                 response?.body()?.let {
-                    Log.d(mTag,"${it.code}")
                     when(it.code){
                         0 -> {
                             Log.d(mTag,"验证码->${it.data?.code}")
@@ -81,10 +107,10 @@ class SMSFragment : BaseFragment() {
                         }
                         1 -> {
                             Log.d(mTag,"错误信息->${it.msg} map->$map")
-                            fetchFailure()
+                            fetchFailure(it.msg)
                         }
                         else -> {
-                            fetchFailure()
+                            fetchFailure(it.msg)
                         }
                     }
                 }
@@ -92,7 +118,7 @@ class SMSFragment : BaseFragment() {
             }
 
             override fun onFailure(call: Call<SMSCode>?, t: Throwable?) {
-                fetchFailure()
+                fetchFailure(t.toString())
             }
         })
 
@@ -108,17 +134,17 @@ class SMSFragment : BaseFragment() {
      * */
     private fun fetchSuccess(obj:SMSCode){
         getAC()?.let {
-            it.mCode = obj.data!!.code
+            it.mCodes = obj.data!!.code
             showCountdown()
             resumeTimer()
             smsStatus.text = "短信已下发到${it.phone}"
         }
     }
 
-    private fun fetchFailure(){
+    private fun fetchFailure(error: String?){
         showRegainButton()
         getAC()?.let {
-            smsStatus.text = "短信发送失败"
+            smsStatus.text = "短信发送失败:$error"
         }
     }
 

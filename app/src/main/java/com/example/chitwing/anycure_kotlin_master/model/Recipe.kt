@@ -1,4 +1,5 @@
 package com.example.chitwing.anycure_kotlin_master.model
+import android.util.Log
 import com.google.gson.annotations.SerializedName
 import io.objectbox.annotation.Entity
 
@@ -54,6 +55,7 @@ class Recipe :BaseData(){
                 ts.forEach {
                     set.add(it.toInt())
                 }
+
             }
             return set
         }

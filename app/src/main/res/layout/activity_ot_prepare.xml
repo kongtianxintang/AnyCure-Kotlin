@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="@id/recipeIcon"
                 app:layout_constraintLeft_toRightOf="@id/recipeIcon"
-                android:text="@string/default_desc"
+                android:text="@string/prepare_header_desc"
                 android:textSize="@dimen/text_size_small"
                 android:layout_marginStart="@dimen/prepare_margin"
                 />

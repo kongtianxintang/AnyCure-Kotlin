@@ -25,16 +25,16 @@ class OtCureAdapter(layoutResId: Int,data:List<CWDevice>) :BaseQuickAdapter<CWDe
 
     override fun convert(helper: BaseViewHolder?, item: CWDevice?) {
         helper?.setText(R.id.otCureRecipeName,item?.recipe?.recipeName)
-        item?.let {
-            when (it.isSelect){
-                true -> {
-                    helper?.setAlpha(R.id.otCureRecipeName,1f)
-                }
-                else -> {
-                    helper?.setAlpha(R.id.otCureRecipeName,0.3f)
-                }
-            }
-        }
+//        item?.let {
+//            when (it.isSelect){
+//                true -> {
+//                    helper?.setAlpha(R.id.otCureRecipeName,1f)
+//                }
+//                else -> {
+//                    helper?.setAlpha(R.id.otCureRecipeName,0.3f)
+//                }
+//            }
+//        }
     }
 
 

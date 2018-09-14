@@ -4,6 +4,9 @@ import android.util.Log
 import com.example.chitwing.anycure_kotlin_master.ble.CWDevice
 import com.example.chitwing.anycure_kotlin_master.ble.CWDeviceInterface
 import com.example.chitwing.anycure_kotlin_master.ble.CWDeviceStatusInterface
+import com.example.chitwing.anycure_kotlin_master.dialog.CWDialog
+import com.example.chitwing.anycure_kotlin_master.dialog.CWDialogInterface
+import com.example.chitwing.anycure_kotlin_master.dialog.CWDialogType
 
 /***********************************************************
  * 版权所有,2018,Chitwing.
@@ -25,19 +28,19 @@ class OtCureProvider(private val fm:OtCureFragment) {
      * */
     val callback = object : CWDeviceInterface {
         override fun cureEndEvent(index: Int,item: CWDevice) {
-            Log.e(tag,"cureEndEvent")
+            Log.d(tag,"cureEndEvent")
             fm.endStatus()
             fm.currentMinusDevice(index)
         }
 
         override fun cureStartEvent(item: CWDevice) {
-            Log.e(tag,"cureStartEvent")
+            Log.d(tag,"cureStartEvent")
             fm.playStatus()
             item.selectDevice(true)
         }
 
         override fun cureStopEvent(item: CWDevice) {
-            Log.e(tag,"cureStopEvent")
+            Log.d(tag,"cureStopEvent")
             fm.stopStatus()
         }
 
@@ -46,30 +49,26 @@ class OtCureProvider(private val fm:OtCureFragment) {
         }
 
         override fun deviceCloseEvent(index: Int,item: CWDevice) {
-            Log.e(tag,"deviceCloseEvent")
+            Log.d(tag,"deviceCloseEvent")
             fm.endStatus()
             fm.currentMinusDevice(index)
         }
 
         override fun deviceConnect(flag: Boolean, item: CWDevice) {
-            Log.e(tag,"deviceConnect")
+            Log.d(tag,"deviceConnect")
             fm.setConnect(flag)
         }
 
         override fun prepareComplete(item: CWDevice) {
-            Log.e(tag,"prepareComplete")
+            Log.d(tag,"prepareComplete")
             //todo~~准备完成,此页面未用到
         }
 
         override fun transferMainElectrodeNotify(value: Int, item: CWDevice) {
-            Log.e(tag,"transferMainElectrodeNotify")
+            Log.d(tag,"transferMainElectrodeNotify")
             when(value){
-                0 -> {
-                    fm.showTips("电极未贴合,请贴于患处")
-                }
-                30 -> {
-                    fm.showTips("电极短路,请检查")
-                }
+                0 -> pushDialog("电极未贴合,请贴于患处")
+                30 -> pushDialog("电极短路,请检查")
                 else -> {}
             }
         }
@@ -79,14 +78,10 @@ class OtCureProvider(private val fm:OtCureFragment) {
         }
 
         override fun transferMainElectrodeQuery(value: Int, item: CWDevice) {
-            Log.e(tag,"transferMainElectrodeQuery")
+            Log.d(tag,"transferMainElectrodeQuery")
             when (value){
-                0 -> {
-                    fm.showTips("电极未贴合,请贴于患处")
-                }
-                30 -> {
-                    fm.showTips("电极短路,请检查")
-                }
+                0 -> pushDialog("电极未贴合,请贴于患处")
+                30 -> pushDialog("电极短路,请检查")
                 else -> {
                     item.startCureAction()
                 }
@@ -94,13 +89,14 @@ class OtCureProvider(private val fm:OtCureFragment) {
         }
 
         override fun transferPower(value: Int, item: CWDevice) {
-            Log.e(tag,"transferPower->$value")
+            Log.d(tag,"transferPower->$value")
             fm.setPowerIcon(value)
         }
 
         override fun prepareFail(error: String, item: CWDevice) {
-            Log.e(tag,"prepareFail")
+            Log.d(tag,"prepareFail")
             //todo:准备失败～～此页面未用到
+            pushDialog(error)
         }
 
     }
@@ -115,4 +111,18 @@ class OtCureProvider(private val fm:OtCureFragment) {
         }
     }
 
+    /**
+     * 弹出错误提示
+     * */
+    private fun pushDialog(error: String){
+        val dialog = CWDialog.Builder().setType(CWDialogType.Hint).setTitle("错误提示").setDesc(error).create()
+        dialog.setCallback(dialogInterface)
+        dialog.show(fm.activity?.fragmentManager,"ot_cure_error")
+    }
+
+    private val dialogInterface = object : CWDialogInterface {
+        override fun onClickButton(flag: Boolean, item: CWDialog) {
+            item.dismiss()
+        }
+    }
 }

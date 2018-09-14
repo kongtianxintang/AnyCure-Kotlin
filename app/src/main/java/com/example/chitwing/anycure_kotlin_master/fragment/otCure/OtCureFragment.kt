@@ -20,6 +20,7 @@ import com.example.chitwing.anycure_kotlin_master.dialog.CWDialog
 import com.example.chitwing.anycure_kotlin_master.dialog.CWDialogInterface
 import com.example.chitwing.anycure_kotlin_master.dialog.CWDialogType
 import com.example.chitwing.anycure_kotlin_master.fragment.BaseFragment
+import com.example.chitwing.anycure_kotlin_master.ui.CWLayoutManager
 import com.example.chitwing.anycure_kotlin_master.unit.loader
 import com.example.chitwing.anycure_kotlin_master.unit.showToast
 import java.text.DecimalFormat
@@ -106,8 +107,12 @@ class OtCureFragment : BaseFragment() {
 
     private fun initAdapter(){
 
-        val layout = LinearLayoutManager(this.context!!, LinearLayoutManager.HORIZONTAL,false)
-        mRecyclerView.layoutManager = layout
+        //test
+        val customLayout = CWLayoutManager(this.context!!, LinearLayoutManager.HORIZONTAL,false)
+        mRecyclerView.layoutManager = customLayout
+
+//        val layout = LinearLayoutManager(this.context!!, LinearLayoutManager.HORIZONTAL,false)
+//        mRecyclerView.layoutManager = layout
         val adapter = OtCureAdapter(R.layout.ot_cure_item,CWBleManager.mCWDevices)
 
         adapter.setOnItemClickListener { _, _, position ->
@@ -129,7 +134,7 @@ class OtCureFragment : BaseFragment() {
      * */
     private fun configureButtonAction(){
         mResumeButton.setOnClickListener {
-            mCurrentDevice?.qeuryElectrode()
+            mCurrentDevice?.queryElectrode()
         }
         mStopButton.setOnClickListener {
             mCurrentDevice?.stopCureAction()

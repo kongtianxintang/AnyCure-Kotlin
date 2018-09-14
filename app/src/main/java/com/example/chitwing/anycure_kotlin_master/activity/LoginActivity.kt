@@ -20,12 +20,14 @@ import android.widget.TextView
 
 import java.util.ArrayList
 import android.content.Intent
+import android.util.Log
 import com.example.chitwing.anycure_kotlin_master.MainActivity
 import com.example.chitwing.anycure_kotlin_master.R
 import com.example.chitwing.anycure_kotlin_master.activity.register.CWRegisterActivity
 import com.example.chitwing.anycure_kotlin_master.database.DBHelper
 import com.example.chitwing.anycure_kotlin_master.model.Login
 import com.example.chitwing.anycure_kotlin_master.network.NetRequest
+import com.example.chitwing.anycure_kotlin_master.unit.showToast
 
 import kotlinx.android.synthetic.main.activity_login.*
 
@@ -61,7 +63,8 @@ class LoginActivity : BaseActivity(), LoaderCallbacks<Cursor> {
             createRegisterActivity(1)
         }
         forgetPassword.setOnClickListener {
-            createRegisterActivity(2)
+//            createRegisterActivity(2)
+            showToast("此功能未开放😂")
         }
 
     }
@@ -263,6 +266,8 @@ class LoginActivity : BaseActivity(), LoaderCallbacks<Cursor> {
         }
 
         private fun insert(arg:Login){
+            Log.d("测试 登录id","${arg.id}")
+
             DBHelper.insert(arg,Login::class.java)
         }
 

@@ -48,7 +48,6 @@ class PrepareActivity : BaseActivity() {
         content.movementMethod = ScrollingMovementMethod.getInstance()
 
         startButton.setOnClickListener {
-            //todo:去查询设备电极贴贴合状态
             deviceProvider.electrodeQuery()
         }
 

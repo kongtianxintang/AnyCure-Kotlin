@@ -19,6 +19,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.example.chitwing.anycure_kotlin_master.app.MyApp
 import com.example.chitwing.anycure_kotlin_master.network.NetRequest
+import com.example.chitwing.anycure_kotlin_master.ui.CWCircleTransform
 
 
 /***********************************************************
@@ -111,8 +112,16 @@ fun ImageView.loadRadius(context: Context,url: String?,radius:Int){
         val path = NetRequest.IMAGE_BASE_PATH + it
         Glide.with(context).load(path).apply(options).into(this)
     }
-
-
+}
+/**
+ * 扩展imageView 圆形
+ * */
+fun ImageView.loadCircle(context: Context,url: String?){
+    val options = RequestOptions().placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_background).transform(CWCircleTransform())
+    url?.let {
+        val path = NetRequest.IMAGE_BASE_PATH + it
+        Glide.with(context).load(path).apply(options).into(this)
+    }
 }
 
 /**

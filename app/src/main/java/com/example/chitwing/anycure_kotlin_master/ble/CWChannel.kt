@@ -24,6 +24,7 @@ enum class CWChannel {
     PingAn,
     CTT,
     QuanJian,
+    Other,
     None;
 
     /**
@@ -37,6 +38,7 @@ enum class CWChannel {
             PingAn -> return@lazy "平安"
             CTT -> return@lazy "康辉"
             QuanJian -> return@lazy "权健"
+            Other -> return@lazy "迈瑞铂"
             else -> return@lazy "默认"
         }
     }
@@ -52,6 +54,7 @@ enum class CWChannel {
             PingAn -> return@lazy "00000003"
             CTT -> return@lazy "00000005"
             QuanJian -> return@lazy "00000004"
+            Other -> return@lazy "00000006"
             else -> return@lazy "00000002"
         }
     }
@@ -62,6 +65,17 @@ enum class CWChannel {
     val SHORT_NUM_CODE:String by lazy {
         val str = NUM_CODE.substring(NUM_CODE.length - 4,NUM_CODE.length)
         return@lazy str
+    }
+
+    /**
+     * 渠道码
+     * */
+    val channelCode: List<Int> by lazy {
+        return@lazy  NUM_CODE.map {
+            val str = it.toString()
+            val t = str.toInt()
+            return@map t
+        }
     }
 
     /**

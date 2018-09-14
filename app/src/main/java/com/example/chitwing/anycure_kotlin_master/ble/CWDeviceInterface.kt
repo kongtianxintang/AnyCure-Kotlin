@@ -76,8 +76,12 @@ interface CWDeviceInterface {
 }
 
 interface CWDeviceStatusInterface{
-    /*关机*/
+    /**
+     * 关机
+     * */
     fun transferDeviceClose(index:Int,item: CWDevice)
-    /*播放结束*/
+    /**
+     * 播放结束
+     * */
     fun transferDevicePlayComplete(index:Int,item: CWDevice)
 }

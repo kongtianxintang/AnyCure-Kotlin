@@ -17,15 +17,15 @@ class LaunchActivity : AppCompatActivity() {
     }
     /*进入 登录页/主页*/
     private fun enterDisplay(){
-        val log = DBHelper.find(1,Login ::class.java)
-        val intent = createIntent(log == null)
+        val logs = DBHelper.findAll(Login ::class.java)
+        val intent = createIntent(logs == null || logs.isEmpty())
         startActivity(intent)
         finish()
     }
 
 
     private fun createIntent(arg :Boolean):Intent{
-        when (arg){
+        when (arg) {
             true -> return Intent(this,LoginActivity ::class.java)
             else -> return Intent(this, MainActivity ::class.java)
         }

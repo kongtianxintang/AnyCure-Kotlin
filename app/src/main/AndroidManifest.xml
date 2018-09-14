@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
     <application
         android:name=".app.MyApp"
@@ -44,7 +45,9 @@
         <activity
             android:name=".activity.prepare.PrepareActivity"
             android:label="@string/prepare_title" />
-        <activity android:name=".activity.prepare.OtPrepareActivity" />
+        <activity android:name=".activity.prepare.OtPrepareActivity"
+            android:label="@string/ot_prepare_title"
+            />
         <activity
             android:name=".activity.register.CWRegisterActivity"
             android:label="@string/title_activity_cwregister"

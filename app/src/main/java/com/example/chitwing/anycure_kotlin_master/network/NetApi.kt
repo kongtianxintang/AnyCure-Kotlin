@@ -1,9 +1,6 @@
 package com.example.chitwing.anycure_kotlin_master.network
 
-import com.example.chitwing.anycure_kotlin_master.model.Login
-import com.example.chitwing.anycure_kotlin_master.model.PrepareHint
-import com.example.chitwing.anycure_kotlin_master.model.Recipe
-import com.example.chitwing.anycure_kotlin_master.model.SMSCode
+import com.example.chitwing.anycure_kotlin_master.model.*
 import retrofit2.Call
 import retrofit2.http.FieldMap
 import retrofit2.http.FormUrlEncoded
@@ -56,4 +53,11 @@ interface NetApi {
     @POST("sms/reqCode")
     @FormUrlEncoded
     fun fetchSMSCode(@FieldMap body: Map<String, String>) :Call<SMSCode>
+
+    /**
+     * 注册
+     * */
+    @POST("/User/userReg")
+    @FormUrlEncoded
+    fun register(@FieldMap body: Map<String, String>) :Call<CWRegister>
 }

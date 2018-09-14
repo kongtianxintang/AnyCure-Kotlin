@@ -22,8 +22,8 @@ import java.util.*
 data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWGattReadInterface,CWGattWriteInterface{
 
 
-    private val tag = "CWDevice"
-
+    private val mTag = "CWDevice"
+    
     /**
      * 处方
      * */
@@ -57,7 +57,10 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
      * 电池电量
      * */
     var power:Int = 100
-
+    /**
+     * 错误标示
+     * */
+    var isError:Boolean = false
 
     /**
      * 处方内容
@@ -69,15 +72,15 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
     /**
      * 读取类
      * */
-    val gattRead:CWGattRead by lazy {
-        return@lazy CWGattRead(this)
+    val gattRead:CWGattDecodeRead by lazy {
+        return@lazy CWGattDecodeRead(this)
     }
 
     /**
      * 写入类
      * */
-    val gattWrite:CWGattWrite by lazy {
-        return@lazy CWGattWrite(this)
+    val gattWrite:CWGattDecodeWrite by lazy {
+        return@lazy CWGattDecodeWrite(this)
     }
     /**
      * 记录是否当前的外设
@@ -104,7 +107,7 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
         mGatt?.close()
         mGatt = null
         val isRemove = CWBleManager.mCWDevices.remove(this)
-        Log.d(tag,"删除外接设备成功与否:$isRemove")
+        Log.d(mTag,"删除外接设备成功与否:$isRemove")
     }
 
 
@@ -115,21 +118,21 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
     }
 
     override fun cwBleRecipeLoadingCallback(flag: Boolean, duration: Int) {
-        if (isExit) {
-            endCureNotify()
-            return
-        }
         if (flag){
             mDuration = duration
             gattWrite.cwBleWriteOutputModel(2)
+        }else{
+            isError = true
+            mCallback?.prepareFail("无效的处方",this)
         }
     }
 
     override fun cwBleRecipeSendIndexCallback(index: Int, total: Int) {
         mRecipeContent?.let {
-            val max = it.count() / 12 - 1
-            if (max == total) {
+            if (index == 0) {
                 gattWrite.cwBleWriteLoadingRecipe()
+            }else{
+                gattWrite.cwBleWriteRecipeContent(index + 1,it)
             }
         }
     }
@@ -149,10 +152,6 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
     override fun cwBleSoftwareStopCureCallback(flag: Boolean) {
         pauseCountDownTimer()
         pauseTimer()
-        if (isExit) {
-            gattWrite.cwBleWriteLoadingRecipe()
-            return
-        }
         this.isPlay = false
         mCallback?.cureStopEvent(this)
 
@@ -163,6 +162,7 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
      * */
     override fun cwChannelCheckError(){
         mCallback?.prepareFail("渠道验证错误",this)
+        isError = true
     }
 
     /**
@@ -170,7 +170,7 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
      * randoms:设备端传过来的随机数
      * */
     override fun cwChannelCheckSuccess(randoms:List<Int>){
-        gattWrite.cwBleWriteACK(randoms)
+        //todo:废弃
     }
 
     /**
@@ -185,7 +185,7 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
      * 软件端发送强度指令 回调
      * - Parameter flag: 成功与否
      * */
-    override fun cwBleSetIntensityCallback(flag: Boolean){
+    override fun cwBleSetIntensityCallback(flag: Boolean,value: Int){
 
     }
 
@@ -218,16 +218,6 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
      * - extension2: 扩展电极2状态
      * */
     override fun cwBleElectrodeNotify(isClose:Boolean,extensionIsInsert:Boolean,main:Int,extension1:Int,extension2:Int){
-        if (isClose){
-            val index = CWBleManager.mCWDevices.indexOf(this)
-            this.isPlay = false
-            pauseCountDownTimer()
-            removeSelf()
-            mCallback?.deviceCloseEvent(index,this)
-            statusCallback?.transferDeviceClose(index,this)
-            deInitDevice()
-            return
-        }
         mCallback?.transferMainElectrodeNotify(main,this)
 
     }
@@ -338,15 +328,15 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
         val localVer = CWBleManager.configure.channel.rangeMap[0]
         when(version){
             in 0 .. 2 -> {
-                Log.d(tag,"直接写入处方内容")
+                Log.d(mTag,"直接写入处方内容")
                 gattWrite.cwBleWriteRecipeContent(1,mRecipeContent)
             }
             else -> {
                 if (localVer > version){
-                    Log.d(tag,"去更新步进表 ->写入步进表内容")
+                    Log.d(mTag,"去更新步进表 ->写入步进表内容")
                     gattWrite.cwBleWriteRangeMapContent(0)
                 }else{
-                    Log.d(tag,"去写入处方内容")
+                    Log.d(mTag,"去写入处方内容")
                     gattWrite.cwBleWriteRecipeContent(1,mRecipeContent)
                 }
             }
@@ -360,13 +350,15 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
      * - flag: 成功与否
      * */
     override fun cwBleDeviceRangeMapWriteCallback(index:Int,flag:Boolean){
-        Log.d(tag,"写入的幅度表->$flag 帧数->$index")
+        Log.d(mTag,"写入的幅度表->$flag 帧数->$index")
         if (flag){
             val max = CWBleManager.configure.channel.rangeMap.count() / 16
             if ((index + 1) == max){
-                gattWrite.cwBleWriteToUpdateRangeMap()
+                gattWrite.cwBleWriteRangeMapUpdate()
             }
+
         }else{
+            isError = true
             mCallback?.prepareFail("幅度表写入失败 帧数:$index",this)
         }
     }
@@ -379,8 +371,82 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
         if (flag){
             gattWrite.cwBleWriteRecipeContent(1,mRecipeContent)
         }else{
+            isError = true
             mCallback?.prepareFail("更新幅度表失败",this)
         }
+    }
+
+    /**
+     * 幅度表删除
+     * */
+    override fun cwBleRangeMapRemove(flag: Boolean){
+
+    }
+
+
+    ///  解密阶段 设备返回的10个随机数
+    ///
+    /// - Parameter list: 随机数
+    override fun cwBleDeviceNormalRandom(list: Array<Int>){
+        gattWrite.cwBleWriteEncryptionRandomWith(list)
+    }
+
+    /// 计算出密钥种子
+    ///
+    /// - Parameter seed: 种子～
+    override fun cwBleCalculate(seed: Int){
+        gattWrite.seed = seed
+        gattWrite.cwBleWriteQueryRangeMap()
+    }
+
+    /// 设备关机
+    override fun cwBleDeviceClose(arg:Int){
+        val index = CWBleManager.mCWDevices.indexOf(this)
+        removeSelf()
+        pauseCountDownTimer()
+        pauseTimer()
+        mCallback?.deviceCloseEvent(index,this)
+        statusCallback?.transferDeviceClose(index,this)
+        deInitDevice()
+    }
+
+    /// hardwareIntensityAutoIncrementComplete 设备强度自增完成
+    override fun cwBleIntensityAutoIncrementComplete(){
+
+    }
+
+    /// 系统版本
+    override fun cwBleDeviceSystemVersion(arg:Int){
+
+    }
+
+    /// 控制led灯
+    override fun cwBleControlLed(flag: Boolean){
+
+    }
+
+    /// 重置密钥回调
+    override fun cwBleDeviceResetSeed(flag: Boolean){
+        gattWrite.cwBleWriteDecryptionCMD()
+    }
+
+    /// 获取通信编号
+    override fun cwBleCommunicationSerialNumber(flag: Boolean){
+        if (flag){
+            gattWrite.cwBleWriteDeviceStatusQuery()
+        }else{
+            isError = true
+            mCallback?.prepareFail("通信编号错误",this)
+        }
+
+    }
+
+    override fun cwBleSoftwareEndCure(flag: Boolean) {
+        endCureNotify()
+    }
+
+    override fun cwBleRemoveRecipe(flag: Boolean) {
+
     }
     /**********************  CWGattReadInterface  end  **************************/
 
@@ -403,43 +469,9 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
      * 开始往设备写入数据
      * */
     fun writeData(){
-        gattWrite.cwBleWriteChannelCode(CWBleManager.configure.channel.encrypt_Channel_Code)
+        gattWrite.cwBleWriteRestSeed()
     }
 
-    /**
-     * 此方法为了让写入处方内容防止出现mDeviceBusy=true
-     * 不是办法的办法
-     * 从
-     * */
-    fun readCharacteristicData(list: ByteArray){
-        val maps = list.map { it.toInt() }
-        if (maps.count() > 3){
-            val command = maps[0] and 0xff
-            val s = maps[1] and 0xff
-            when(command){
-                0xab -> {//写入处方
-                    when(s) {
-                        0x00 -> {
-                            val index = maps[2]
-                            if (index == 0) {
-                                return
-                            }
-                            gattWrite.cwBleWriteRecipeContent(index + 1,mRecipeContent)
-                        }
-                        else -> {
-
-                        }
-                    }
-                }
-                0xad -> {//写入幅度映射表
-                    //TODO:可能需要～做幅度映射表矫正
-                }
-                else -> {
-
-                }
-            }
-        }
-    }
 
     /**~~~~~~~~~~~~~~~ 操作功能 ~~~~~~~~~~~~~~~~~**/
     /**
@@ -459,11 +491,10 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
      * 结束
      * */
     fun endCureAction(){
-        isExit = true
-        if (isConnect){
-            stopCureAction()
-        }else{
+        if (isError){
             endCureNotify()
+        }else{
+            gattWrite.cwBleWriteEndCure()
         }
     }
     /**
@@ -519,9 +550,18 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
     /**
      * 查询电极状态
      * */
-    fun qeuryElectrode(){
+    fun queryElectrode(){
         gattWrite.cwBleWriteElectrodeQuery()
     }
+
+    /**
+     * 查询通信编码
+     * */
+    fun queryCommunicationSerialNumber(){
+        gattRead.mIsCompleteDecryption = false
+        gattWrite.cwBleWriteCommunicationSerialNumber()
+    }
+
 
     /**
      * 倒计时 --
@@ -604,6 +644,9 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
      * 设备的连接状况
      * */
     fun setDeviceConnect(arg:Boolean){
+        if (!arg){
+            isError = true
+        }
         isConnect = arg
         mCallback?.deviceConnect(arg,this)
     }

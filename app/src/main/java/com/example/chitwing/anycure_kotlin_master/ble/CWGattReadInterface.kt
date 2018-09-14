@@ -47,12 +47,14 @@ interface CWGattReadInterface {
     /**
      * 渠道验证:错误
      * */
+    @Deprecated("新协议更换")
     fun cwChannelCheckError()
 
     /**
      * 渠道验证:成功
      * randoms:设备端传过来的随机数
      * */
+    @Deprecated("新协议更换")
     fun cwChannelCheckSuccess(randoms:List<Int>)
 
     /**
@@ -65,7 +67,7 @@ interface CWGattReadInterface {
      * 软件端发送强度指令 回调
      * - Parameter flag: 成功与否
      * */
-    fun cwBleSetIntensityCallback(flag: Boolean)
+    fun cwBleSetIntensityCallback(flag: Boolean,value: Int)
 
     /**
      * 软件端发送输出模式 回调
@@ -160,5 +162,62 @@ interface CWGattReadInterface {
      * */
     fun cwBleDeviceRangeMapUpdateCallback(flag: Boolean)
 
+    /**
+     * 幅度表删除
+     * */
+    fun cwBleRangeMapRemove(flag: Boolean)
 
+    /**
+     * 删除处方
+     * */
+    fun cwBleRemoveRecipe(flag: Boolean)
+
+    /**
+     * 解密阶段 设备返回的10个随机数
+     *
+     * - Parameter list: 随机数
+     * **/
+    fun cwBleDeviceNormalRandom(list: Array<Int>)
+
+    /**
+     * 计算出密钥种子
+     *
+     * - Parameter seed: 种子～
+     * **/
+    fun cwBleCalculate(seed: Int)
+
+    /**
+     * 设备关机
+     * */
+    fun cwBleDeviceClose(arg:Int)
+
+    /**
+     * 设备强度自增完成
+     * */
+    fun cwBleIntensityAutoIncrementComplete()
+
+    /**
+     * 硬件系统版本
+     * */
+    fun cwBleDeviceSystemVersion(arg:Int)
+
+    /**
+     * 控制led灯
+     * */
+    fun cwBleControlLed(flag: Boolean)
+
+    /**
+     * 重置密钥
+     * */
+    fun cwBleDeviceResetSeed(flag: Boolean)
+
+    /**
+     * 获取通信编号
+     * */
+    fun cwBleCommunicationSerialNumber(flag: Boolean)
+
+    /**
+     * 理疗结束
+     * */
+    fun cwBleSoftwareEndCure(flag: Boolean)
 }

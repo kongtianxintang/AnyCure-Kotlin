@@ -23,7 +23,7 @@ enum class CWDeviceType{
  * 扩展设备是否为新设备
  * */
 fun BluetoothDevice.deviceType() :CWDeviceType {
-    if (name.contains("med_")){
+    if (name.contains("MRB_")){
         return CWDeviceType.New
     }
     return CWDeviceType.Old

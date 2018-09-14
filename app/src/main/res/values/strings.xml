@@ -58,6 +58,7 @@
     <string name="bind_title">设备绑定</string>
     <string name="search_title">设备搜索</string>
     <string name="main_title">主页</string>
+    <string name="ot_prepare_title">设备初始化</string>
 
     <!--button的描述-->
     <string name="button_cancel_text">取消</string>
@@ -77,6 +78,9 @@
     <string name="title_activity_cwregister">注册</string>
     <string name="action_settings">Settings</string>
     <string name="empty_text">空空如也</string>
+    <string name="input_password">输入密码</string>
+    <string name="password_tips">密码格式为6-16位数字或字母,不允许有空格和符号</string>
+    <string name="prepare_header_desc">每日或隔日1~2次,一个疗程为10-20天</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

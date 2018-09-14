@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 
 import com.example.chitwing.anycure_kotlin_master.R
 import com.example.chitwing.anycure_kotlin_master.activity.LoginActivity
@@ -24,9 +25,8 @@ import com.example.chitwing.anycure_kotlin_master.dialog.CWDialogInterface
 import com.example.chitwing.anycure_kotlin_master.fragment.BaseFragment
 import com.example.chitwing.anycure_kotlin_master.model.Login
 import com.example.chitwing.anycure_kotlin_master.model.MineModel
+import com.example.chitwing.anycure_kotlin_master.unit.*
 import com.example.chitwing.anycure_kotlin_master.unit.Unit
-import com.example.chitwing.anycure_kotlin_master.unit.loadRadius
-import com.example.chitwing.anycure_kotlin_master.unit.loader
 
 /**
  * 个人页面
@@ -64,12 +64,11 @@ class MineFragment : BaseFragment() {
                     val intent = Intent(activity!!,BindActivity ::class.java)
                     startActivity(intent)
                 }
-                1 -> {}
                 2 -> {
                     val intent = Intent(activity!!,AboutActivity ::class.java)
                     startActivity(intent)
                 }
-                3 -> {}
+                else -> { activity?.showToast("功能未开放😂")}
             }
 
         }
@@ -78,12 +77,14 @@ class MineFragment : BaseFragment() {
 
         val header = getHeaderView()
         val icon = header.findViewById<ImageView>(R.id.mine_header_icon)
+        val telephone = header.findViewById<TextView>(R.id.mineTelephone)
         val logs = DBHelper.findAll(Login ::class.java)
         val log = logs?.lastOrNull()
         log?.let {
             val px = Unit.Dp2Px(activity!!,160)
-            icon.loadRadius(this.activity!!,it.icon,px)
+            icon.loadCircle(this.activity!!,it.icon)
             Log.d("个人中心","用户头像${it.icon} px->$px")
+//            telephone.text = "134****2934"
         }
 
         mad.addHeaderView(header)
@@ -116,6 +117,7 @@ class MineFragment : BaseFragment() {
     }
 
     private fun userLogOut(){
+        Log.d("删除登录信息","还有那个地方？")
         DBHelper.removeAll(Login ::class.java)
         val intent = Intent(activity,LoginActivity ::class.java)
         startActivity(intent)

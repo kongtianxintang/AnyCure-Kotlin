@@ -17,8 +17,6 @@
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
         android:background="@drawable/ot_cure_item_text_bg"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
         android:id="@+id/otCureRecipeName"
         android:textColor="@color/white"
         android:textSize="@dimen/text_size_small"

@@ -5,6 +5,7 @@ import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
 import com.example.chitwing.anycure_kotlin_master.ble.CWDevice
 import com.example.chitwing.anycure_kotlin_master.ble.CWDeviceInterface
 import com.example.chitwing.anycure_kotlin_master.database.DBHelper
+import com.example.chitwing.anycure_kotlin_master.dialog.CWDialog
 import com.example.chitwing.anycure_kotlin_master.model.PrepareHint
 import com.example.chitwing.anycure_kotlin_master.unit.showToast
 import kotlinx.android.synthetic.main.activity_ot_prepare.*
@@ -36,6 +37,10 @@ class OtPrepareProvider (private val context:OtPrepareActivity): CWBaseProvider(
      * */
     private fun getDataSource(){
         mDataSet = DBHelper.findAll(PrepareHint ::class.java)
+        mDataSet?.firstOrNull()?.let {
+            context.recipeTips.text = it.getReplaceContent()
+            context.recipeTitle.text = it.title
+        }
     }
 
     fun switchIndex(arg:Int){
@@ -102,7 +107,8 @@ class OtPrepareProvider (private val context:OtPrepareActivity): CWBaseProvider(
 
         override fun prepareFail(error: String, item: CWDevice) {
             context.runOnUiThread {
-                context.showToast(error)
+                val dialog = CWDialog.Builder().setTitle("提示").setDesc(error).create()
+                dialog.show(context.fragmentManager,"prepareError")
             }
         }
 

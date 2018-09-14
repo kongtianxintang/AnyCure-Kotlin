@@ -96,8 +96,12 @@ class BleDialog : DialogFragment() {
         override fun discoveryDevice(item: BluetoothDevice, manager: CWBleManager) {
             val device = mSaveDevices?.find { it.mac == item.address }
             device?.let {
-                manager.stopScanDevice()
+                if (mDevice != null){
+                    return@let
+                }
+                mDevice = item
                 manager.connect(item)
+                manager.stopScanDevice()
             }
         }
     }
@@ -144,6 +148,10 @@ class BleDialog : DialogFragment() {
     private val mSaveDevices by lazy {
         return@lazy DBHelper.findAll(BindDevice ::class.java)
     }
+    /**
+     * 搜索到的设备
+     * */
+    private var mDevice: BluetoothDevice? = null
 
     private fun scanNullDevice(){
         activity?.runOnUiThread {
@@ -184,6 +192,7 @@ class BleDialog : DialogFragment() {
         super.onDestroy()
         mCallback = null
         mRecipe = null
+        mDevice = null
     }
 
 

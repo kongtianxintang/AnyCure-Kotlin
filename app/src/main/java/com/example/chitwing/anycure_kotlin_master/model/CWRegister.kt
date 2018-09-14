@@ -1,19 +1,19 @@
-package com.example.chitwing.anycure_kotlin_master.ble
+package com.example.chitwing.anycure_kotlin_master.model
 
 /***********************************************************
  * 版权所有,2018,Chitwing.
  * Copyright(C),2018,Chitwing co. LTD.All rights reserved.
  * project:AnyCure-Kotlin
  * Author:chitwing
- * Date:  2018/6/11
+ * Date:  2018/9/14
  * QQ/Tel/Mail:383118832
  * Description:
  * Others:新手勿喷
  * Modifier:
  * Reason:
  *************************************************************/
-class CWConfigure {
-
-    val channel:CWChannel = CWChannel.Other
-
+class CWRegister {
+    var code:Int = 0
+    var msg:String? = null
+    var uid:String? = null
 }

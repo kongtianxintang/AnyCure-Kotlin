@@ -19,6 +19,7 @@ class CWGattRead(b:CWGattReadInterface) :CWGattReadInterface by b{
     private val tag = "CWGattRead"
 
     fun handleData(list:ByteArray?){
+
         val first = list?.first()?.toInt()
         first?.let {
             when(it and 0xff){
@@ -309,7 +310,7 @@ class CWGattRead(b:CWGattReadInterface) :CWGattReadInterface by b{
      * 调节强度
      * */
     private fun softwareSetIntensity(list: ByteArray){
-        cwBleSetIntensityCallback(true)
+        cwBleSetIntensityCallback(true,1)
     }
     /**
      * 电极贴贴合 软件状态查询

@@ -113,14 +113,13 @@ class CWSearchProvider(private val context: SearchActivity) :CWBaseProvider(cont
     }
 
     fun bindSpecifyDevice(item:BluetoothDevice){
-        val bond = item.createBond()
-        if (bond){
+//        val bond = item.createBond()
+//        if (bond){
             val temp = BindDevice()
             temp.mac = item.address
-
             DBHelper.insert(temp,BindDevice::class.java)
             context.finish()
-        }
+//        }
     }
 
 

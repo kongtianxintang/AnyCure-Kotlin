@@ -262,7 +262,7 @@ object  CWBleManager {
                     }
                 }
             }else {
-                if (newState == BluetoothGatt.STATE_CONNECTED){
+                if (newState == BluetoothGatt.STATE_DISCONNECTED){
                     Log.d(mTag,"断开链接")
                     val device = mCWDevices.find {  it.mDevice.address == gatt?.device?.address }
                     device?.let {

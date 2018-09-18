@@ -8,7 +8,6 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/part_4"
         android:contentDescription="@string/default_title"
         android:id="@+id/cure_item_icon"
         android:scaleType="center"

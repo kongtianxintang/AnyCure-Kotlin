@@ -99,6 +99,9 @@ class CWSearchProvider(private val context: SearchActivity) :CWBaseProvider(cont
                 CWBleStatus.OFF -> {
 
                 }
+                else -> {
+
+                }
             }
         }
 
@@ -109,17 +112,16 @@ class CWSearchProvider(private val context: SearchActivity) :CWBaseProvider(cont
 
     private fun startScan(){
         CWBleManager.startScan()
+        mIsScan = true
         stopScan(15000)
+        context.searchStatus()
     }
 
     fun bindSpecifyDevice(item:BluetoothDevice){
-//        val bond = item.createBond()
-//        if (bond){
             val temp = BindDevice()
             temp.mac = item.address
             DBHelper.insert(temp,BindDevice::class.java)
             context.finish()
-//        }
     }
 
 
@@ -139,6 +141,7 @@ class CWSearchProvider(private val context: SearchActivity) :CWBaseProvider(cont
             job!!.cancel()
             job = null
         }
+        context.resultStatus()
         mIsScan = false
     }
 

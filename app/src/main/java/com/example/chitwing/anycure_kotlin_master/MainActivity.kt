@@ -137,7 +137,7 @@ class MainActivity : BaseActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Log.d(tag,"requestCode->$requestCode  resultCode->$resultCode")
+        Log.d(mTag,"requestCode->$requestCode  resultCode->$resultCode")
         if (resultCode == 0x01){
             switchCure()
         }
@@ -162,6 +162,11 @@ class MainActivity : BaseActivity() {
      * */
     fun switchRecipeFragment(){
         mBottomNavView!!.selectedItemId = R.id.action_recipe
+    }
+
+
+    override fun onBackPressed() {
+        moveTaskToBack(true)
     }
 
 }

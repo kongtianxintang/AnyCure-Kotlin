@@ -19,7 +19,7 @@
     <dimen name="default_margin_right">8dp</dimen>
     <dimen name="default_margin">8dp</dimen>
     <dimen name="prepare_margin">8dp</dimen>
-    <dimen name="ot_cure_default_margin">20dp</dimen>
+    <dimen name="ot_cure_default_margin">16dp</dimen>
 
     <!--字体大小-->
     <dimen name="default_button_text_size">20sp</dimen>
@@ -41,6 +41,7 @@
     <dimen name="dp_8">8dp</dimen>
     <dimen name="dp_12">12dp</dimen>
     <dimen name="dp_16">16dp</dimen>
+    <dimen name="dp_18">18dp</dimen>
     <dimen name="dp_20">20dp</dimen>
     <dimen name="dp_22">22dp</dimen>
     <dimen name="dp_36">36dp</dimen>
@@ -48,6 +49,9 @@
     <dimen name="dp_49">49dp</dimen>
     <dimen name="dp_64">64dp</dimen>
     <dimen name="dp_80">80dp</dimen>
+    <dimen name="dp_128">128dp</dimen>
+    <dimen name="dp_156">156dp</dimen>
+
 
     <dimen name="sp_10">10sp</dimen>
     <dimen name="sp_12">12sp</dimen>

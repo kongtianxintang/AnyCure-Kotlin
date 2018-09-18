@@ -21,5 +21,7 @@
 
     <color name="prepare_color">#F0EFFE</color>
     <color name="theme_ignore_gray">#676c80</color>
+
+    <color name="high_gray">#f5f7f0</color>
     
 </resources>

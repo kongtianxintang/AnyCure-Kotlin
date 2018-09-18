@@ -5,10 +5,15 @@ import android.os.Bundle
 import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
+import android.view.animation.AnimationSet
+import android.view.animation.ScaleAnimation
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -23,6 +28,7 @@ import com.example.chitwing.anycure_kotlin_master.fragment.BaseFragment
 import com.example.chitwing.anycure_kotlin_master.ui.CWLayoutManager
 import com.example.chitwing.anycure_kotlin_master.unit.loader
 import com.example.chitwing.anycure_kotlin_master.unit.showToast
+import kotlinx.android.synthetic.main.fragment_ot_cure.*
 import java.text.DecimalFormat
 
 
@@ -82,6 +88,7 @@ class OtCureFragment : BaseFragment() {
         initAdapter()
         endStatus()
         defaultItem()
+        startAlphaAnimation()
     }
 
 
@@ -148,7 +155,7 @@ class OtCureFragment : BaseFragment() {
         mMinusButton.setOnClickListener {
             mCurrentDevice?.minusIntensity()
         }
-        mEmptyView.setOnClickListener {
+        mReCure.setOnClickListener {
             val ac = activity as? MainActivity
             ac?.switchRecipeFragment()
         }
@@ -387,5 +394,15 @@ class OtCureFragment : BaseFragment() {
                 it.showToast(arg)
             }
         }
+    }
+
+    private fun startAlphaAnimation(){
+        mReCureIcon.clearAnimation()
+        val alpha = AlphaAnimation(1f,0.3f)
+        alpha.duration = 1000
+        alpha.repeatCount = -1
+        alpha.repeatMode = Animation.REVERSE
+        mReCureIcon.animation = alpha
+        alpha.start()
     }
 }

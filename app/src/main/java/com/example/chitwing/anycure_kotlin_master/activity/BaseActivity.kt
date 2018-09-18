@@ -2,6 +2,7 @@ package com.example.chitwing.anycure_kotlin_master.activity
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import com.example.chitwing.anycure_kotlin_master.app.MyApp
 import com.example.chitwing.anycure_kotlin_master.unit.Unit
@@ -9,7 +10,7 @@ import com.example.chitwing.anycure_kotlin_master.unit.Unit
 abstract class BaseActivity : AppCompatActivity() {
 
     companion object {
-        val tag:String = "AnyCure-Kotlin"
+        val mTag: String = "AnyCure-Kotlin"
     }
 
      override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,4 +49,8 @@ abstract class BaseActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(mTag,"销毁")
+    }
 }

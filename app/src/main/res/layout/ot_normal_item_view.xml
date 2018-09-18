@@ -3,7 +3,6 @@
     android:layout_width="116dp"
     android:layout_height="match_parent"
     android:layout_marginStart="@dimen/default_margin"
-    android:layout_marginEnd="@dimen/default_margin"
     android:background="@drawable/ot_recipe_item_bg"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <TextView
@@ -20,7 +19,6 @@
         android:layout_width="33dp"
         android:layout_height="42dp"
         android:contentDescription="@string/default_desc"
-        android:src="@mipmap/part_1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toTopOf="@id/ot_normal_item_text_view"

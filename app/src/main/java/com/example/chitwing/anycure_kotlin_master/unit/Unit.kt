@@ -95,8 +95,9 @@ object Unit {
  * //todo:请ui给个占位图 及 错误图
  * */
 fun ImageView.loader(context: Context, url:String?){
-    val options = RequestOptions().placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_background)
     url?.let {
+        if (it.isEmpty()){ return }
+        val options = RequestOptions().placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_background)
         val path = NetRequest.IMAGE_BASE_PATH + it
         Glide.with(context).load(path).apply(options).into(this)
     }
@@ -106,9 +107,11 @@ fun ImageView.loader(context: Context, url:String?){
  * radius 圆角
 * */
 fun ImageView.loadRadius(context: Context,url: String?,radius:Int){
-    val corners = RoundedCorners(radius)
-    val options = RequestOptions().placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_foreground).transform(corners)
+
     url?.let {
+        if (it.isEmpty()){ return }
+        val corners = RoundedCorners(radius)
+        val options = RequestOptions().placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_foreground).transform(corners)
         val path = NetRequest.IMAGE_BASE_PATH + it
         Glide.with(context).load(path).apply(options).into(this)
     }
@@ -117,8 +120,9 @@ fun ImageView.loadRadius(context: Context,url: String?,radius:Int){
  * 扩展imageView 圆形
  * */
 fun ImageView.loadCircle(context: Context,url: String?){
-    val options = RequestOptions().placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_background).transform(CWCircleTransform())
     url?.let {
+        if (it.isEmpty()){ return }
+        val options = RequestOptions().placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_background).transform(CWCircleTransform())
         val path = NetRequest.IMAGE_BASE_PATH + it
         Glide.with(context).load(path).apply(options).into(this)
     }

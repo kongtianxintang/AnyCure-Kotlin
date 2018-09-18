@@ -19,6 +19,7 @@ import com.example.chitwing.anycure_kotlin_master.R
 import com.example.chitwing.anycure_kotlin_master.activity.LoginActivity
 import com.example.chitwing.anycure_kotlin_master.activity.about.AboutActivity
 import com.example.chitwing.anycure_kotlin_master.activity.bind.BindActivity
+import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
 import com.example.chitwing.anycure_kotlin_master.database.DBHelper
 import com.example.chitwing.anycure_kotlin_master.dialog.CWDialog
 import com.example.chitwing.anycure_kotlin_master.dialog.CWDialogInterface
@@ -119,6 +120,7 @@ class MineFragment : BaseFragment() {
     private fun userLogOut(){
         Log.d("删除登录信息","还有那个地方？")
         DBHelper.removeAll(Login ::class.java)
+        CWBleManager.mCWDevices.forEach { it.endCureAction() }
         val intent = Intent(activity,LoginActivity ::class.java)
         startActivity(intent)
         activity?.finish()

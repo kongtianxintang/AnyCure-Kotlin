@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/high_gray"
     tools:context="com.example.chitwing.anycure_kotlin_master.fragment.recipe.RecipeFragment">
 
     <android.support.v4.widget.SwipeRefreshLayout
@@ -11,7 +12,9 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/fm_recipe_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:background="@color/high_gray"
+            />
     </android.support.v4.widget.SwipeRefreshLayout>
 
 

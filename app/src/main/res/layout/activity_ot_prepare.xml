@@ -26,7 +26,6 @@
                 android:contentDescription="@string/default_desc"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
-                android:src="@mipmap/part_1"
                 android:layout_marginTop="12dp"
                 android:layout_marginStart="12dp"
                 android:id="@+id/recipeIcon"

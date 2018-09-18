@@ -14,8 +14,8 @@ android {
         applicationId "com.example.chitwing.anycure_kotlin_master"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 111
-        versionName "1.11"
+        versionCode 112
+        versionName "1.12"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -24,6 +24,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+
 
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'

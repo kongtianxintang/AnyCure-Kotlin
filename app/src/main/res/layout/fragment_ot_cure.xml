@@ -299,6 +299,7 @@
                 app:layout_constraintTop_toTopOf="@id/ot_cure_clock_icon"
                 app:layout_constraintBottom_toBottomOf="@id/ot_cure_clock_icon"
                 android:textSize="@dimen/count_down_size"
+                android:textColor="@color/main"
                 />
 
         </android.support.constraint.ConstraintLayout>

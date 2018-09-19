@@ -76,7 +76,7 @@ class MainActivity : BaseActivity() {
 
             when(futureItem){
                 R.id.action_mine -> {
-                    this.supportActionBar?.title = "个人"
+                    this.supportActionBar?.title = "我的"
                     if (mMineFragment == null){
                         mMineFragment = MineFragment()
                         transaction.add(R.id.linear_view,mMineFragment!!)
@@ -84,7 +84,7 @@ class MainActivity : BaseActivity() {
                     showItem = mMineFragment!!
                 }
                 R.id.action_recipe -> {
-                    this.supportActionBar?.title = "处方"
+                    this.supportActionBar?.title = "首页"
                     showItem = mRecipeFragment!!
                 }
                 R.id.action_cure -> {
@@ -96,7 +96,7 @@ class MainActivity : BaseActivity() {
                     showItem = mCureFragment!!
                 }
                 else -> {
-                    this.supportActionBar?.title = "商城"
+                    this.supportActionBar?.title = "发现"
                     if (mMallFragment == null){
                         mMallFragment = MallFragment()
                         transaction.add(R.id.linear_view,mMallFragment!!)
@@ -127,7 +127,7 @@ class MainActivity : BaseActivity() {
         transaction.add(R.id.linear_view,mRecipeFragment!!)
         transaction.show(mRecipeFragment!!)
         transaction.commit()
-        this.title = "处方"
+        this.title = "首页"
         val ac = supportActionBar
         ac?.setDisplayHomeAsUpEnabled(false)
     }
@@ -162,11 +162,6 @@ class MainActivity : BaseActivity() {
      * */
     fun switchRecipeFragment(){
         mBottomNavView!!.selectedItemId = R.id.action_recipe
-    }
-
-
-    override fun onBackPressed() {
-        moveTaskToBack(true)
     }
 
 }

@@ -118,6 +118,7 @@
                 app:layout_constraintLeft_toRightOf="@id/ot_cure_intensity_icon"
                 android:text="@string/default_intensity_desc"
                 android:layout_marginStart="12dp"
+                android:textSize="@dimen/sp_20"
                 />
             <TextView
                 android:gravity="center"
@@ -185,6 +186,7 @@
                 app:layout_constraintLeft_toRightOf="@id/ot_cure_clock_icon"
                 android:layout_marginStart="12dp"
                 android:text="@string/default_clock_desc"
+                android:textSize="@dimen/sp_20"
                 />
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/ot_cure_resume_button"

@@ -34,17 +34,17 @@
     <string name="default_device_link_status">正常</string>
     <string name="default_intensity_desc">强度</string>
     <string name="default_intensity_num">0</string>
-    <string name="default_clock_desc">时间</string>
+    <string name="default_clock_desc">剩余时间</string>
     <string name="default_clock_num">00:00</string>
     <string name="default_resume_desc">播放</string>
     <string name="default_stop_desc">暂停</string>
     <string name="default_more">查看更多</string>
 
     <!--底部栏-->
-    <string name="item_recipe">处方</string>
-    <string name="item_cure">理疗</string>
-    <string name="item_mall">商城</string>
-    <string name="item_mine">个人</string>
+    <string name="item_recipe">首页</string>
+    <string name="item_cure">按摩</string>
+    <string name="item_mall">发现</string>
+    <string name="item_mine">我的</string>
 
     <!--绑定-->
     <string name="un_bind">解绑</string>

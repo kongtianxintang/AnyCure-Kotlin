@@ -14,7 +14,7 @@ package com.example.chitwing.anycure_kotlin_master.ble
  *************************************************************/
 interface CWDeviceInterface {
     /**
-     * 装备完成,可以输出了
+     * 准备完成,可以输出了
      * */
     fun prepareComplete(item:CWDevice)
 
@@ -73,6 +73,12 @@ interface CWDeviceInterface {
      * 主动获取电极贴状态
      * */
     fun transferMainElectrodeQuery(value: Int,item: CWDevice)
+
+    /**
+     * 是否可对设备操作(写入数据)
+     * @param flag  ->true 可以操作 ->false 不可以操作
+     * */
+//    fun operationDevice(flag: Boolean)
 }
 
 interface CWDeviceStatusInterface{

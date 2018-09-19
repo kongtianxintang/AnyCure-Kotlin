@@ -28,7 +28,7 @@
     <dimen name="text_size_small">12sp</dimen>
     <dimen name="text_size_big">20sp</dimen>
     <dimen name="text_size_default">15sp</dimen>
-    <dimen name="count_down_size">20sp</dimen>
+    <dimen name="count_down_size">25sp</dimen>
 
     <dimen name="text_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>

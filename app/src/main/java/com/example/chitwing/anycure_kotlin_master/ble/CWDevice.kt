@@ -1,8 +1,14 @@
 package com.example.chitwing.anycure_kotlin_master.ble
 
+import android.arch.lifecycle.Lifecycle
+import android.arch.lifecycle.LifecycleObserver
+import android.arch.lifecycle.OnLifecycleEvent
+import android.arch.lifecycle.ProcessLifecycleOwner
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothGatt
+import android.os.CountDownTimer
 import android.util.Log
+import com.example.chitwing.anycure_kotlin_master.app.MyApp
 import com.example.chitwing.anycure_kotlin_master.model.Recipe
 import java.util.*
 
@@ -306,6 +312,7 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
         }
         val left = mDuration - playTime
         mCallback?.transferPlayDuration(left,this)
+        Log.d(mTag,"剩余时间->$left")
     }
 
     /**
@@ -579,6 +586,7 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
                     playDuration += 1
                     val left = mDuration - playDuration
                     mCallback?.transferPlayDuration(left,this@CWDevice)
+                    Log.d(mTag,"剩余时间->$left")
                     if (left <= 0){
                         endCureAction()
                     }
@@ -622,7 +630,6 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
                    }
                    mTrans = mTempIntensity
                    setBleIntensity(mTempIntensity)
-                   mCallback?.transferIntensity(mTempIntensity,this@CWDevice)
                }
            }
            mTimer?.schedule(mTimerTask,Date(),500)

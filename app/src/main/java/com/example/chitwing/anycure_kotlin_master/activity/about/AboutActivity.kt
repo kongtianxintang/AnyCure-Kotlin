@@ -3,6 +3,7 @@ package com.example.chitwing.anycure_kotlin_master.activity.about
 import android.os.Bundle
 import android.util.Log
 import android.webkit.*
+import com.example.chitwing.anycure_kotlin_master.BuildConfig
 import com.example.chitwing.anycure_kotlin_master.R
 import com.example.chitwing.anycure_kotlin_master.activity.BaseActivity
 import com.example.chitwing.anycure_kotlin_master.network.NetRequest
@@ -61,7 +62,7 @@ class AboutActivity : BaseActivity() {
      * 调用h5的js方法
      * */
     private fun evaluateJavascriptFunc(){
-        val map = mapOf("code" to "0","channel" to "00000006","version" to "1.0")
+        val map = mapOf("code" to "0","channel" to "00000006","version" to BuildConfig.VERSION_NAME)
         val json = Gson().toJson(map)
         val js = "javascript:updateInfo($json)"
         mWebView.evaluateJavascript(js,({

@@ -86,7 +86,6 @@ object Unit {
         acDisplayMetrics.density = targetDensity.toFloat()
         acDisplayMetrics.scaledDensity = targetScaledDensity
         acDisplayMetrics.densityDpi = targetDensityDpi.toInt()
-
     }
 }
 
@@ -97,7 +96,7 @@ object Unit {
 fun ImageView.loader(context: Context, url:String?){
     url?.let {
         if (it.isEmpty()){ return }
-        val options = RequestOptions().placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_background)
+        val options = RequestOptions().error(R.drawable.ic_launcher_background)
         val path = NetRequest.IMAGE_BASE_PATH + it
         Glide.with(context).load(path).apply(options).into(this)
     }

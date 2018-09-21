@@ -396,7 +396,6 @@ class CWGattDecodeRead(delegate:CWGattReadInterface) :CWGattReadInterface by del
             val id = list[3]
             val dur = list[4] +  list[5] * 256
             cwBleDeviceStatusQueryCallback(isPlay,intensity,id,dur)
-            Log.d(mTag,"获取设备状态: 是否在播放->$isPlay 强度->$intensity 处方id->$id 播放时长->$dur")
         }
     }
 

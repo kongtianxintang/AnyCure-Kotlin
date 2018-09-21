@@ -41,9 +41,9 @@ class RecipeProvider(private val context: Context,private val fm:RecipeFragment)
                 response?.body()?.let {
                     fm.mDataSet.clear()
                     val data = listOf( RecipeSection(0x00,it.filter { it.partId == 0 }),
-                            RecipeSection(true,"精品",false),
+                            RecipeSection(true,"保健按摩",false),
                             RecipeSection(0x02,it.filter { it.partId == 0 }),
-                            RecipeSection(true,"处方库",false),
+                            RecipeSection(true,"保健方案库",false),
                             RecipeSection(0x03,it.filter { it.partId == 1 }))
                     fm.mDataSet.addAll(data)
                     saveRecipe(it)

@@ -312,7 +312,6 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
         }
         val left = mDuration - playTime
         mCallback?.transferPlayDuration(left,this)
-        Log.d(mTag,"剩余时间->$left")
     }
 
     /**
@@ -586,7 +585,6 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
                     playDuration += 1
                     val left = mDuration - playDuration
                     mCallback?.transferPlayDuration(left,this@CWDevice)
-                    Log.d(mTag,"剩余时间->$left")
                     if (left <= 0){
                         endCureAction()
                     }

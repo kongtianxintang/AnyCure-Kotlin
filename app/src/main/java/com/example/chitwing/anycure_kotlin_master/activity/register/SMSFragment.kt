@@ -26,7 +26,6 @@ import java.util.*
  *
  */
 class SMSFragment : BaseFragment() {
-    private val mTag = "获取验证码"
 
     /**
      * 倒计时

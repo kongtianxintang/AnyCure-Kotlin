@@ -51,7 +51,6 @@ class RecipeFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        Log.e(fm_tag,"onCreateView")
         val view = inflater.inflate(R.layout.fragment_recipe, container, false)
         mRecyclerView = view.findViewById(R.id.fm_recipe_recycler_view)
         refreshView = view.findViewById(R.id.fm_recipe_refresh)

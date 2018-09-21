@@ -7,6 +7,7 @@ import android.util.Log
 import com.example.chitwing.anycure_kotlin_master.activity.BaseActivity
 import com.example.chitwing.anycure_kotlin_master.activity.prepare.PrepareProvider
 import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
+import com.example.chitwing.anycure_kotlin_master.dialog.CWHintDialog
 import com.example.chitwing.anycure_kotlin_master.fragment.BaseFragment
 import com.example.chitwing.anycure_kotlin_master.fragment.cure.CureFragment
 import com.example.chitwing.anycure_kotlin_master.fragment.mall.MallFragment
@@ -15,6 +16,7 @@ import com.example.chitwing.anycure_kotlin_master.fragment.otCure.OtCureFragment
 import com.example.chitwing.anycure_kotlin_master.fragment.recipe.RecipeFragment
 import com.example.chitwing.anycure_kotlin_master.unit.BottomNavigationViewHelper
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 
 
@@ -39,7 +41,7 @@ class MainActivity : BaseActivity() {
 
         initView()
         fetchData()
-
+        pushHintDialog()
     }
 
     override fun initView() {
@@ -164,4 +166,16 @@ class MainActivity : BaseActivity() {
         mBottomNavView!!.selectedItemId = R.id.action_recipe
     }
 
+
+    /**
+     * 提示禁忌事项
+     * */
+    private fun pushHintDialog(){
+        val job = launch {
+            delay(2000)
+            val dialog = CWHintDialog()
+            dialog.show(fragmentManager,"hint")
+        }
+        job.start()
+    }
 }

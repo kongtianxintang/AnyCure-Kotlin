@@ -51,7 +51,7 @@
     <string name="bind">绑定</string>
 
     <!--设备准备页面-->
-    <string name="prepare_button">开始理疗</string>
+    <string name="prepare_button">开始按摩</string>
 
     <!--activity 的label-->
     <string name="prepare_title">电极贴合</string>
@@ -77,12 +77,16 @@
     <string name="sms_regain_code">重新获取验证码</string>
     <string name="title_activity_cwregister">注册</string>
     <string name="action_settings">Settings</string>
-    <string name="empty_text">空空如也</string>
+    <string name="empty_text">暂时没有理疗设备工作</string>
     <string name="input_password">输入密码</string>
     <string name="password_tips">密码格式为6-16位数字或字母,不允许有空格和符号</string>
     <string name="prepare_header_desc">每日或隔日1~2次,一个疗程为10-20天</string>
     <string name="re_search">重新搜索</string>
-    <string name="start_cure">开始理疗</string>
+    <string name="start_cure">开始按摩</string>
+
+    <string name="do_not_again">不再提示</string>
+    <string name="hint">1.身体内有植入电子装置(如:心脏起搏器)或治疗部位有金属异物者,若没有医生医嘱请勿使用本产品;\n2.靠近胸部使用电极会增加心脏纤颤的危险,禁止将电极片一前一后贴在心脏部位使用;\n3.孕妇、产妇、女性生理期,避免在腹部使用;\n4.对电流不能耐受者禁止使用;\n5.术后未愈合的伤口处禁止使用;\n6.患有严重高血压、心脏病、脑神经异常的患者禁止使用;\n7.急性化脓炎症禁止使用;</string>
+    <string name="hint_title">禁忌事项</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

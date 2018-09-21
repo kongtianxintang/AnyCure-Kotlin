@@ -15,37 +15,32 @@ import android.view.ViewGroup
 abstract class BaseFragment : Fragment() {
 
 
-    val fm_tag:String by lazy {
+    val mTag:String by lazy {
         return@lazy "${this ::class.java}"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(fm_tag,"onCreate")
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        return null
+        Log.d(mTag,"onCreate")
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        Log.d(fm_tag,"onActivityCreated")
+        Log.d(mTag,"onActivityCreated")
     }
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        Log.d(fm_tag,"onAttach")
+        Log.d(mTag,"onAttach")
     }
 
     override fun onDetach() {
         super.onDetach()
-        Log.d(fm_tag,"onDetach")
+        Log.d(mTag,"onDetach")
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d(fm_tag,"onDestroy")
+        Log.d(mTag,"onDestroy")
     }
 }

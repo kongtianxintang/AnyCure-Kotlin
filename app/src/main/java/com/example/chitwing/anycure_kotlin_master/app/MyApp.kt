@@ -25,7 +25,7 @@ import io.objectbox.BoxStore
 class MyApp :Application() {
 
     companion object {
-        const val mTag: String = "AnyCure-Kotlin"
+        const val mTag: String = "MyApp"
         private var instance:MyApp? = null
         fun getApp() = instance!!
     }

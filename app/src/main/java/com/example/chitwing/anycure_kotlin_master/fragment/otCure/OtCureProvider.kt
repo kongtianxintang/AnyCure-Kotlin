@@ -37,6 +37,7 @@ class OtCureProvider(private val fm:OtCureFragment) {
             Log.d(tag,"cureStartEvent")
             fm.playStatus()
             item.selectDevice(true)
+            clearDialogs()
         }
 
         override fun cureStopEvent(item: CWDevice) {
@@ -67,8 +68,8 @@ class OtCureProvider(private val fm:OtCureFragment) {
         override fun transferMainElectrodeNotify(value: Int, item: CWDevice) {
             Log.d(tag,"transferMainElectrodeNotify")
             when(value){
-                0 -> pushDialog("电极未贴合,请贴于患处")
-                30 -> pushDialog("电极短路,请检查")
+                0 -> pushDialog("电极贴脱落,请正常贴于患处")
+                30 -> pushDialog("电极片贴合异常,请正常贴于患处")
                 else -> {}
             }
         }
@@ -80,8 +81,8 @@ class OtCureProvider(private val fm:OtCureFragment) {
         override fun transferMainElectrodeQuery(value: Int, item: CWDevice) {
             Log.d(tag,"transferMainElectrodeQuery")
             when (value){
-                0 -> pushDialog("电极未贴合,请贴于患处")
-                30 -> pushDialog("电极短路,请检查")
+                0 -> pushDialog("电极贴脱落,请正常贴于患处")
+                30 -> pushDialog("电极片贴合异常,请正常贴于患处")
                 else -> {
                     item.startCureAction()
                 }
@@ -114,15 +115,28 @@ class OtCureProvider(private val fm:OtCureFragment) {
     /**
      * 弹出错误提示
      * */
+    private val mDialogs = mutableListOf<CWDialog>()
     private fun pushDialog(error: String){
+        clearDialogs()
         val dialog = CWDialog.Builder().setType(CWDialogType.Hint).setTitle("错误提示").setDesc(error).create()
         dialog.setCallback(dialogInterface)
         dialog.show(fm.activity?.fragmentManager,"ot_cure_error")
+        mDialogs.add(dialog)
     }
 
     private val dialogInterface = object : CWDialogInterface {
         override fun onClickButton(flag: Boolean, item: CWDialog) {
             item.dismiss()
+            mDialogs.remove(item)
+        }
+    }
+    /**
+     * 清除dialog
+     * */
+    private fun clearDialogs(){
+        mDialogs.forEach {
+            it.dismiss()
+            mDialogs.remove(it)
         }
     }
 }

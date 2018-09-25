@@ -4,12 +4,15 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
+import android.view.View
 import android.widget.ImageButton
 import com.example.chitwing.anycure_kotlin_master.R
 import com.example.chitwing.anycure_kotlin_master.activity.BaseActivity
 import com.example.chitwing.anycure_kotlin_master.activity.search.SearchActivity
 import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
 import com.example.chitwing.anycure_kotlin_master.model.BindDevice
+import kotlinx.android.synthetic.main.activity_bind.*
 
 class BindActivity : BaseActivity() {
 
@@ -59,11 +62,17 @@ class BindActivity : BaseActivity() {
             startSearchActivity()
         }
         customTitle?.text = getText(R.string.bind_title)
+
+        mEmptyButton.setOnClickListener {
+            startSearchActivity()
+        }
     }
 
     override fun fetchData() {
         mAdapter =  CWBindAdapter(mDataSet,this)
         mRecyclerView!!.adapter =  mAdapter!!
+        mAdapter!!.callback = emptyInterface
+
         mProvider.fetchDataSource()
     }
 
@@ -80,6 +89,20 @@ class BindActivity : BaseActivity() {
         if (requestCode == mRequestCode){
             mProvider.fetchDataSource()
         }
+    }
+
+    private val emptyInterface = object :CWBindAdapter.BindAdapterInterface {
+        override fun empty(flag: Boolean) {
+            controlEmptyView(flag)
+        }
+    }
+
+    /**
+     * 控制是否显示空页面
+     * */
+    fun controlEmptyView(flag: Boolean){
+        val status = if (flag) View.VISIBLE else View.INVISIBLE
+        mEmptyView.visibility = status
     }
 
 }

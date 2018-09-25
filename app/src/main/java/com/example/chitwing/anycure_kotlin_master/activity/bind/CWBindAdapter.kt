@@ -1,6 +1,5 @@
 package com.example.chitwing.anycure_kotlin_master.activity.bind
 
-import android.app.Activity
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -26,6 +25,8 @@ import com.example.chitwing.anycure_kotlin_master.model.BindDevice
  *************************************************************/
 class CWBindAdapter(private val dataSet:List<BindDevice>?, private val context: BindActivity) :RecyclerView.Adapter<CWBindAdapter.ViewHolder>() {
 
+
+    var callback: BindAdapterInterface? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CWBindAdapter.ViewHolder {
         val v = LayoutInflater.from(parent.context)
@@ -53,11 +54,18 @@ class CWBindAdapter(private val dataSet:List<BindDevice>?, private val context: 
 
     override fun getItemCount(): Int {
         dataSet?.let {
+            callback?.empty(it.isEmpty())
             return it.size
         }
-        return  0
+        return 0
     }
 
+    /**
+     * 提示数据源是否为空
+     * */
+    interface BindAdapterInterface {
+        fun empty(flag: Boolean)
+    }
 
     class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
         val mMac: TextView = v.findViewById(R.id.bind_item_device_mac)

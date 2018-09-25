@@ -88,6 +88,9 @@
     <string name="hint">1.身体内有植入电子装置(如:心脏起搏器)或治疗部位有金属异物者,若没有医生医嘱请勿使用本产品;\n2.靠近胸部使用电极会增加心脏纤颤的危险,禁止将电极片一前一后贴在心脏部位使用;\n3.孕妇、产妇、女性生理期,避免在腹部使用;\n4.对电流不能耐受者禁止使用;\n5.术后未愈合的伤口处禁止使用;\n6.患有严重高血压、心脏病、脑神经异常的患者禁止使用;\n7.急性化脓炎症禁止使用;</string>
     <string name="hint_title">禁忌事项</string>
 
+    <string name="bind_empty_desc">没有绑定设备</string>
+    <string name="bind_empty_button">去绑定设备</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_about">关于我们</string>

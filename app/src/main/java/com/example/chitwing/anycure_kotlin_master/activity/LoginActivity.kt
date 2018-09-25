@@ -27,6 +27,7 @@ import com.example.chitwing.anycure_kotlin_master.activity.register.CWRegisterAc
 import com.example.chitwing.anycure_kotlin_master.database.DBHelper
 import com.example.chitwing.anycure_kotlin_master.model.Login
 import com.example.chitwing.anycure_kotlin_master.network.NetRequest
+import com.example.chitwing.anycure_kotlin_master.unit.SharedPreferencesHelper
 import com.example.chitwing.anycure_kotlin_master.unit.showToast
 
 import kotlinx.android.synthetic.main.activity_login.*
@@ -254,7 +255,11 @@ class LoginActivity : BaseActivity(), LoaderCallbacks<Cursor> {
                 }
 
                 when(isSuccessful) {
-                    true -> insert(log!!)
+                    true -> {
+                        insert(log!!)
+                        SharedPreferencesHelper.put(SharedPreferencesHelper.telephone,mEmail)
+                    }
+                    else -> {}
                 }
 
                 return isSuccessful

@@ -1,5 +1,6 @@
 package com.example.chitwing.anycure_kotlin_master
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
@@ -15,6 +16,7 @@ import com.example.chitwing.anycure_kotlin_master.fragment.mine.MineFragment
 import com.example.chitwing.anycure_kotlin_master.fragment.otCure.OtCureFragment
 import com.example.chitwing.anycure_kotlin_master.fragment.recipe.RecipeFragment
 import com.example.chitwing.anycure_kotlin_master.unit.BottomNavigationViewHelper
+import com.example.chitwing.anycure_kotlin_master.unit.SharedPreferencesHelper
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
@@ -171,11 +173,18 @@ class MainActivity : BaseActivity() {
      * 提示禁忌事项
      * */
     private fun pushHintDialog(){
-        val job = launch {
-            delay(2000)
-            val dialog = CWHintDialog()
-            dialog.show(fragmentManager,"hint")
+        /**
+         * 判断是否需要推出----
+         * @return 如果false 则推出
+         * */
+        val  isIgnore = SharedPreferencesHelper.getObject(SharedPreferencesHelper.hintKey,false) as Boolean
+        if (!isIgnore){
+            val job = launch {
+                delay(2000)
+                val dialog = CWHintDialog()
+                dialog.show(fragmentManager,"hint")
+            }
+            job.start()
         }
-        job.start()
     }
 }

@@ -82,11 +82,11 @@ class MineFragment : BaseFragment() {
         val logs = DBHelper.findAll(Login ::class.java)
         val log = logs?.lastOrNull()
         log?.let {
-            val px = Unit.Dp2Px(activity!!,160)
             icon.loadCircle(this.activity!!,it.icon)
-            Log.d("个人中心","用户头像${it.icon} px->$px")
-//            telephone.text = "134****2934"
         }
+        val phone = SharedPreferencesHelper.getObject(SharedPreferencesHelper.telephone,"134 **** 2934") as String
+        val temp = phone.replaceRange(3 until 7,"****")
+        telephone.text = temp
 
         mad.addHeaderView(header)
         val footer = getFooterView()

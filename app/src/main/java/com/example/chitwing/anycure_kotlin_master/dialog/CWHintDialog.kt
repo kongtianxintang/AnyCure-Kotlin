@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.RadioButton
 import android.widget.TextView
 import com.example.chitwing.anycure_kotlin_master.R
+import com.example.chitwing.anycure_kotlin_master.unit.SharedPreferencesHelper
 
 /***********************************************************
  * 版权所有,2018,Chitwing.
@@ -29,6 +30,7 @@ class CWHintDialog: DialogFragment() {
     private var mRadioButton: RadioButton? = null
     private var mHintDesc: TextView? = null
     private var mHintTitle: TextView? = null
+    private var mIgnore: Boolean = false//是否下次忽略
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +60,14 @@ class CWHintDialog: DialogFragment() {
     private fun configureSubviews(){
         mButton?.setOnClickListener {
             dismiss()
+            if (mIgnore){
+                SharedPreferencesHelper.put(SharedPreferencesHelper.hintKey,true)
+            }
         }
+        mRadioButton?.setOnCheckedChangeListener { _, isChecked ->
+            mIgnore = isChecked
+        }
+
     }
 
 }

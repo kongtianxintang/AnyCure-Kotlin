@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.util.Log
+import android.view.View
 import com.example.chitwing.anycure_kotlin_master.activity.BaseActivity
 import com.example.chitwing.anycure_kotlin_master.activity.prepare.PrepareProvider
 import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
@@ -53,6 +54,8 @@ class MainActivity : BaseActivity() {
         defaultBottomNavigationView()
 
         defaultData()
+
+        customLeftBar?.visibility = View.GONE
     }
 
     override fun fetchData() {
@@ -80,7 +83,7 @@ class MainActivity : BaseActivity() {
 
             when(futureItem){
                 R.id.action_mine -> {
-                    this.supportActionBar?.title = "我的"
+                    customTitle?.text = "我的"
                     if (mMineFragment == null){
                         mMineFragment = MineFragment()
                         transaction.add(R.id.linear_view,mMineFragment!!)
@@ -88,11 +91,11 @@ class MainActivity : BaseActivity() {
                     showItem = mMineFragment!!
                 }
                 R.id.action_recipe -> {
-                    this.supportActionBar?.title = "首页"
+                    customTitle?.text = "首页"
                     showItem = mRecipeFragment!!
                 }
                 R.id.action_cure -> {
-                    this.supportActionBar?.title = "控制器"
+                    customTitle?.text = "控制器"
                     if (mCureFragment == null){
                         mCureFragment = OtCureFragment()
                         transaction.add(R.id.linear_view,mCureFragment!!)
@@ -100,7 +103,7 @@ class MainActivity : BaseActivity() {
                     showItem = mCureFragment!!
                 }
                 else -> {
-                    this.supportActionBar?.title = "发现"
+                    customTitle?.text = "发现"
                     if (mMallFragment == null){
                         mMallFragment = MallFragment()
                         transaction.add(R.id.linear_view,mMallFragment!!)
@@ -131,9 +134,7 @@ class MainActivity : BaseActivity() {
         transaction.add(R.id.linear_view,mRecipeFragment!!)
         transaction.show(mRecipeFragment!!)
         transaction.commit()
-        this.title = "首页"
-        val ac = supportActionBar
-        ac?.setDisplayHomeAsUpEnabled(false)
+        customTitle?.text = "首页"
     }
 
 

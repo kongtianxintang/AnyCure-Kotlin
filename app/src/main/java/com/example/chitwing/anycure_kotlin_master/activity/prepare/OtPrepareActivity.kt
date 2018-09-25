@@ -42,6 +42,7 @@ class OtPrepareActivity : BaseActivity() {
             val last = CWBleManager.mCWDevices.lastOrNull()
             last?.gattWrite?.cwBleWriteElectrodeQuery()
         }
+        customTitle?.text = getText(R.string.ot_prepare_title)
     }
 
     override fun fetchData() {

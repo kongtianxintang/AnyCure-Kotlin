@@ -47,7 +47,7 @@ class SearchActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
         initView()
-        startScanPepare()
+        startScanPrepare()
     }
 
     override fun initView() {
@@ -59,8 +59,9 @@ class SearchActivity : BaseActivity() {
         configureSearch()
 
         mReSearch.setOnClickListener {
-            startScanPepare()
+            startScanPrepare()
         }
+        customTitle?.text = getText(R.string.search_title)
     }
 
     override fun fetchData() {
@@ -75,7 +76,7 @@ class SearchActivity : BaseActivity() {
     /**
      * 动态请求权限
      * */
-    private fun startScanPepare(){
+    private fun startScanPrepare(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             val check = checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
             if (check != PackageManager.PERMISSION_GRANTED){

@@ -58,6 +58,7 @@ class BindActivity : BaseActivity() {
         mAddButton!!.setOnClickListener {
             startSearchActivity()
         }
+        customTitle?.text = getText(R.string.bind_title)
     }
 
     override fun fetchData() {

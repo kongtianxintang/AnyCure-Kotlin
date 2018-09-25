@@ -53,6 +53,7 @@ class PrepareActivity : BaseActivity() {
 
         tabLayout.addOnTabSelectedListener(tabListener)
 
+        customTitle?.text = getText(R.string.prepare_title)
     }
 
     private val tabListener = object :TabLayout.OnTabSelectedListener{

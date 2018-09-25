@@ -105,10 +105,8 @@ class RegisterFragment : BaseFragment() {
 
     private fun configureTitle(type:Int){
         val ac = activity as? CWRegisterActivity
-        ac?.supportActionBar?.let {
-            val str = if (type == 1) "手机号注册" else "忘记密码"
-            it.title = str
-        }
+        val str = if (type == 1) "手机号注册" else "忘记密码"
+        ac?.customTitle?.text = str
     }
     /**
      * This interface must be implemented by activities that contain this

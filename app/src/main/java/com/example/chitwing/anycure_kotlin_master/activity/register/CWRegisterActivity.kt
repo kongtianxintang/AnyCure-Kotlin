@@ -61,6 +61,8 @@ class CWRegisterActivity : BaseActivity() {
         transaction.add(R.id.cw_register_content_view,mRegisterFragment!!)
         transaction.show(mRegisterFragment!!)
         transaction.commit()
+
+        customTitle?.text = getText(R.string.title_activity_register)
     }
 
     override fun fetchData() {

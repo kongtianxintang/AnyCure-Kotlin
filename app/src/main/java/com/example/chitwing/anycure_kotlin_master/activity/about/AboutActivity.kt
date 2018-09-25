@@ -48,6 +48,8 @@ class AboutActivity : BaseActivity() {
         mWebView.webChromeClient = client
         mWebView.webViewClient = CWWebClient()
 
+
+        customTitle?.text = getText(R.string.title_activity_about)
     }
 
     override fun fetchData() {

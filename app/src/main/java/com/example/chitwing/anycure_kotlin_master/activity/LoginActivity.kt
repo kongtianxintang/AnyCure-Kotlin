@@ -68,6 +68,7 @@ class LoginActivity : BaseActivity(), LoaderCallbacks<Cursor> {
             showToast("此功能未开放😂")
         }
 
+        customTitle?.text = getText(R.string.title_activity_login)
     }
 
     /**
@@ -271,8 +272,6 @@ class LoginActivity : BaseActivity(), LoaderCallbacks<Cursor> {
         }
 
         private fun insert(arg:Login){
-            Log.d("测试 登录id","${arg.id}")
-
             DBHelper.insert(arg,Login::class.java)
         }
 

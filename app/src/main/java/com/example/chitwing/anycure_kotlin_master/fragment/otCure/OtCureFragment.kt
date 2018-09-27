@@ -245,7 +245,7 @@ class OtCureFragment : BaseFragment() {
         setRecipeName(obj.recipe?.recipeName)
         setPlayDuration(obj.mDuration - obj.playDuration)
         mEmptyView.visibility = View.GONE
-        mRecyclerView.adapter.notifyDataSetChanged()
+        reloadData()
     }
 
     /// 配置resumeButton的 文字及 图标
@@ -353,6 +353,7 @@ class OtCureFragment : BaseFragment() {
             val obj = CWBleManager.mCWDevices[target]
             switchItem(obj)
         }
+        reloadData()
     }
 
     /**
@@ -369,7 +370,11 @@ class OtCureFragment : BaseFragment() {
      * 刷新数据
      * */
     private fun reloadData(){
-        mRecyclerView.adapter.notifyDataSetChanged()
+        activity?.runOnUiThread {
+            mRecyclerView.adapter.notifyDataSetChanged()
+            val ac = activity as? MainActivity
+            ac?.cureBadge()
+        }
     }
 
     private fun checkEmpty(){

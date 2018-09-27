@@ -32,7 +32,6 @@ class RecipeProvider(private val context: Context,private val fm:RecipeFragment)
         if(!fm.refreshView!!.isRefreshing){
             fm.refreshView!!.isRefreshing = true
         }
-
         val map = mapOf("channels" to "00000006")
         val api = NetRequest.fetchRecipeAction(map)
         api.enqueue(object : Callback<List<Recipe>> {

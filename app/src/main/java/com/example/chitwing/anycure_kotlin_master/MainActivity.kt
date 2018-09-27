@@ -1,24 +1,27 @@
 package com.example.chitwing.anycure_kotlin_master
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.PersistableBundle
+import android.support.design.internal.BottomNavigationItemView
+import android.support.design.internal.BottomNavigationMenuView
 import android.support.design.widget.BottomNavigationView
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.TextView
 import com.example.chitwing.anycure_kotlin_master.activity.BaseActivity
 import com.example.chitwing.anycure_kotlin_master.activity.prepare.PrepareProvider
 import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
 import com.example.chitwing.anycure_kotlin_master.dialog.CWHintDialog
 import com.example.chitwing.anycure_kotlin_master.fragment.BaseFragment
-import com.example.chitwing.anycure_kotlin_master.fragment.cure.CureFragment
 import com.example.chitwing.anycure_kotlin_master.fragment.mall.MallFragment
 import com.example.chitwing.anycure_kotlin_master.fragment.mine.MineFragment
 import com.example.chitwing.anycure_kotlin_master.fragment.otCure.OtCureFragment
 import com.example.chitwing.anycure_kotlin_master.fragment.recipe.RecipeFragment
 import com.example.chitwing.anycure_kotlin_master.unit.BottomNavigationViewHelper
 import com.example.chitwing.anycure_kotlin_master.unit.SharedPreferencesHelper
-import kotlinx.android.synthetic.main.activity_main.*
+import com.example.chitwing.anycure_kotlin_master.unit.showToast
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 
@@ -32,10 +35,16 @@ class MainActivity : BaseActivity() {
     /**
      * 首页的四个fragment
      * */
-    private var mRecipeFragment:RecipeFragment? = null
-    private var mCureFragment:OtCureFragment? = null
-    private var mMallFragment:MallFragment? = null
-    private var mMineFragment:MineFragment? = null
+    private val mRecipeFragment by lazy { return@lazy RecipeFragment() }
+    private val mCureFragment by lazy { return@lazy OtCureFragment() }
+    private val mMallFragment by lazy { return@lazy MallFragment() }
+    private val mMineFragment by lazy { return@lazy MineFragment() }
+    private var badgeView:View? = null
+    private var mBadge:TextView? = null
+
+    private val mFragmentTags by lazy {
+        return@lazy listOf("mRecipe","mCure","mMall","mMine")
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,6 +55,16 @@ class MainActivity : BaseActivity() {
         fetchData()
         pushHintDialog()
     }
+
+    /**
+     * 问题：底部导航栏无法切换
+     * 出现的情况
+     * 1.当系统内存不足，Fragment 的宿主 Activity 回收的时候
+     * 2.进入的Activity崩溃，返回页面时
+     * 3....
+     * 解决办法：在Fragment中所在的activity中重写onSaveInstanceState方法，并且把super.onSaveInstanceState(outState); 注释掉，阻止activity保存fragment的状态就可以了，
+     */
+    override fun onSaveInstanceState(outState: Bundle?) {}
 
     override fun initView() {
         mBottomNavView = findViewById(R.id.bottom_navigation)
@@ -59,15 +78,21 @@ class MainActivity : BaseActivity() {
     }
 
     override fun fetchData() {
-
         PrepareProvider(this).fetchDataSource()
-
     }
 
     /**
      * 配置底部导航条的点击事件
      * */
     private fun defaultBottomNavigationView(){
+
+        val menuView = mBottomNavView!!.getChildAt(0) as BottomNavigationMenuView
+        val tab = menuView.getChildAt(1) as BottomNavigationItemView
+        badgeView = LayoutInflater.from(this).inflate(R.layout.tips_badge,menuView,false)
+        tab.addView(badgeView)
+        mBadge = badgeView!!.findViewById(R.id.mBadgeTextView)
+        cureBadge()
+
         mBottomNavView!!.setOnNavigationItemSelectedListener {
             /**
              * 选择同样的fragment 不切换
@@ -80,43 +105,38 @@ class MainActivity : BaseActivity() {
 
             val transaction = supportFragmentManager.beginTransaction()
             val showItem:BaseFragment
-
+            val tagIndex: Int
             when(futureItem){
                 R.id.action_mine -> {
                     customTitle?.text = "我的"
-                    if (mMineFragment == null){
-                        mMineFragment = MineFragment()
-                        transaction.add(R.id.linear_view,mMineFragment!!)
-                    }
-                    showItem = mMineFragment!!
+                    showItem = mMineFragment
+                    tagIndex = 3
                 }
                 R.id.action_recipe -> {
                     customTitle?.text = "首页"
-                    showItem = mRecipeFragment!!
+                    showItem = mRecipeFragment
+                    tagIndex = 0
                 }
                 R.id.action_cure -> {
                     customTitle?.text = "控制器"
-                    if (mCureFragment == null){
-                        mCureFragment = OtCureFragment()
-                        transaction.add(R.id.linear_view,mCureFragment!!)
-                    }
-                    showItem = mCureFragment!!
+                    showItem = mCureFragment
+                    tagIndex = 1
                 }
                 else -> {
                     customTitle?.text = "发现"
-                    if (mMallFragment == null){
-                        mMallFragment = MallFragment()
-                        transaction.add(R.id.linear_view,mMallFragment!!)
-                    }
-                    showItem = mMallFragment!!
+                    showItem = mMallFragment
+                    tagIndex = 2
                 }
             }
 
             val hideItem = when(currentItem) {
-                R.id.action_recipe ->  mRecipeFragment!!
-                R.id.action_cure ->  mCureFragment!!
-                R.id.action_mall ->  mMallFragment!!
-                else ->  mMineFragment!!
+                R.id.action_recipe ->  mRecipeFragment
+                R.id.action_cure ->  mCureFragment
+                R.id.action_mall ->  mMallFragment
+                else ->  mMineFragment
+            }
+            if (!showItem.isAdded){
+                transaction.add(R.id.linear_view,showItem,mFragmentTags[tagIndex])
             }
             transaction.hide(hideItem)
             transaction.show(showItem)
@@ -129,12 +149,13 @@ class MainActivity : BaseActivity() {
      * 基础数据
      * */
     private fun defaultData(){
-        val transaction = supportFragmentManager.beginTransaction()
-        mRecipeFragment = RecipeFragment()
-        transaction.add(R.id.linear_view,mRecipeFragment!!)
-        transaction.show(mRecipeFragment!!)
-        transaction.commit()
-        customTitle?.text = "首页"
+        if (!mRecipeFragment.isAdded){
+            val transaction = supportFragmentManager.beginTransaction()
+            transaction.add(R.id.linear_view,mRecipeFragment,mFragmentTags[0])
+            transaction.show(mRecipeFragment)
+            transaction.commit()
+            customTitle?.text = "首页"
+        }
     }
 
 
@@ -153,10 +174,10 @@ class MainActivity : BaseActivity() {
      * */
     private fun switchCure(){
 
-        mCureFragment?.let {
+        if (mCureFragment.isAdded){
             val last = CWBleManager.mCWDevices.lastOrNull()
             last?.let {
-                mCureFragment!!.switchItem(it)
+                mCureFragment.switchItem(it)
             }
         }
         mBottomNavView!!.selectedItemId = R.id.action_cure
@@ -187,5 +208,15 @@ class MainActivity : BaseActivity() {
             }
             job.start()
         }
+    }
+
+    /**
+     * 设置理疗页的角标
+     * */
+    fun cureBadge(){
+        val num = CWBleManager.mCWDevices.count()
+        val badgeVisibility = if (num == 0) View.INVISIBLE else View.VISIBLE
+        badgeView?.visibility = badgeVisibility
+        mBadge?.text = num.toString()
     }
 }

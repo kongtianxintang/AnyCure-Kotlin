@@ -23,20 +23,20 @@ enum class CWRegex {
      * 判断是否正确
      * */
     fun isRight(arg: String): Boolean{
-        when (this){
+       return when (this){
             Email -> {
                 val pattern = "^([a-z0-9_\\.-]+)@([\\da-z\\.-]+)\\.([a-z\\.]{2,6})$"
-                return Regex(pattern).matches(arg)
+                Regex(pattern).matches(arg)
             }
             Phone -> {
                 val pattern = "^((13[0-9])|(15[0,0-9])|(17[0,0-9])|(18[0,0-9]))\\d{8}$"
-                return Regex(pattern).matches(arg)
+                Regex(pattern).matches(arg)
             }
             Password -> {
                 val pattern = "^[a-zA-Z0-9]{6,16}+$"
-                return Regex(pattern).matches(arg)
+                Regex(pattern).matches(arg)
             }
-            else -> { return false }
+            else -> { false }
         }
     }
 

@@ -2,11 +2,9 @@ package com.example.chitwing.anycure_kotlin_master
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.support.design.internal.BottomNavigationItemView
 import android.support.design.internal.BottomNavigationMenuView
 import android.support.design.widget.BottomNavigationView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
@@ -20,7 +18,9 @@ import com.example.chitwing.anycure_kotlin_master.fragment.mine.MineFragment
 import com.example.chitwing.anycure_kotlin_master.fragment.otCure.OtCureFragment
 import com.example.chitwing.anycure_kotlin_master.fragment.recipe.RecipeFragment
 import com.example.chitwing.anycure_kotlin_master.unit.BottomNavigationViewHelper
+import com.example.chitwing.anycure_kotlin_master.unit.CWRegex
 import com.example.chitwing.anycure_kotlin_master.unit.SharedPreferencesHelper
+import com.orhanobut.logger.Logger
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 

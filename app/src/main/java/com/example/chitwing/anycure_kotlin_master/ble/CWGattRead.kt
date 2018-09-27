@@ -1,6 +1,7 @@
 package com.example.chitwing.anycure_kotlin_master.ble
 
 import android.util.Log
+import com.orhanobut.logger.Logger
 import kotlin.experimental.and
 
 /***********************************************************
@@ -51,7 +52,7 @@ class CWGattRead(b:CWGattReadInterface) :CWGattReadInterface by b{
                  * 默认
                  * */
                 else -> {
-                    Log.d(tag,"数据读取:默认$it")
+                    Logger.d("数据读取:默认$it")
                 }
             }
         }
@@ -64,7 +65,7 @@ class CWGattRead(b:CWGattReadInterface) :CWGattReadInterface by b{
         if (byteArray.count() > 3){
             val index = byteArray[2].toInt()
             val total = byteArray[3].toInt()
-            Log.d(tag,"处方第几帧:$index 总共帧数:$total")
+            Logger.d("处方第几帧:$index 总共帧数:$total")
             cwBleRecipeSendIndexCallback(index,total)
         }
     }
@@ -76,7 +77,7 @@ class CWGattRead(b:CWGattReadInterface) :CWGattReadInterface by b{
         /**异常处理*/
         if (list.count() <= 1){
             assert(true,{
-                Log.d(tag,"可能发生数据越界")
+                Logger.d("可能发生数据越界")
             })
             return
         }
@@ -157,7 +158,7 @@ class CWGattRead(b:CWGattReadInterface) :CWGattReadInterface by b{
                 desc =  "默认指令:未知->" + "$command"
             }
         }
-        Log.d(tag,desc)
+        Logger.d(desc)
     }
 
     /**
@@ -167,7 +168,7 @@ class CWGattRead(b:CWGattReadInterface) :CWGattReadInterface by b{
         if (list.count() > 2){
             val value = list[2].toInt()
             cwBleBatteryPower(value)
-            Log.d(tag,"电池电量:$value")
+            Logger.d("电池电量:$value")
         }
     }
 
@@ -185,7 +186,7 @@ class CWGattRead(b:CWGattReadInterface) :CWGattReadInterface by b{
                     unlockDevice(list)
                 }
                 else -> {
-                    Log.d(tag,"渠道验证:未知$command")
+                    Logger.d("渠道验证:未知$command")
                 }
             }
         }
@@ -200,10 +201,10 @@ class CWGattRead(b:CWGattReadInterface) :CWGattReadInterface by b{
         val result = maps.reduce { total, next -> total + next }
         if (result == 0){//渠道错误
             cwChannelCheckError()
-            Log.d(tag,"渠道验证错误")
+            Logger.d("渠道验证错误")
         }else{
             cwChannelCheckSuccess(maps)
-            Log.d(tag,"渠道验证成功")
+            Logger.d("渠道验证成功")
         }
     }
 
@@ -213,7 +214,7 @@ class CWGattRead(b:CWGattReadInterface) :CWGattReadInterface by b{
     private fun unlockDevice(list: ByteArray){
         val flag = list[2].toInt() == 0
         cwBleDeviceUnlockCallback(flag)
-        Log.d(tag,"设备解锁:$flag")
+        Logger.d("设备解锁:$flag")
     }
 
 
@@ -245,7 +246,7 @@ class CWGattRead(b:CWGattReadInterface) :CWGattReadInterface by b{
             val ver = list[2].toInt() and 0xff
             val steps = list[3].toInt() and 0xff
             cwBleDeviceRangeMapCallback(ver,steps)
-            Log.d(tag,"步进表版本ver:$ver 步进数:$steps")
+            Logger.d("步进表版本ver:$ver 步进数:$steps")
         }
     }
 
@@ -256,7 +257,7 @@ class CWGattRead(b:CWGattReadInterface) :CWGattReadInterface by b{
             //0 成功 1 失败
             val status = list[3].toInt() == 0
             cwBleDeviceRangeMapWriteCallback(index,status)
-            Log.d(tag,"写入步进表 帧数$index 状态$status")
+            Logger.d("写入步进表 帧数$index 状态$status")
         }
     }
     ///映射表升级
@@ -264,7 +265,7 @@ class CWGattRead(b:CWGattReadInterface) :CWGattReadInterface by b{
         if (list.count() > 2){
             val status = list[2].toInt() == 0
             cwBleDeviceRangeMapUpdateCallback(status)
-            Log.d(tag,"更新步进表$status")
+            Logger.d("更新步进表$status")
         }
     }
 
@@ -276,7 +277,7 @@ class CWGattRead(b:CWGattReadInterface) :CWGattReadInterface by b{
         val low = list[2].toInt() and 0xff
         val high = list[3].toInt() * 256
         val dur = low + high
-        Log.d(tag,"处方是否有效:$flag ,处方时长:$dur")
+        Logger.d("处方是否有效:$flag ,处方时长:$dur")
         cwBleRecipeLoadingCallback(flag,dur)
     }
 
@@ -284,7 +285,7 @@ class CWGattRead(b:CWGattReadInterface) :CWGattReadInterface by b{
      * 输出模式
      * */
     private fun deviceDataOutputModel(list: ByteArray){
-        Log.d(tag,"设置输出模式:成功")
+        Logger.d("设置输出模式:成功")
         cwBleSetOutputSchemeCallback(true)
     }
 
@@ -321,7 +322,7 @@ class CWGattRead(b:CWGattReadInterface) :CWGattReadInterface by b{
             val main = list[3].toInt()//电极贴贴合
             val e1 = list[4].toInt()
             val e2 = list[5].toInt()
-            Log.d(tag,"软件 电极贴贴合状态查询 贴合:$main")
+            Logger.d("软件 电极贴贴合状态查询 贴合:$main")
             cwBleElectrodeQueryCallback(isInsert,main,e1,e2)
         }
     }
@@ -335,7 +336,7 @@ class CWGattRead(b:CWGattReadInterface) :CWGattReadInterface by b{
             val e1 = list[4].toInt()
             val e2 = list[5].toInt()
             val isClose = list[6].toInt() == 1//0正常工作 1即将关机
-            Log.d(tag,"硬件 电极贴贴合状态通知 关机位:$isClose 贴合位:$main")
+            Logger.d("硬件 电极贴贴合状态通知 关机位:$isClose 贴合位:$main")
             cwBleElectrodeNotify(isClose,isInsert,main,e1,e2)
         }
     }
@@ -345,7 +346,7 @@ class CWGattRead(b:CWGattReadInterface) :CWGattReadInterface by b{
     private fun hardwarePlayComplete(list: ByteArray){
         if (list.count() > 2){
             val flag = list[2].toInt() == 1
-            Log.d(tag,"播放完成通知:$flag")
+            Logger.d("播放完成通知:$flag")
             cwBlePlayCompleteNotify(flag)
         }
     }
@@ -355,7 +356,7 @@ class CWGattRead(b:CWGattReadInterface) :CWGattReadInterface by b{
     private fun hardwareExtensionElectrodeNotify(list: ByteArray){
         if (list.count() > 2){
             val flag = list[2].toInt() == 1
-            Log.d(tag,"扩展电极状态通知:$flag")
+            Logger.d("扩展电极状态通知:$flag")
             cwBleExtensionElectrodeInsertNotify(flag)
         }
     }
@@ -365,7 +366,7 @@ class CWGattRead(b:CWGattReadInterface) :CWGattReadInterface by b{
     private fun hardwareIntensityNotify(list: ByteArray){
         if (list.count() > 2){
             val value = list[2].toInt()
-            Log.d(tag,"电极强度通知:$value")
+            Logger.d("电极强度通知:$value")
             cwBleIntensityNotify(value)
         }
     }
@@ -375,7 +376,7 @@ class CWGattRead(b:CWGattReadInterface) :CWGattReadInterface by b{
     private fun hardwareOutputNotify(list: ByteArray) {
         if (list.count() > 2){
             val flag = list[2].toInt() == 1//0暂停 1开始
-            Log.d(tag,"硬件 输出开始or暂停通知$flag")
+            Logger.d("硬件 输出开始or暂停通知$flag")
             cwBleCureStatusNotify(flag)
         }
     }
@@ -390,7 +391,7 @@ class CWGattRead(b:CWGattReadInterface) :CWGattReadInterface by b{
         val intensity = list[3].toInt()
         val recipeId = list[4].toInt()
         val dur = list[5].toInt() and 0xff * 256 + list[6].toInt() and 0xff
-        Log.d(tag,"设备信息 播放状态:$isPlay -- 强度:$intensity -- 处方id：$recipeId -- 播放时间:$dur")
+        Logger.d("设备信息 播放状态:$isPlay -- 强度:$intensity -- 处方id：$recipeId -- 播放时间:$dur")
         cwBleDeviceStatusQueryCallback(isPlay,intensity,recipeId,dur)
     }
     /**
@@ -399,7 +400,7 @@ class CWGattRead(b:CWGattReadInterface) :CWGattReadInterface by b{
     private fun softwareLockDeviceButton(list: ByteArray){
         if (list.count() > 2) {
             val flag = list[2].toInt() == 1
-            Log.d(tag,"设备按钮锁定 or 解除:$flag")
+            Logger.d("设备按钮锁定 or 解除:$flag")
             cwBleLockDeviceButtonCallback(flag)
         }
     }
@@ -410,7 +411,7 @@ class CWGattRead(b:CWGattReadInterface) :CWGattReadInterface by b{
     private fun hardwareUnlockDeviceButton(list: ByteArray){
         if (list.count() > 2){
             val flag = list[2].toInt() == 1
-            Log.d(tag,"手动解除按钮锁 设备主动通知:$flag")
+            Logger.d("手动解除按钮锁 设备主动通知:$flag")
             cwBleUnlockDeviceButtonNotify(flag)
         }
     }

@@ -21,10 +21,8 @@ import com.example.chitwing.anycure_kotlin_master.fragment.otCure.OtCureFragment
 import com.example.chitwing.anycure_kotlin_master.fragment.recipe.RecipeFragment
 import com.example.chitwing.anycure_kotlin_master.unit.BottomNavigationViewHelper
 import com.example.chitwing.anycure_kotlin_master.unit.SharedPreferencesHelper
-import com.example.chitwing.anycure_kotlin_master.unit.showToast
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
-
 
 
 class MainActivity : BaseActivity() {
@@ -163,7 +161,6 @@ class MainActivity : BaseActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Log.d(mTag,"requestCode->$requestCode  resultCode->$resultCode")
         if (resultCode == 0x01){
             switchCure()
         }

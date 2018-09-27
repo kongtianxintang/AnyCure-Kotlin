@@ -16,6 +16,7 @@ import com.example.chitwing.anycure_kotlin_master.ble.*
 import com.example.chitwing.anycure_kotlin_master.database.DBHelper
 import com.example.chitwing.anycure_kotlin_master.model.BindDevice
 import com.example.chitwing.anycure_kotlin_master.model.Recipe
+import com.orhanobut.logger.Logger
 import java.util.*
 
 /***********************************************************
@@ -123,7 +124,7 @@ class BleDialog : DialogFragment() {
                     onDismiss(null)
                 }
                 else -> {
-                    Log.e(tag,arg.desc)
+                    Logger.d(arg.desc)
                 }
             }
         }

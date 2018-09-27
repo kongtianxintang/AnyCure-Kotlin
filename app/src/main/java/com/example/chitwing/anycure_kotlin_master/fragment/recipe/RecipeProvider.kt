@@ -55,7 +55,6 @@ class RecipeProvider(private val context: Context,private val fm:RecipeFragment)
             }
 
             override fun onFailure(call: Call<List<Recipe>>?, t: Throwable?) {
-                Log.d("RecipeProvider","数据请求失败~${t.toString()}")
                 if(fm.refreshView!!.isRefreshing){
                     fm.refreshView!!.isRefreshing = false
                 }

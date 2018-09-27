@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.AsyncTask
 import android.os.Handler
 import android.util.Log
+import com.orhanobut.logger.Logger
 import java.util.*
 
 /***********************************************************
@@ -19,7 +20,6 @@ import java.util.*
  * Reason:
  *************************************************************/
  class CWGattWrite(b:CWGattWriteInterface) :CWGattWriteInterface by b {
-    private val tag = "数据写入类"
 
     /**
      * 写入渠道号
@@ -87,7 +87,7 @@ import java.util.*
 
         //产生随机填充数
         val n = Random().nextInt(100)
-        Log.d(tag,"随机数$n")
+        Logger.d("随机数$n")
         val n1 = n + 4
         val n2 = n + 6
         val n3 = n + 8
@@ -143,7 +143,7 @@ import java.util.*
             if (index == max){
                 contentIndex = 0x00
             }
-            Log.d(tag,"处方写入 $index,max：$max")
+            Logger.d("处方写入 $index,max：$max")
             val content = mutableListOf(0xab,0x00,contentIndex)
             content.addAll(subs)
             cwGattWriteData(content)

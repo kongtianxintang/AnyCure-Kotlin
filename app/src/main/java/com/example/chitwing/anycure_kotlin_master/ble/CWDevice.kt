@@ -10,6 +10,7 @@ import android.os.CountDownTimer
 import android.util.Log
 import com.example.chitwing.anycure_kotlin_master.app.MyApp
 import com.example.chitwing.anycure_kotlin_master.model.Recipe
+import com.orhanobut.logger.Logger
 import java.util.*
 
 
@@ -28,8 +29,6 @@ import java.util.*
 data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWGattReadInterface,CWGattWriteInterface{
 
 
-    private val mTag = "CWDevice"
-    
     /**
      * 处方
      * */
@@ -113,7 +112,7 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
         mGatt?.close()
         mGatt = null
         val isRemove = CWBleManager.mCWDevices.remove(this)
-        Log.d(mTag,"删除外接设备成功与否:$isRemove")
+        Logger.d("删除外接设备成功与否:$isRemove")
     }
 
 
@@ -334,15 +333,15 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
         val localVer = CWBleManager.configure.channel.rangeMap[0]
         when(version){
             in 0 .. 2 -> {
-                Log.d(mTag,"直接写入处方内容")
+                Logger.d("直接写入处方内容")
                 gattWrite.cwBleWriteRecipeContent(1,mRecipeContent)
             }
             else -> {
                 if (localVer > version){
-                    Log.d(mTag,"去更新步进表 ->写入步进表内容")
+                    Logger.d("去更新步进表 ->写入步进表内容")
                     gattWrite.cwBleWriteRangeMapContent(0)
                 }else{
-                    Log.d(mTag,"去写入处方内容")
+                    Logger.d("去写入处方内容")
                     gattWrite.cwBleWriteRecipeContent(1,mRecipeContent)
                 }
             }
@@ -356,7 +355,7 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
      * - flag: 成功与否
      * */
     override fun cwBleDeviceRangeMapWriteCallback(index:Int,flag:Boolean){
-        Log.d(mTag,"写入的幅度表->$flag 帧数->$index")
+        Logger.d("写入的幅度表->$flag 帧数->$index")
         if (flag){
             val max = CWBleManager.configure.channel.rangeMap.count() / 16
             if ((index + 1) == max){

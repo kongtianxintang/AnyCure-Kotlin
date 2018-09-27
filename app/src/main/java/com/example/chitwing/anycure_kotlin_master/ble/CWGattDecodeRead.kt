@@ -1,6 +1,6 @@
 package com.example.chitwing.anycure_kotlin_master.ble
 
-import android.util.Log
+import com.orhanobut.logger.Logger
 
 /***********************************************************
  * 版权所有,2018,Chitwing.
@@ -16,7 +16,6 @@ import android.util.Log
  *************************************************************/
 class CWGattDecodeRead(delegate:CWGattReadInterface) :CWGattReadInterface by delegate{
 
-    private val mTag = "加密协议读取类"
     /**
      * 标示 是否完成加密
      * */
@@ -88,7 +87,8 @@ class CWGattDecodeRead(delegate:CWGattReadInterface) :CWGattReadInterface by del
                     0x56 -> hardwareUnlockDeviceButton(subs)
                     0x57 -> hardwareCloseNotify(subs)
                     0x58 -> hardwareBatteryPowerNotify(subs)
-                    else -> {Log.d(mTag,"未知指令 cmd:$it")}
+                    else -> {
+                        Logger.d("未知指令 cmd:$it")}
                 }
             }
 
@@ -112,7 +112,7 @@ class CWGattDecodeRead(delegate:CWGattReadInterface) :CWGattReadInterface by del
                     plaintextData(subs)
                 }
                 else -> {
-                    Log.d(mTag,"加密解密过程未知cmd->$it")
+                    Logger.d("加密解密过程未知cmd->$it")
                 }
             }
 
@@ -120,7 +120,7 @@ class CWGattDecodeRead(delegate:CWGattReadInterface) :CWGattReadInterface by del
     }
 
     private fun deviceNormalRandom(list: List<Int>){
-        Log.d(mTag,"第一步 设备返回的10个随机数")
+        Logger.d("第一步 设备返回的10个随机数")
         val decodes = mutableListOf<Int>()
         for (i in 1 until list.count()){
             val t = list[i]
@@ -148,7 +148,7 @@ class CWGattDecodeRead(delegate:CWGattReadInterface) :CWGattReadInterface by del
     }
 
     private fun deviceEncryptionRandom(list: List<Int>){
-        Log.d(mTag,"第三步:处理设备发来的10个加密过的随机数")
+        Logger.d("第三步:处理设备发来的10个加密过的随机数")
         val randoms = mutableListOf<Int>()
         for (i in 1 until list.count()){
             val num = list[i]
@@ -169,11 +169,11 @@ class CWGattDecodeRead(delegate:CWGattReadInterface) :CWGattReadInterface by del
         }
         if (randoms.count() > 9){
             val n = randoms[9] % 10
-            Log.d(mTag,"计算cid 原始数据->$n")
+            Logger.d("计算cid 原始数据->$n")
             cid1 = (randoms[(n + 1) % 10] + 11) % 256 or 0x80
             cid2 = (randoms[(n + 2) % 10] + 17) % 256 or 0x08
             seed = randoms[n]
-            Log.d(mTag,"验证cid1->$cid1 cid2->$cid2 seed->$seed")
+            Logger.d("验证cid1->$cid1 cid2->$cid2 seed->$seed")
             mIsCompleteDecryption = true
             cwBleCalculate(seed)
         }
@@ -188,7 +188,7 @@ class CWGattDecodeRead(delegate:CWGattReadInterface) :CWGattReadInterface by del
             when (cmd){
                 0x01 -> deviceResetSeed(list)
                 0x02 -> devicePlaySerialNumber(list)
-                else -> { Log.d(mTag,"明文通信未知cmd->$cmd") }
+                else -> { Logger.d("明文通信未知cmd->$cmd") }
             }
         }
     }
@@ -199,7 +199,7 @@ class CWGattDecodeRead(delegate:CWGattReadInterface) :CWGattReadInterface by del
     private fun deviceResetSeed(list: List<Int>){
         if (list.count() > 2){
             val flag = list[2].toInt() == 0
-            Log.d(mTag,"重置密钥->$flag")
+            Logger.d("重置密钥->$flag")
             cwBleDeviceResetSeed(flag)
         }
     }
@@ -209,11 +209,11 @@ class CWGattDecodeRead(delegate:CWGattReadInterface) :CWGattReadInterface by del
     private fun devicePlaySerialNumber(list: List<Int>){
         if (list.count() > 4){
             val flag = list[2] == 1
-            Log.d(mTag,"验证通信编号$flag")
+            Logger.d("验证通信编号$flag")
             if (flag){
                 val tCid1 = list[3]
                 val tCid2 = list[4]
-                Log.d(mTag,"验证通信编号tCid1->$tCid1,tCid2->$tCid2")
+                Logger.d("验证通信编号tCid1->$tCid1,tCid2->$tCid2")
                 if (tCid1 == cid1 && tCid2 == cid2){
                     mIsCompleteDecryption = true
                     cwBleCommunicationSerialNumber(true)
@@ -236,7 +236,7 @@ class CWGattDecodeRead(delegate:CWGattReadInterface) :CWGattReadInterface by del
                 0x01 -> resumeCure(list)
                 0x02 -> stopCure(list)
                 0x03 -> endCure(list)
-                else -> { Log.d(mTag,"理疗状态数据 未知指令->$cmd") }
+                else -> { Logger.d("理疗状态数据 未知指令->$cmd") }
             }
         }
     }
@@ -302,7 +302,7 @@ class CWGattDecodeRead(delegate:CWGattReadInterface) :CWGattReadInterface by del
             val dur = low + high * 256
             val id = list[3]
             val flag = list[2]  == 0x00
-            Log.d(mTag,"处方加载 是否有效:$flag 处方id:$id 处方时间:$dur high:$high low:$low")
+            Logger.d("处方加载 是否有效:$flag 处方id:$id 处方时间:$dur high:$high low:$low")
             cwBleRecipeLoadingCallback(flag,dur)
         }
     }
@@ -314,7 +314,7 @@ class CWGattDecodeRead(delegate:CWGattReadInterface) :CWGattReadInterface by del
             val main = list[3]
             val e1 = list[4]
             val e2 = list[5]
-            Log.d(mTag,"软件 电极贴合状态查询: $main")
+            Logger.d("软件 电极贴合状态查询: $main")
             cwBleElectrodeQueryCallback(isInsert,main,e1,e2)
         }
     }
@@ -325,7 +325,7 @@ class CWGattDecodeRead(delegate:CWGattReadInterface) :CWGattReadInterface by del
             val main = bytes[2]
             val e1 = bytes[3]
             val e2 = bytes[4]
-            Log.d(mTag,"硬件通知 电极贴合状态 $main")
+            Logger.d("硬件通知 电极贴合状态 $main")
             cwBleElectrodeNotify(false,isInsert,main,e1,e2)
         }
     }
@@ -475,7 +475,7 @@ class CWGattDecodeRead(delegate:CWGattReadInterface) :CWGattReadInterface by del
         if (list.count() > 2){
             val index = list[1]
             val total = list[2]
-            Log.d(mTag,"处方发送 第几帧->$index 合计->$total")
+            Logger.d("处方发送 第几帧->$index 合计->$total")
             cwBleRecipeSendIndexCallback(index,total)
         }
     }
@@ -491,7 +491,7 @@ class CWGattDecodeRead(delegate:CWGattReadInterface) :CWGattReadInterface by del
                 0x02 -> rangeMapContentWrite(list)
                 0x03 -> rangeMapUpdate(list)
                 0x04 -> rangeMapRemove(list)
-                else -> { Log.d(mTag,"映射表 未知指令 $cmd") }
+                else -> { Logger.d("映射表 未知指令 $cmd") }
             }
         }
     }
@@ -503,7 +503,7 @@ class CWGattDecodeRead(delegate:CWGattReadInterface) :CWGattReadInterface by del
         if (list.count() > 3){
             val ver = list[2]
             val steps = list[3]
-            Log.d(mTag,"映射表版本号:$ver 步进数:$steps")
+            Logger.d("映射表版本号:$ver 步进数:$steps")
             cwBleDeviceRangeMapCallback(ver,steps)
         }
     }

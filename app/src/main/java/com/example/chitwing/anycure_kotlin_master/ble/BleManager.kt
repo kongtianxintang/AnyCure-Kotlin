@@ -14,6 +14,7 @@ import android.os.Handler
 import android.os.ParcelUuid
 import android.util.Log
 import com.example.chitwing.anycure_kotlin_master.app.MyApp
+import com.orhanobut.logger.Logger
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
@@ -32,7 +33,6 @@ import kotlinx.coroutines.experimental.launch
  *************************************************************/
 object  CWBleManager {
 
-    private const val mTag = "蓝牙管理类"
     /**
      * 基础配置:1.渠道号 2.可用性
      * */
@@ -86,11 +86,11 @@ object  CWBleManager {
 
             when (state) {
                 BluetoothAdapter.STATE_ON -> {
-                    Log.d(mTag,"蓝牙打开")
+                    Logger.d("蓝牙打开")
                     mStatusCallback?.bleStatus(CWBleStatus.ON)
                 }
                 BluetoothAdapter.STATE_OFF -> {
-                    Log.d(mTag,"蓝牙关闭")
+                    Logger.d("蓝牙关闭")
                     mStatusCallback?.bleStatus(CWBleStatus.OFF)
                 }
             }
@@ -105,7 +105,7 @@ object  CWBleManager {
         context.registerReceiver(mBluetoothReceiver,filter)
 
         if (mStatusCallback == null) {
-            Log.d(mTag,"请设置回调")
+            Logger.d("请设置回调")
             return
         }
         if (mBleManager == null){
@@ -159,7 +159,7 @@ object  CWBleManager {
     private val mScannerCallback = object :ScanCallback(){
         override fun onBatchScanResults(results: MutableList<ScanResult>?) {
             super.onBatchScanResults(results)
-            Log.d(mTag,"batch")
+            Logger.d("batch")
         }
 
         override fun onScanResult(callbackType: Int, result: ScanResult?) {
@@ -176,7 +176,7 @@ object  CWBleManager {
                      * 新的设备则需要判断 client 与 设备为同一个渠道
                      * */
                     val code = it.device.channelCode()
-                    Log.d(mTag,"设备名称${it.device.name} 渠道号:$code")
+                    Logger.d("设备名称${it.device.name} 渠道号:$code")
                     val type = it.device.deviceType()
                     when(type){
                         CWDeviceType.Old -> {
@@ -204,7 +204,7 @@ object  CWBleManager {
 
         override fun onScanFailed(errorCode: Int) {
             super.onScanFailed(errorCode)
-            Log.d(mTag,"Failed->$errorCode")
+            Logger.d("Failed->$errorCode")
         }
     }
 
@@ -213,7 +213,7 @@ object  CWBleManager {
      * */
     fun connect(device: BluetoothDevice){
         val gatt = device.connectGatt(MyApp.getApp(),false, mGattCallback)
-        Log.d(mTag,"链接gatt->$gatt")
+        Logger.d("链接gatt->$gatt")
     }
 
 
@@ -241,7 +241,7 @@ object  CWBleManager {
             if(status == BluetoothGatt.GATT_SUCCESS && newState == BluetoothGatt.STATE_CONNECTED) {
                 val device = mCWDevices.find { it.mDevice.address == gatt?.device?.address }
                 if (device != null){//重新链接的
-                    Log.d(mTag,"重新链接的 gatt->$gatt")
+                    Logger.d("重新链接的 gatt->$gatt")
                     device.mGatt = gatt
                     gatt?.discoverServices()
                     device.setDeviceConnect(true)
@@ -253,17 +253,17 @@ object  CWBleManager {
                             mCWDevices.add(cw)
                             mStatusCallback?.onCreateCWDevice(cw)
                             mStatusCallback?.bleStatus(CWBleStatus.Connect)
-                            Log.d(mTag,"去发现服务->延时1600ms 前")
+                            Logger.d("去发现服务->延时1600ms 前")
                             delay(1600)
                             it.discoverServices()
-                            Log.d(mTag,"去发现服务->延时1600ms 后")
+                            Logger.d("去发现服务->延时1600ms 后")
                         }
                         job.start()
                     }
                 }
             }else {
                 if (newState == BluetoothGatt.STATE_DISCONNECTED){
-                    Log.d(mTag,"断开链接")
+                    Logger.d("断开链接")
                     val device = mCWDevices.find {  it.mDevice.address == gatt?.device?.address }
                     device?.let {
                         it.setDeviceConnect(false)
@@ -272,12 +272,12 @@ object  CWBleManager {
                         }else{
                             gatt?.disconnect()
                             val isReConnect = gatt?.connect()
-                            Log.d(mTag,"重连->$isReConnect 断开链接gatt对象->$gatt")
+                            Logger.d("重连->$isReConnect 断开链接gatt对象->$gatt")
                         }
                     }
                     mStatusCallback?.bleStatus(CWBleStatus.Disconnect)
                 }
-                Log.d(mTag,"蓝牙连接未知状态$status new->$newState")
+                Logger.d("蓝牙连接未知状态$status new->$newState")
             }
         }
 
@@ -297,7 +297,7 @@ object  CWBleManager {
                 character.descriptors.forEach {
                     it.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
                     val isWrite = gatt.writeDescriptor(it)
-                    Log.d(mTag, "desc写入:$isWrite desc的uuid:${it.uuid}")
+                    Logger.d("desc写入:$isWrite desc的uuid:${it.uuid}")
                 }
             }
         }
@@ -308,7 +308,7 @@ object  CWBleManager {
             val cw = mCWDevices.find { it.mGatt == gatt }
             cw?.let {
                 if (!it.isAutoDisconnect){
-                    Log.d(mTag,"查询通信编号")
+                    Logger.d("查询通信编号")
                     cw.queryCommunicationSerialNumber()
                 }
             }
@@ -316,13 +316,13 @@ object  CWBleManager {
 
         override fun onDescriptorRead(gatt: BluetoothGatt?, descriptor: BluetoothGattDescriptor?, status: Int) {
             super.onDescriptorRead(gatt, descriptor, status)
-            Log.d(mTag,"descriptor读取$status")
+            Logger.d("descriptor读取$status")
         }
 
 
         override fun onReadRemoteRssi(gatt: BluetoothGatt?, rssi: Int, status: Int) {
             super.onReadRemoteRssi(gatt, rssi, status)
-            Log.d(mTag,"信号量:$rssi")
+            Logger.d("信号量:$rssi")
         }
 
     }

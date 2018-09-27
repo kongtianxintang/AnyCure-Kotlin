@@ -15,6 +15,7 @@ import com.example.chitwing.anycure_kotlin_master.fragment.BaseFragment
 import com.example.chitwing.anycure_kotlin_master.model.SMSCode
 import com.example.chitwing.anycure_kotlin_master.network.NetRequest
 import com.example.chitwing.anycure_kotlin_master.unit.showToast
+import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.fragment_sm.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -71,7 +72,7 @@ class SMSFragment : BaseFragment() {
                     s?.let {
                         if (it.length >= 6){
                             val tCode = it.toString()
-                            Log.d(mTag,"用户输入的验证码$tCode")
+                            Logger.d("用户输入的验证码$tCode")
                             val ac = getAC()
                             if (tCode == ac?.mCodes){
                                 //切换到密码页面
@@ -101,11 +102,11 @@ class SMSFragment : BaseFragment() {
                 response?.body()?.let {
                     when(it.code){
                         0 -> {
-                            Log.d(mTag,"验证码->${it.data?.code}")
+                            Logger.d("验证码->${it.data?.code}")
                             fetchSuccess(it)
                         }
                         1 -> {
-                            Log.d(mTag,"错误信息->${it.msg} map->$map")
+                            Logger.d("错误信息->${it.msg} map->$map")
                             fetchFailure(it.msg)
                         }
                         else -> {

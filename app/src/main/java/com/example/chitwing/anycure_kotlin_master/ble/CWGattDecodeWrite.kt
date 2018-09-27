@@ -1,6 +1,5 @@
 package com.example.chitwing.anycure_kotlin_master.ble
 
-import android.util.Log
 import java.util.*
 
 /***********************************************************
@@ -17,7 +16,6 @@ import java.util.*
  *************************************************************/
 class CWGattDecodeWrite(delegate: CWGattWriteInterface) :CWGattWriteInterface by delegate{
 
-    private val mTag = "加密数据写入类"
     var seed: Int = 0 //密钥
 
 

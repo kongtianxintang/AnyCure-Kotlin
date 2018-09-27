@@ -16,9 +16,6 @@ import android.content.Context
  *************************************************************/
 abstract class CWBaseProvider(private val context: Context) {
 
-    val tag:String by lazy {
-        return@lazy "${this ::class.java}"
-    }
     /**
      * 获取数据
      * **/

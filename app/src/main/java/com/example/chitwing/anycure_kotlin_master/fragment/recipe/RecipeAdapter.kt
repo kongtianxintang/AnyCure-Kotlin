@@ -13,6 +13,7 @@ import com.example.chitwing.anycure_kotlin_master.base.CWOnItemClickListener
 import com.example.chitwing.anycure_kotlin_master.model.Recipe
 import com.example.chitwing.anycure_kotlin_master.network.NetRequest
 import com.example.chitwing.anycure_kotlin_master.unit.loadRadius
+import com.orhanobut.logger.Logger
 
 /***********************************************************
  * 版权所有,2018,Chitwing.
@@ -36,7 +37,7 @@ class RecipeAdapter(private val dataSet:List<Recipe>,val context: Context) :Recy
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val v = LayoutInflater.from(parent.context)
                 .inflate(R.layout.recipe_item, parent, false)
-        Log.d("测绘","onCreateViewHolder")
+        Logger.d("测绘 onCreateViewHolder")
         return RecipeAdapter.ViewHolder(v)
     }
 

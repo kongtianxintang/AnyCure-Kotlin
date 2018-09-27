@@ -6,8 +6,11 @@ import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.OnLifecycleEvent
 import android.arch.lifecycle.ProcessLifecycleOwner
 import android.util.Log
+import com.example.chitwing.anycure_kotlin_master.BuildConfig
 import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
 import com.example.chitwing.anycure_kotlin_master.model.MyObjectBox
+import com.orhanobut.logger.AndroidLogAdapter
+import com.orhanobut.logger.Logger
 import io.objectbox.BoxStore
 
 /***********************************************************
@@ -25,7 +28,6 @@ import io.objectbox.BoxStore
 class MyApp :Application() {
 
     companion object {
-        const val mTag: String = "MyApp"
         private var instance:MyApp? = null
         fun getApp() = instance!!
     }
@@ -37,25 +39,25 @@ class MyApp :Application() {
         super.onCreate()
         instance = this
         boxStore = MyObjectBox.builder().androidContext(this).build()
-        Log.d(mTag, "启动boxStore")
 
         ProcessLifecycleOwner.get().lifecycle.addObserver(MyLifecycle())
+        initLogger()
     }
 
     inner class MyLifecycle: LifecycleObserver {
         @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
         fun create() {
-            Log.d(mTag,"create")
+            Logger.d(" create")
         }
 
         @OnLifecycleEvent(Lifecycle.Event.ON_START)
         fun start() {
-            Log.d(mTag,"start")
+            Logger.d("start")
         }
 
         @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
         fun resume() {
-            Log.d(mTag,"resume")
+            Logger.d("resume")
             CWBleManager.mCWDevices.forEach { it.queryCommunicationSerialNumber() }
         }
 
@@ -63,13 +65,24 @@ class MyApp :Application() {
         //此后App进入不可见状态/后台
         @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
         fun pause() {
-            Log.d(mTag,"pause")
+            Logger.d("pause")
         }
 
         @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
         fun stop() {
-            Log.d(mTag,"stop")
+            Logger.d("stop")
         }
+    }
+
+    /**
+     * 注册logger
+     * */
+    private fun initLogger(){
+        Logger.addLogAdapter(object : AndroidLogAdapter(){
+            override fun isLoggable(priority: Int, tag: String?): Boolean {
+                return BuildConfig.DEBUG
+            }
+        })
     }
 
 }

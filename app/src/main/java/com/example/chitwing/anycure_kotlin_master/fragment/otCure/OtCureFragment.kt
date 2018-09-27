@@ -28,6 +28,7 @@ import com.example.chitwing.anycure_kotlin_master.fragment.BaseFragment
 import com.example.chitwing.anycure_kotlin_master.ui.CWLayoutManager
 import com.example.chitwing.anycure_kotlin_master.unit.loader
 import com.example.chitwing.anycure_kotlin_master.unit.showToast
+import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.fragment_ot_cure.*
 import java.text.DecimalFormat
 
@@ -123,7 +124,7 @@ class OtCureFragment : BaseFragment() {
         val adapter = OtCureAdapter(R.layout.ot_cure_item,CWBleManager.mCWDevices)
 
         adapter.setOnItemClickListener { _, _, position ->
-            Log.d("点击","位置->$position")
+            Logger.d("点击位置->$position")
             val count = CWBleManager.mCWDevices.count()
             if (count > position){
                 val obj = CWBleManager.mCWDevices[position]

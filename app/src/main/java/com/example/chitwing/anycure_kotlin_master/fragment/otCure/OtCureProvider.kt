@@ -7,6 +7,7 @@ import com.example.chitwing.anycure_kotlin_master.ble.CWDeviceStatusInterface
 import com.example.chitwing.anycure_kotlin_master.dialog.CWDialog
 import com.example.chitwing.anycure_kotlin_master.dialog.CWDialogInterface
 import com.example.chitwing.anycure_kotlin_master.dialog.CWDialogType
+import com.orhanobut.logger.Logger
 
 /***********************************************************
  * 版权所有,2018,Chitwing.
@@ -21,27 +22,26 @@ import com.example.chitwing.anycure_kotlin_master.dialog.CWDialogType
  * Reason:
  *************************************************************/
 class OtCureProvider(private val fm:OtCureFragment) {
-    private val tag = "OtCureProvider"
 
     /**
      * 接口
      * */
     val callback = object : CWDeviceInterface {
         override fun cureEndEvent(index: Int,item: CWDevice) {
-            Log.d(tag,"cureEndEvent")
+            Logger.d("cureEndEvent")
             fm.endStatus()
             fm.currentMinusDevice(index)
         }
 
         override fun cureStartEvent(item: CWDevice) {
-            Log.d(tag,"cureStartEvent")
+            Logger.d("cureStartEvent")
             fm.playStatus()
             item.selectDevice(true)
             clearDialogs()
         }
 
         override fun cureStopEvent(item: CWDevice) {
-            Log.d(tag,"cureStopEvent")
+            Logger.d("cureStopEvent")
             fm.stopStatus()
         }
 
@@ -50,23 +50,23 @@ class OtCureProvider(private val fm:OtCureFragment) {
         }
 
         override fun deviceCloseEvent(index: Int,item: CWDevice) {
-            Log.d(tag,"deviceCloseEvent")
+            Logger.d("deviceCloseEvent")
             fm.endStatus()
             fm.currentMinusDevice(index)
         }
 
         override fun deviceConnect(flag: Boolean, item: CWDevice) {
-            Log.d(tag,"deviceConnect")
+            Logger.d("deviceConnect")
             fm.setConnect(flag)
         }
 
         override fun prepareComplete(item: CWDevice) {
-            Log.d(tag,"prepareComplete")
+            Logger.d("prepareComplete")
             //todo~~准备完成,此页面未用到
         }
 
         override fun transferMainElectrodeNotify(value: Int, item: CWDevice) {
-            Log.d(tag,"transferMainElectrodeNotify")
+            Logger.d("transferMainElectrodeNotify")
             when(value){
                 0 -> pushDialog("电极贴脱落,请正常贴于患处")
                 30 -> pushDialog("电极片贴合异常,请正常贴于患处")
@@ -79,7 +79,7 @@ class OtCureProvider(private val fm:OtCureFragment) {
         }
 
         override fun transferMainElectrodeQuery(value: Int, item: CWDevice) {
-            Log.d(tag,"transferMainElectrodeQuery")
+            Logger.d("transferMainElectrodeQuery")
             when (value){
                 0 -> pushDialog("电极贴脱落,请正常贴于患处")
                 30 -> pushDialog("电极片贴合异常,请正常贴于患处")
@@ -90,12 +90,12 @@ class OtCureProvider(private val fm:OtCureFragment) {
         }
 
         override fun transferPower(value: Int, item: CWDevice) {
-            Log.d(tag,"transferPower->$value")
+            Logger.d("transferPower->$value")
             fm.setPowerIcon(value)
         }
 
         override fun prepareFail(error: String, item: CWDevice) {
-            Log.d(tag,"prepareFail")
+            Logger.d("prepareFail")
             //todo:准备失败～～此页面未用到
             pushDialog(error)
         }

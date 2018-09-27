@@ -18,6 +18,7 @@ import com.example.chitwing.anycure_kotlin_master.R
 import com.example.chitwing.anycure_kotlin_master.activity.BaseActivity
 import com.example.chitwing.anycure_kotlin_master.unit.Unit
 import com.example.chitwing.anycure_kotlin_master.unit.showToast
+import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.activity_search.*
 
 class SearchActivity : BaseActivity() {
@@ -92,7 +93,7 @@ class SearchActivity : BaseActivity() {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        Log.e(mTag,"code->$requestCode")
+        Logger.e("code->$requestCode")
         if (requestCode == 0x01){
             val g = grantResults[0]
             if (g == PackageManager.PERMISSION_GRANTED){

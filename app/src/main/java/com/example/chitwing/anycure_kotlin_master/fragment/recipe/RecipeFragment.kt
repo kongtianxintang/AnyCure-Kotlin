@@ -28,6 +28,7 @@ import com.example.chitwing.anycure_kotlin_master.model.RecipeSection
 import com.example.chitwing.anycure_kotlin_master.ot.RecipeInterface
 import com.example.chitwing.anycure_kotlin_master.ot.RecipeSectionAdapter
 import com.example.chitwing.anycure_kotlin_master.unit.showToast
+import com.orhanobut.logger.Logger
 
 
 /**
@@ -91,7 +92,7 @@ class RecipeFragment : BaseFragment() {
         }
 
         override fun onClickButton(flag: Boolean) {
-            Log.d("测试","点击了dialog cancel button")
+            Logger.d("点击了dialog cancel button")
         }
     }
 
@@ -100,7 +101,7 @@ class RecipeFragment : BaseFragment() {
     private val onClickItem = object :RecipeInterface {
         override fun didSelectItem(obj: Recipe) {
             mRecipe = obj
-            Log.d("处方","id->${obj.recipeId} name->${obj.recipeName}")
+            Logger.d("处方->${obj.recipeId} name->${obj.recipeName}")
             requestLocationPermission()
         }
     }

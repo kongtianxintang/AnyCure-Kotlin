@@ -28,6 +28,7 @@ import com.example.chitwing.anycure_kotlin_master.model.Login
 import com.example.chitwing.anycure_kotlin_master.model.MineModel
 import com.example.chitwing.anycure_kotlin_master.unit.*
 import com.example.chitwing.anycure_kotlin_master.unit.Unit
+import com.orhanobut.logger.Logger
 
 /**
  * 个人页面
@@ -118,7 +119,7 @@ class MineFragment : BaseFragment() {
     }
 
     private fun userLogOut(){
-        Log.d("删除登录信息","还有那个地方？")
+        Logger.d("删除登录信息 还有那个地方？")
         DBHelper.removeAll(Login ::class.java)
         CWBleManager.mCWDevices.forEach { it.endCureAction() }
         val intent = Intent(activity,LoginActivity ::class.java)

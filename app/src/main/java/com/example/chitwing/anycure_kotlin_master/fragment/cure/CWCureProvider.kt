@@ -1,9 +1,9 @@
 package com.example.chitwing.anycure_kotlin_master.fragment.cure
 
-import android.util.Log
 import com.example.chitwing.anycure_kotlin_master.ble.CWDevice
 import com.example.chitwing.anycure_kotlin_master.ble.CWDeviceInterface
 import com.example.chitwing.anycure_kotlin_master.ble.CWDeviceStatusInterface
+import com.orhanobut.logger.Logger
 
 /***********************************************************
  * 版权所有,2018,Chitwing.
@@ -18,26 +18,23 @@ import com.example.chitwing.anycure_kotlin_master.ble.CWDeviceStatusInterface
  * Reason:
  *************************************************************/
 class CWCureProvider(private val fm:CureFragment) {
-
-
-    private val tag = "CWCureProvider"
-
+    
     /**
      * 接口
      * */
     val callback = object :CWDeviceInterface {
         override fun cureEndEvent(index:Int,item: CWDevice) {
-            Log.e(tag,"cureEndEvent")
+            Logger.d("cureEndEvent")
             fm.endStatus()
         }
 
         override fun cureStartEvent(item: CWDevice) {
-            Log.e(tag,"cureStartEvent")
+            Logger.d("cureStartEvent")
             fm.startStatus()
         }
 
         override fun cureStopEvent(item: CWDevice) {
-            Log.e(tag,"cureStopEvent")
+            Logger.d("cureStopEvent")
             fm.stopStatus()
         }
 
@@ -46,22 +43,22 @@ class CWCureProvider(private val fm:CureFragment) {
         }
 
         override fun deviceCloseEvent(index:Int,item: CWDevice) {
-            Log.e(tag,"deviceCloseEvent")
+            Logger.d("deviceCloseEvent")
             fm.endStatus()
         }
 
         override fun deviceConnect(flag: Boolean, item: CWDevice) {
-            Log.e(tag,"deviceConnect")
+            Logger.d("deviceConnect")
             fm.setLinkStatus(flag)
         }
 
         override fun prepareComplete(item: CWDevice) {
-            Log.e(tag,"prepareComplete")
+            Logger.d("prepareComplete")
             //todo~~准备完成,此页面未用到
         }
 
         override fun transferMainElectrodeNotify(value: Int, item: CWDevice) {
-            Log.e(tag,"transferMainElectrodeNotify")
+            Logger.d("transferMainElectrodeNotify")
             //todo:电极贴贴合状态～～硬件通知
         }
 
@@ -70,17 +67,17 @@ class CWCureProvider(private val fm:CureFragment) {
         }
 
         override fun transferMainElectrodeQuery(value: Int, item: CWDevice) {
-            Log.e(tag,"transferMainElectrodeQuery")
+            Logger.d("transferMainElectrodeQuery")
             //todo:电极贴贴合状态～～查询
         }
 
         override fun transferPower(value: Int, item: CWDevice) {
-            Log.e(tag,"transferPower->$value")
+            Logger.d("transferPower->$value")
             fm.setPower(value)
         }
 
         override fun prepareFail(error: String, item: CWDevice) {
-            Log.e(tag,"prepareFail")
+            Logger.d("prepareFail")
             //todo:准备失败～～此页面未用到
         }
 

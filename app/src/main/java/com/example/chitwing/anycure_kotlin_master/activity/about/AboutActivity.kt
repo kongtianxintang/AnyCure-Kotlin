@@ -8,6 +8,7 @@ import com.example.chitwing.anycure_kotlin_master.R
 import com.example.chitwing.anycure_kotlin_master.activity.BaseActivity
 import com.example.chitwing.anycure_kotlin_master.network.NetRequest
 import com.google.gson.Gson
+import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.content_about.*
 
 class AboutActivity : BaseActivity() {
@@ -68,7 +69,7 @@ class AboutActivity : BaseActivity() {
         val json = Gson().toJson(map)
         val js = "javascript:updateInfo($json)"
         mWebView.evaluateJavascript(js,({
-            Log.d("回调","字符串->$it")
+            Logger.d("回调 字符串->$it")
         }))
 
     }
@@ -77,12 +78,12 @@ class AboutActivity : BaseActivity() {
     inner class CWWebChromeClient:WebChromeClient (){
 
         override fun onJsAlert(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
-            Log.d("网页","message->$message")
+            Logger.d("网页message->$message")
             return super.onJsAlert(view, url, message, result)
         }
 
         override fun onConsoleMessage(consoleMessage: ConsoleMessage?): Boolean {
-            Log.d("console","meg->${consoleMessage?.message()}")
+            Logger.d("console meg->${consoleMessage?.message()}")
             return super.onConsoleMessage(consoleMessage)
         }
 
@@ -102,7 +103,7 @@ class AboutActivity : BaseActivity() {
     inner class InjectsObj {
         @JavascriptInterface
         fun linkToDownApk(path: String){
-            Log.d("注入信息","地址->$path")
+            Logger.d("注入信息地址->$path")
         }
     }
 

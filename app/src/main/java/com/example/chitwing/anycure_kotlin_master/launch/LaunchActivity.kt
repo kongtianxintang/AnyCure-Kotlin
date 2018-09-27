@@ -3,11 +3,14 @@ package com.example.chitwing.anycure_kotlin_master.launch
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.example.chitwing.anycure_kotlin_master.BuildConfig
 import com.example.chitwing.anycure_kotlin_master.MainActivity
 import com.example.chitwing.anycure_kotlin_master.R
 import com.example.chitwing.anycure_kotlin_master.activity.LoginActivity
 import com.example.chitwing.anycure_kotlin_master.database.DBHelper
 import com.example.chitwing.anycure_kotlin_master.model.Login
+import com.orhanobut.logger.AndroidLogAdapter
+import com.orhanobut.logger.Logger
 
 class LaunchActivity : AppCompatActivity() {
 
@@ -25,9 +28,9 @@ class LaunchActivity : AppCompatActivity() {
 
 
     private fun createIntent(arg :Boolean):Intent{
-        when (arg) {
-            true -> return Intent(this,LoginActivity ::class.java)
-            else -> return Intent(this, MainActivity ::class.java)
+       return  when (arg) {
+            true ->  Intent(this,LoginActivity ::class.java)
+            else ->  Intent(this, MainActivity ::class.java)
         }
     }
 
@@ -37,6 +40,7 @@ class LaunchActivity : AppCompatActivity() {
         Thread.sleep(500)
         enterDisplay()
     }
+
 
 
 }

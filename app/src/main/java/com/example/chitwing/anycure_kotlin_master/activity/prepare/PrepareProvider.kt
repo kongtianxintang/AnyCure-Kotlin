@@ -7,6 +7,7 @@ import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
 import com.example.chitwing.anycure_kotlin_master.database.DBHelper
 import com.example.chitwing.anycure_kotlin_master.model.PrepareHint
 import com.example.chitwing.anycure_kotlin_master.network.NetRequest
+import com.orhanobut.logger.Logger
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -37,7 +38,7 @@ class PrepareProvider(private val context: Context) :CWBaseProvider(context) {
         call.enqueue( object :Callback<List<PrepareHint>>{
 
             override fun onFailure(call: Call<List<PrepareHint>>?, t: Throwable?) {
-                Log.e(tag,"网络请求错误${t.toString()}")
+                Logger.e("网络请求错误${t.toString()}")
             }
 
             override fun onResponse(call: Call<List<PrepareHint>>?, response: Response<List<PrepareHint>>?) {

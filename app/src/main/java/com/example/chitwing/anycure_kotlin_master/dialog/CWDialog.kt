@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.chitwing.anycure_kotlin_master.R
+import com.orhanobut.logger.Logger
 
 /***********************************************************
  * 版权所有,2018,Chitwing.
@@ -144,7 +145,7 @@ class CWDialog :DialogFragment(){
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d("dialog","销毁")
+        Logger.d("销毁")
     }
 
     class Builder{

@@ -1,6 +1,5 @@
 package com.example.chitwing.anycure_kotlin_master.network
 
-import android.util.Log
 import com.example.chitwing.anycure_kotlin_master.model.*
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
@@ -85,11 +84,18 @@ object NetRequest {
     }
 
     /**
+     * 版本检测
+     * */
+    fun checkVersion(map: Map<String, String>): Call<Version>{
+        val body = createPair(map)
+        return api.checkVersion(body)
+    }
+
+    /**
      * 配置参数
      * */
     private fun createPair(map: Map<String, String>) :Map<String,String>{
         val json = gson.toJson(map)
-        Log.d(mTag,"请求参数->$json")
         return mapOf("data" to json)
     }
 

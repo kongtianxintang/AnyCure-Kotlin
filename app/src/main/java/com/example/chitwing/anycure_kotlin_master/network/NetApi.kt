@@ -60,4 +60,13 @@ interface NetApi {
     @POST("/User/userReg")
     @FormUrlEncoded
     fun register(@FieldMap body: Map<String, String>) :Call<CWRegister>
+
+    /**
+     * 版本更新
+     * */
+    @POST("checkVersion")
+    @FormUrlEncoded
+    fun checkVersion(@FieldMap body: Map<String, String>): Call<Version>
+
+
 }

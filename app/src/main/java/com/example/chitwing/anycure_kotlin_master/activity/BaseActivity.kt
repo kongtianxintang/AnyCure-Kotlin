@@ -12,15 +12,13 @@ import android.widget.TextView
 import com.example.chitwing.anycure_kotlin_master.R
 import com.example.chitwing.anycure_kotlin_master.app.MyApp
 import com.example.chitwing.anycure_kotlin_master.unit.Unit
+import com.orhanobut.logger.Logger
 
 abstract class BaseActivity : AppCompatActivity() {
 
     var customTitle:TextView? = null
     var customLeftBar: ImageButton? = null
 
-    companion object {
-       const val mTag: String = "AnyCure-Kotlin"
-    }
 
      override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,6 +70,6 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d(mTag,"销毁")
+        Logger.d("销毁")
     }
 }

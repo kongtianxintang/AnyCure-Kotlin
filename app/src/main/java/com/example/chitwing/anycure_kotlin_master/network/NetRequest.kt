@@ -1,8 +1,11 @@
 package com.example.chitwing.anycure_kotlin_master.network
 
+import android.util.Log
 import com.example.chitwing.anycure_kotlin_master.model.*
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
+import okhttp3.ResponseBody
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -35,13 +38,19 @@ object NetRequest {
     val IMAGE_BASE_PATH = CW_HOST_IP + "uploadfile/"
 
     private val gson = Gson()
-    private val client = OkHttpClient.Builder().readTimeout(15, TimeUnit.SECONDS).connectTimeout(15, TimeUnit.SECONDS).build();
+    private val client = OkHttpClient.Builder().readTimeout(15, TimeUnit.SECONDS).connectTimeout(15, TimeUnit.SECONDS).addInterceptor(getLogger()).build();
     private val retro = Retrofit.Builder()
             .baseUrl(CW_HOST_IP)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(client)
             .build()
     private val api = retro.create(NetApi ::class.java)
+
+    private fun getLogger() = HttpLoggingInterceptor( object : HttpLoggingInterceptor.Logger{
+        override fun log(message: String?) {
+            Log.d("网络请求类","json->$message")
+        }
+    }).setLevel(HttpLoggingInterceptor.Level.BODY)
 
     /**
      * 登录
@@ -89,6 +98,13 @@ object NetRequest {
     fun checkVersion(map: Map<String, String>): Call<Version>{
         val body = createPair(map)
         return api.checkVersion(body)
+    }
+
+    /**
+     * 下载apk
+     * */
+    fun downloadApk(path: String): Call<ResponseBody> {
+        return api.downloadFile(path)
     }
 
     /**

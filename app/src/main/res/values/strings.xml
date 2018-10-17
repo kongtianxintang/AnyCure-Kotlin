@@ -91,6 +91,8 @@
     <string name="bind_empty_desc">没有绑定设备</string>
     <string name="bind_empty_button">去绑定设备</string>
 
+    <string name="app_update">立刻升级</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_about">关于我们</string>

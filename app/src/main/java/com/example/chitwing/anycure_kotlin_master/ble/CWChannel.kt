@@ -154,18 +154,4 @@ enum class CWChannel {
         }
     }
 
-    val SMS_TEMPLATEID:String by lazy {
-        when(this){
-            PingAn -> return@lazy "234184"
-            else -> return@lazy "234413"
-        }
-    }
-
-    val SMS_APP_ID:String by lazy {
-        when(this){
-            PingAn -> return@lazy "8a216da86150f043016154879a3000d0"
-            else -> return@lazy "8a216da86150f04301615488603d00d1"
-        }
-    }
-
 }

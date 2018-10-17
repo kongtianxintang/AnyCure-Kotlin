@@ -1,10 +1,9 @@
 package com.example.chitwing.anycure_kotlin_master.network
 
 import com.example.chitwing.anycure_kotlin_master.model.*
+import okhttp3.ResponseBody
 import retrofit2.Call
-import retrofit2.http.FieldMap
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.POST
+import retrofit2.http.*
 
 /***********************************************************
  * 版权所有,2018,Chitwing.
@@ -62,11 +61,17 @@ interface NetApi {
     fun register(@FieldMap body: Map<String, String>) :Call<CWRegister>
 
     /**
-     * 版本更新
+     * 下载文件
      * */
-    @POST("checkVersion")
-    @FormUrlEncoded
-    fun checkVersion(@FieldMap body: Map<String, String>): Call<Version>
+    @Streaming
+    @GET
+    fun downloadFile(@Url path: String): Call<ResponseBody>
 
+    /**
+     * 检查版本更新
+     * */
+    @POST("/client/checkVersion")
+    @FormUrlEncoded
+    fun checkVersion(@FieldMap map: Map<String,String>): Call<Version>
 
 }

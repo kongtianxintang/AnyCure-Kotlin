@@ -1,28 +1,36 @@
 package com.example.chitwing.anycure_kotlin_master
 
 import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.support.design.internal.BottomNavigationItemView
 import android.support.design.internal.BottomNavigationMenuView
 import android.support.design.widget.BottomNavigationView
+import android.support.v4.content.FileProvider
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import com.example.chitwing.anycure_kotlin_master.activity.BaseActivity
 import com.example.chitwing.anycure_kotlin_master.activity.prepare.PrepareProvider
 import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
+import com.example.chitwing.anycure_kotlin_master.dialog.CWDownloadDialog
 import com.example.chitwing.anycure_kotlin_master.dialog.CWHintDialog
+import com.example.chitwing.anycure_kotlin_master.download.CWCheckVersionProvider
+import com.example.chitwing.anycure_kotlin_master.download.DownloadAPKProvider
 import com.example.chitwing.anycure_kotlin_master.fragment.BaseFragment
 import com.example.chitwing.anycure_kotlin_master.fragment.mall.MallFragment
 import com.example.chitwing.anycure_kotlin_master.fragment.mine.MineFragment
 import com.example.chitwing.anycure_kotlin_master.fragment.otCure.OtCureFragment
 import com.example.chitwing.anycure_kotlin_master.fragment.recipe.RecipeFragment
 import com.example.chitwing.anycure_kotlin_master.unit.BottomNavigationViewHelper
-import com.example.chitwing.anycure_kotlin_master.unit.CWRegex
 import com.example.chitwing.anycure_kotlin_master.unit.SharedPreferencesHelper
+import com.example.chitwing.anycure_kotlin_master.unit.showToast
 import com.orhanobut.logger.Logger
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
+import java.io.File
 
 
 class MainActivity : BaseActivity() {
@@ -77,6 +85,7 @@ class MainActivity : BaseActivity() {
 
     override fun fetchData() {
         PrepareProvider(this).fetchDataSource()
+        checkVersion()
     }
 
     /**
@@ -215,5 +224,85 @@ class MainActivity : BaseActivity() {
         val badgeVisibility = if (num == 0) View.INVISIBLE else View.VISIBLE
         badgeView?.visibility = badgeVisibility
         mBadge?.text = num.toString()
+    }
+
+    /**
+     * 版本相关
+     * */
+    private fun checkVersion(){
+        val channel = CWBleManager.configure.channel.NUM_CODE
+        val code = BuildConfig.VERSION_CODE.toString()
+        val check = CWCheckVersionProvider()
+        val map = mapOf("token" to "downloadAPKurl","name" to "medical" ,"channel" to channel,"version" to code)
+        check.checkVersion(checkCallback,map)
+    }
+
+    /**
+     * 检查版本的回调
+     * */
+    private val checkCallback = object :CWCheckVersionProvider.CheckVersionInterface{
+        override fun checkVersion(flag: Boolean, url: String?, desc: String?,ver: String?) {
+            Logger.d("版本检查回调: 是否需要更新->$flag url->$url  desc->$desc ver->$ver")
+            if (flag){
+                if (url != null && desc != null && ver != null){
+                    pushDownloadDialog(url,desc,ver)
+                }
+            }
+        }
+    }
+
+    private fun pushDownloadDialog(url: String,desc:String,ver: String){
+        val dialog = CWDownloadDialog()
+        val bundle = Bundle()
+        bundle.putString(CWDownloadDialog.versionKey,ver)
+        bundle.putString(CWDownloadDialog.contentKey,desc)
+        dialog.arguments = bundle
+        dialog.show(fragmentManager,"download")
+        dialog.setCallback(object : CWDownloadDialog.DownloadDialogInterface {
+            override fun didClickButton(flag: Boolean) {
+                if (flag){
+                    dialog.downloadStatus()
+                    //去下载
+                    val task = DownloadAPKProvider(this@MainActivity)
+                    task.downloadTask(url)
+                    task.setCallback(object : DownloadAPKProvider.DownloadApkInterface {
+                        override fun downloadProgress(arg: Int) {
+                            dialog.setProgressBarValues(arg)
+                        }
+
+                        override fun downloadSuccess(flag: Boolean) {
+                            dialog.dismiss()
+                            val str = if (flag) "下载成功" else "下载失败"
+                            this@MainActivity.showToast(str)
+                            if (flag){
+                                installApk()
+                            }
+                        }
+                    })
+                }
+            }
+        })
+    }
+
+    /**
+     * 安装apk
+     * */
+    private fun installApk(){
+        val path = getExternalFilesDir(null)
+        val file = File(path,"may_able.apk")
+        if (file.exists()){
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                val name = BuildConfig.APPLICATION_ID + ".fileProvider"
+                val pack = FileProvider.getUriForFile(this,name,file)
+                intent.setDataAndType(pack, "application/vnd.android.package-archive")
+            } else {
+                intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive")
+            }
+            startActivity(intent)
+        }
     }
 }

@@ -44,11 +44,11 @@ class MineAdapter(private val mDataSet:List<MineModel>,private val context: Mine
             when(position){
                 0 -> {
                     val intent = Intent(context.activity!!,BindActivity ::class.java)
-                    context.activity!!.startActivity(intent)
+                    context.startActivity(intent)
                 }
                 2 -> {
                     val intent = Intent(context.activity!!, AboutActivity ::class.java)
-                    context.activity!!.startActivity(intent)
+                    context.startActivity(intent)
                 }
                 else -> {
                     context.activity?.showToast("功能暂未开放")

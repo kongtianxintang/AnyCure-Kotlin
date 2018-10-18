@@ -19,6 +19,8 @@ import com.example.chitwing.anycure_kotlin_master.dialog.CWDownloadDialog
 import com.example.chitwing.anycure_kotlin_master.dialog.CWHintDialog
 import com.example.chitwing.anycure_kotlin_master.download.CWCheckVersionProvider
 import com.example.chitwing.anycure_kotlin_master.download.DownloadAPKProvider
+import com.example.chitwing.anycure_kotlin_master.download.DownloadFileTask
+import com.example.chitwing.anycure_kotlin_master.download.DownloadResProvider
 import com.example.chitwing.anycure_kotlin_master.fragment.BaseFragment
 import com.example.chitwing.anycure_kotlin_master.fragment.mall.MallFragment
 import com.example.chitwing.anycure_kotlin_master.fragment.mine.MineFragment
@@ -28,6 +30,7 @@ import com.example.chitwing.anycure_kotlin_master.unit.BottomNavigationViewHelpe
 import com.example.chitwing.anycure_kotlin_master.unit.SharedPreferencesHelper
 import com.example.chitwing.anycure_kotlin_master.unit.showToast
 import com.orhanobut.logger.Logger
+import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 import java.io.File
@@ -86,6 +89,7 @@ class MainActivity : BaseActivity() {
     override fun fetchData() {
         PrepareProvider(this).fetchDataSource()
         checkVersion()
+        downloadResZip()
     }
 
     /**
@@ -262,15 +266,13 @@ class MainActivity : BaseActivity() {
             override fun didClickButton(flag: Boolean) {
                 if (flag){
                     dialog.downloadStatus()
-                    //去下载
-                    val task = DownloadAPKProvider(this@MainActivity)
-                    task.downloadTask(url)
-                    task.setCallback(object : DownloadAPKProvider.DownloadApkInterface {
+
+                    val callback = object :DownloadFileTask.DownloadFileInterface {
                         override fun downloadProgress(arg: Int) {
                             dialog.setProgressBarValues(arg)
                         }
 
-                        override fun downloadSuccess(flag: Boolean) {
+                        override fun downloadSuccessful(flag: Boolean) {
                             dialog.dismiss()
                             val str = if (flag) "下载成功" else "下载失败"
                             this@MainActivity.showToast(str)
@@ -278,7 +280,10 @@ class MainActivity : BaseActivity() {
                                 installApk()
                             }
                         }
-                    })
+                    }
+                    //去下载
+                    val task = DownloadAPKProvider(this@MainActivity,callback = callback)
+                    task.downloadTask(url)
                 }
             }
         })
@@ -303,6 +308,26 @@ class MainActivity : BaseActivity() {
                 intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive")
             }
             startActivity(intent)
+        }
+    }
+
+    /**
+     * 下载资源
+     * */
+    private fun downloadResZip(){
+        val path  = "http://tmtzf.meirencloud.com/uploadfile/C00000001/C00000001.zip"
+        val provider = DownloadResProvider(this,callback = downloadResCallback)
+        provider.start(path)
+    }
+
+    private val downloadResCallback = object :DownloadFileTask.DownloadFileInterface {
+
+        override fun downloadProgress(arg: Int) {
+//            Logger.d("进度->$arg")
+        }
+
+        override fun downloadSuccessful(flag: Boolean) {
+            Logger.d("下载结果->$flag")
         }
     }
 }

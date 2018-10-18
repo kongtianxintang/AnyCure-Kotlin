@@ -8,6 +8,10 @@ class DownloadConfigure {
          * */
         const val resName = "res.zip"
         /**
+         * 资源包解压后名称
+         * */
+        const val resTargetName = "res"
+        /**
          * apk包本地名称
          * */
         const val apkName = "may_able.apk"

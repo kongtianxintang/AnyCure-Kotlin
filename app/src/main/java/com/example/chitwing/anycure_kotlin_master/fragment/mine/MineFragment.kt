@@ -23,12 +23,14 @@ import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
 import com.example.chitwing.anycure_kotlin_master.database.DBHelper
 import com.example.chitwing.anycure_kotlin_master.dialog.CWDialog
 import com.example.chitwing.anycure_kotlin_master.dialog.CWDialogInterface
+import com.example.chitwing.anycure_kotlin_master.download.DownloadConfigure
 import com.example.chitwing.anycure_kotlin_master.fragment.BaseFragment
 import com.example.chitwing.anycure_kotlin_master.model.Login
 import com.example.chitwing.anycure_kotlin_master.model.MineModel
 import com.example.chitwing.anycure_kotlin_master.unit.*
 import com.example.chitwing.anycure_kotlin_master.unit.Unit
 import com.orhanobut.logger.Logger
+import java.io.File
 
 /**
  * 个人页面

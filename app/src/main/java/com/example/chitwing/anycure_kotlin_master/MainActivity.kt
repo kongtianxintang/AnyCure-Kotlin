@@ -17,10 +17,7 @@ import com.example.chitwing.anycure_kotlin_master.activity.prepare.PrepareProvid
 import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
 import com.example.chitwing.anycure_kotlin_master.dialog.CWDownloadDialog
 import com.example.chitwing.anycure_kotlin_master.dialog.CWHintDialog
-import com.example.chitwing.anycure_kotlin_master.download.CWCheckVersionProvider
-import com.example.chitwing.anycure_kotlin_master.download.DownloadAPKProvider
-import com.example.chitwing.anycure_kotlin_master.download.DownloadFileTask
-import com.example.chitwing.anycure_kotlin_master.download.DownloadResProvider
+import com.example.chitwing.anycure_kotlin_master.download.*
 import com.example.chitwing.anycure_kotlin_master.fragment.BaseFragment
 import com.example.chitwing.anycure_kotlin_master.fragment.mall.MallFragment
 import com.example.chitwing.anycure_kotlin_master.fragment.mine.MineFragment
@@ -28,6 +25,7 @@ import com.example.chitwing.anycure_kotlin_master.fragment.otCure.OtCureFragment
 import com.example.chitwing.anycure_kotlin_master.fragment.recipe.RecipeFragment
 import com.example.chitwing.anycure_kotlin_master.unit.BottomNavigationViewHelper
 import com.example.chitwing.anycure_kotlin_master.unit.SharedPreferencesHelper
+import com.example.chitwing.anycure_kotlin_master.unit.Unit
 import com.example.chitwing.anycure_kotlin_master.unit.showToast
 import com.orhanobut.logger.Logger
 import kotlinx.coroutines.experimental.async
@@ -328,6 +326,16 @@ class MainActivity : BaseActivity() {
 
         override fun downloadSuccessful(flag: Boolean) {
             Logger.d("下载结果->$flag")
+            if (flag){
+                val dir = this@MainActivity.getExternalFilesDir(null)
+                val zip = File(dir,DownloadConfigure.resName)
+                val unzip = File(dir,DownloadConfigure.resTargetName)
+                if (!unzip.exists()){
+                    unzip.mkdir()
+                }
+                Unit.unZip(zip,unzip.path)
+            }
+
         }
     }
 }

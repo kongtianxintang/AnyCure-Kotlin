@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.content.res.Resources
-import android.support.annotation.NonNull
 import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
@@ -13,13 +12,12 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.chitwing.anycure_kotlin_master.R
 import android.util.TypedValue
-import android.view.Gravity
-import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.TextView
-import com.example.chitwing.anycure_kotlin_master.app.MyApp
 import com.example.chitwing.anycure_kotlin_master.network.NetRequest
 import com.example.chitwing.anycure_kotlin_master.ui.CWCircleTransform
+import java.io.*
+import java.util.zip.ZipEntry
+import java.util.zip.ZipFile
+import java.util.zip.ZipInputStream
 
 
 /***********************************************************
@@ -87,6 +85,50 @@ object Unit {
         acDisplayMetrics.scaledDensity = targetScaledDensity
         acDisplayMetrics.densityDpi = targetDensityDpi.toInt()
     }
+
+
+    /**
+     * zip解压缩
+     * */
+    fun unZip(zipFile: File, targetDir: String){
+        val zFile = ZipFile(zipFile)
+        val zList = zFile.entries()
+        var ze: ZipEntry?
+        val buffer = ByteArray(1024 * 4)
+        var input: BufferedInputStream? = null
+        var output: BufferedOutputStream? = null
+        try {
+            while (zList.hasMoreElements()){
+                ze = zList.nextElement()
+                if (ze.isDirectory){
+                    val path = targetDir + File.separator + ze.name
+                    val f = File(path)
+                    f.mkdir()
+                    continue
+                }
+                val folder = File(targetDir,ze.name)
+                if (!folder.exists()){
+                    folder.createNewFile()
+                }
+                output = BufferedOutputStream(FileOutputStream(folder))
+                input = BufferedInputStream(zFile.getInputStream(ze))
+                var readLen = 0
+
+                while (input.read(buffer,0,1024).apply { readLen = this } > 0){
+                    output.write(buffer,0,readLen)
+                }
+
+                input.close()
+                output.close()
+            }
+        }catch (e: Exception){
+            Log.d("unzip","解压失败")
+        }
+        finally {
+            input?.close()
+            output?.close()
+        }
+    }
 }
 
 /**
@@ -125,6 +167,14 @@ fun ImageView.loadCircle(context: Context,url: String?){
         val path = NetRequest.IMAGE_BASE_PATH + it
         Glide.with(context).load(path).apply(options).into(this)
     }
+}
+
+/**
+ * 扩展imageView 圆形 加载本地的图片
+ * */
+fun ImageView.loadCircle(context: Context,file: File){
+    val options = RequestOptions().placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_background).transform(CWCircleTransform())
+    Glide.with(context).load(file).apply(options).into(this)
 }
 
 /**

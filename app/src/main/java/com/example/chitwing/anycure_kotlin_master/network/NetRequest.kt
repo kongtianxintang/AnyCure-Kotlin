@@ -101,12 +101,20 @@ object NetRequest {
     }
 
     /**
-     * 下载apk
+     * 获取资源路径
      * */
-    fun downloadApk(path: String): Call<ResponseBody> {
-        return api.downloadFile(path)
+    fun resPackagePath(map: Map<String, String>): Call<CWResPack>{
+        val body = createPair(map)
+        return api.resPackage(body)
     }
 
+    /**
+     * 数据是否刷新
+     * */
+    fun dataRefresh(map: Map<String, String>): Call<String>{
+        val body = createPair(map)
+        return api.dataRefresh(body)
+    }
     /**
      * 配置参数
      * */

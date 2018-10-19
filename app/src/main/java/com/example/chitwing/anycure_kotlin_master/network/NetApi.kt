@@ -61,17 +61,24 @@ interface NetApi {
     fun register(@FieldMap body: Map<String, String>) :Call<CWRegister>
 
     /**
-     * 下载文件
-     * */
-    @Streaming
-    @GET
-    fun downloadFile(@Url path: String): Call<ResponseBody>
-
-    /**
      * 检查版本更新
      * */
     @POST("/client/checkVersion")
     @FormUrlEncoded
     fun checkVersion(@FieldMap map: Map<String,String>): Call<Version>
+
+    /**
+     * 请求资源包下载
+     * */
+    @POST("/recipe/getResPackage")
+    @FormUrlEncoded
+    fun resPackage(@FieldMap map: Map<String,String>): Call<CWResPack>
+
+    /**
+     * 数据刷新时间
+     * */
+    @POST("/recipe/getDataTime")
+    @FormUrlEncoded
+    fun dataRefresh(@FieldMap map: Map<String,String>): Call<String>
 
 }

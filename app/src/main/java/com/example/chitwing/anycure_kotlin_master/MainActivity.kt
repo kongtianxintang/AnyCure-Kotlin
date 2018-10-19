@@ -23,6 +23,7 @@ import com.example.chitwing.anycure_kotlin_master.fragment.mall.MallFragment
 import com.example.chitwing.anycure_kotlin_master.fragment.mine.MineFragment
 import com.example.chitwing.anycure_kotlin_master.fragment.otCure.OtCureFragment
 import com.example.chitwing.anycure_kotlin_master.fragment.recipe.RecipeFragment
+import com.example.chitwing.anycure_kotlin_master.main.CWMainProvider
 import com.example.chitwing.anycure_kotlin_master.unit.BottomNavigationViewHelper
 import com.example.chitwing.anycure_kotlin_master.unit.SharedPreferencesHelper
 import com.example.chitwing.anycure_kotlin_master.unit.Unit
@@ -46,6 +47,7 @@ class MainActivity : BaseActivity() {
     private val mCureFragment by lazy { return@lazy OtCureFragment() }
     private val mMallFragment by lazy { return@lazy MallFragment() }
     private val mMineFragment by lazy { return@lazy MineFragment() }
+    private val mProvider by lazy { return@lazy CWMainProvider(this) }
     private var badgeView:View? = null
     private var mBadge:TextView? = null
 
@@ -87,8 +89,9 @@ class MainActivity : BaseActivity() {
     override fun fetchData() {
         PrepareProvider(this).fetchDataSource()
         checkVersion()
-        downloadResZip()
+        mProvider.fetchDataSource()
     }
+
 
     /**
      * 配置底部导航条的点击事件
@@ -310,32 +313,10 @@ class MainActivity : BaseActivity() {
     }
 
     /**
-     * 下载资源
+     * 下载图片资源成功
      * */
-    private fun downloadResZip(){
-        val path  = "http://tmtzf.meirencloud.com/uploadfile/C00000001/C00000001.zip"
-        val provider = DownloadResProvider(this,callback = downloadResCallback)
-        provider.start(path)
+    fun downloadResSuccessful(){
+        mRecipeFragment?.mAdapter?.notifyDataSetChanged()
     }
 
-    private val downloadResCallback = object :DownloadFileTask.DownloadFileInterface {
-
-        override fun downloadProgress(arg: Int) {
-//            Logger.d("进度->$arg")
-        }
-
-        override fun downloadSuccessful(flag: Boolean) {
-            Logger.d("下载结果->$flag")
-            if (flag){
-                val dir = this@MainActivity.getExternalFilesDir(null)
-                val zip = File(dir,DownloadConfigure.resName)
-                val unzip = File(dir,DownloadConfigure.resTargetName)
-                if (!unzip.exists()){
-                    unzip.mkdir()
-                }
-                Unit.unZip(zip,unzip.path)
-            }
-
-        }
-    }
 }

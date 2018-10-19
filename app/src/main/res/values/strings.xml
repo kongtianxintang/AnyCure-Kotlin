@@ -90,6 +90,8 @@
 
     <string name="bind_empty_desc">没有绑定设备</string>
     <string name="bind_empty_button">去绑定设备</string>
+    <string name="no_data">没有数据</string>
+    <string name="re_fetch_data">重新加载数据</string>
 
     <string name="app_update">立刻升级</string>
 

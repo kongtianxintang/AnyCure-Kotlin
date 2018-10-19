@@ -12,6 +12,8 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.chitwing.anycure_kotlin_master.R
 import android.util.TypedValue
+import com.example.chitwing.anycure_kotlin_master.app.MyApp
+import com.example.chitwing.anycure_kotlin_master.download.DownloadConfigure
 import com.example.chitwing.anycure_kotlin_master.network.NetRequest
 import com.example.chitwing.anycure_kotlin_master.ui.CWCircleTransform
 import java.io.*
@@ -138,9 +140,13 @@ object Unit {
 fun ImageView.loader(context: Context, url:String?){
     url?.let {
         if (it.isEmpty()){ return }
+        val subs = it.split("/")
+        val last = subs.last()
+        val dir = context.getExternalFilesDir(null)
+        val file = File(dir,DownloadConfigure.resTargetName + File.separator + last)
         val options = RequestOptions().error(R.drawable.ic_launcher_background)
-        val path = NetRequest.IMAGE_BASE_PATH + it
-        Glide.with(context).load(path).apply(options).into(this)
+//        val path = NetRequest.IMAGE_BASE_PATH + it
+        Glide.with(context).load(file).apply(options).into(this)
     }
 }
 /**
@@ -151,10 +157,14 @@ fun ImageView.loadRadius(context: Context,url: String?,radius:Int){
 
     url?.let {
         if (it.isEmpty()){ return }
+        val subs = it.split("/")
+        val last = subs.last()
+        val dir = context.getExternalFilesDir(null)
+        val file = File(dir,DownloadConfigure.resTargetName + File.separator + last)
         val corners = RoundedCorners(radius)
         val options = RequestOptions().placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_foreground).transform(corners)
-        val path = NetRequest.IMAGE_BASE_PATH + it
-        Glide.with(context).load(path).apply(options).into(this)
+//        val path = NetRequest.IMAGE_BASE_PATH + it
+        Glide.with(context).load(file).apply(options).into(this)
     }
 }
 /**
@@ -163,9 +173,13 @@ fun ImageView.loadRadius(context: Context,url: String?,radius:Int){
 fun ImageView.loadCircle(context: Context,url: String?){
     url?.let {
         if (it.isEmpty()){ return }
+        val subs = it.split("/")
+        val last = subs.last()
+        val dir = context.getExternalFilesDir(null)
+        val file = File(dir,DownloadConfigure.resTargetName + File.separator + last)
         val options = RequestOptions().placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_background).transform(CWCircleTransform())
-        val path = NetRequest.IMAGE_BASE_PATH + it
-        Glide.with(context).load(path).apply(options).into(this)
+//        val path = NetRequest.IMAGE_BASE_PATH + it
+        Glide.with(context).load(file).apply(options).into(this)
     }
 }
 

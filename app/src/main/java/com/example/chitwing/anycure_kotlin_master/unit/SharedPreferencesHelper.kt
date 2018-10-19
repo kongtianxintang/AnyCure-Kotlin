@@ -23,6 +23,8 @@ object  SharedPreferencesHelper {
     const val hintKey = "hintKey"
     //存储手机号码
     const val telephone = "phone"
+    //存储数据更新时间
+    const val timeKey = "update_time"
 
     /**
      * 获取

@@ -13,6 +13,7 @@ import com.example.chitwing.anycure_kotlin_master.model.Recipe
 import com.example.chitwing.anycure_kotlin_master.model.RecipeUsage
 import com.example.chitwing.anycure_kotlin_master.unit.loader
 import com.google.gson.Gson
+import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.activity_ot_prepare.*
 
 class OtPrepareActivity : BaseActivity() {
@@ -23,6 +24,11 @@ class OtPrepareActivity : BaseActivity() {
     private val mProvider:OtPrepareProvider by lazy {
         return@lazy OtPrepareProvider(this)
     }
+
+    /**
+     * 标示此外设是否一切准备就绪
+     * */
+    var mIsSuccessful = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -130,17 +136,21 @@ class OtPrepareActivity : BaseActivity() {
         mProvider.switchIndex(arg)
     }
 
-
     /**
-     * 销毁的时候 删除最新链接的一个外设
+     * 删除最后一个外设
      * */
-    override fun onBackPressed() {
-        super.onBackPressed()
-        /**
-         * finish 先于 onBackPressed 执行
-         * */
-        val last = CWBleManager.mCWDevices.lastOrNull()
-        last?.removeSelf()
+    private fun removeLastDevice(){
+        if (!mIsSuccessful){
+            val last = CWBleManager.mCWDevices.lastOrNull()
+            last?.removeSelf()
+            Logger.d("删除最后一个外设")
+        }
+    }
+
+
+    override fun finish() {
+        super.finish()
+        removeLastDevice()
     }
 
 

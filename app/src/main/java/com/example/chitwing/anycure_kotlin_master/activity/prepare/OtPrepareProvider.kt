@@ -66,6 +66,7 @@ class OtPrepareProvider (private val context:OtPrepareActivity): CWBaseProvider(
      * */
     private fun enterCurePage(){
         context.setResult(0x01)
+        context.mIsSuccessful = true
         context.finish()
     }
 

@@ -94,6 +94,7 @@
     <string name="re_fetch_data">重新加载数据</string>
 
     <string name="app_update">立刻升级</string>
+    <string name="shared_activity">分享软件</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

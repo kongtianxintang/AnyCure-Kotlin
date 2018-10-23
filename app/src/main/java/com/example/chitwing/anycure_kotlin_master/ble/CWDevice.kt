@@ -496,7 +496,7 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
      * 结束
      * */
     fun endCureAction(){
-        if (isError){
+        if (isError || !isConnect){
             endCureNotify()
         }else{
             gattWrite.cwBleWriteEndCure()
@@ -648,9 +648,6 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
      * 设备的连接状况
      * */
     fun setDeviceConnect(arg:Boolean){
-        if (!arg){
-            isError = true
-        }
         isConnect = arg
         mCallback?.deviceConnect(arg,this)
     }

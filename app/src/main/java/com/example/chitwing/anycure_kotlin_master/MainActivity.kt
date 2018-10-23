@@ -14,6 +14,7 @@ import android.view.View
 import android.widget.TextView
 import com.example.chitwing.anycure_kotlin_master.activity.BaseActivity
 import com.example.chitwing.anycure_kotlin_master.activity.prepare.PrepareProvider
+import com.example.chitwing.anycure_kotlin_master.app.MyApp
 import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
 import com.example.chitwing.anycure_kotlin_master.dialog.CWDownloadDialog
 import com.example.chitwing.anycure_kotlin_master.dialog.CWHintDialog
@@ -63,6 +64,8 @@ class MainActivity : BaseActivity() {
         initView()
         fetchData()
         pushHintDialog()
+
+        Unit.customDensity(this, MyApp.getApp())
     }
 
     /**
@@ -316,7 +319,7 @@ class MainActivity : BaseActivity() {
      * 下载图片资源成功
      * */
     fun downloadResSuccessful(){
-        mRecipeFragment?.mAdapter?.notifyDataSetChanged()
+        mRecipeFragment.mAdapter?.notifyDataSetChanged()
     }
 
 }

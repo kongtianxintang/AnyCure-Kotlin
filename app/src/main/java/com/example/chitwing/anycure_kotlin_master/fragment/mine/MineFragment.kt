@@ -19,6 +19,7 @@ import com.example.chitwing.anycure_kotlin_master.R
 import com.example.chitwing.anycure_kotlin_master.activity.LoginActivity
 import com.example.chitwing.anycure_kotlin_master.activity.about.AboutActivity
 import com.example.chitwing.anycure_kotlin_master.activity.bind.BindActivity
+import com.example.chitwing.anycure_kotlin_master.activity.shared.SharedActivity
 import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
 import com.example.chitwing.anycure_kotlin_master.database.DBHelper
 import com.example.chitwing.anycure_kotlin_master.dialog.CWDialog
@@ -38,6 +39,7 @@ import java.io.File
 class MineFragment : BaseFragment() {
 
     private lateinit var mRecyclerView:RecyclerView
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -70,6 +72,10 @@ class MineFragment : BaseFragment() {
                 }
                 2 -> {
                     val intent = Intent(activity!!,AboutActivity ::class.java)
+                    startActivity(intent)
+                }
+                3 -> {
+                    val  intent = Intent(activity!!,SharedActivity ::class.java)
                     startActivity(intent)
                 }
                 else -> { activity?.showToast("功能未开放😂")}

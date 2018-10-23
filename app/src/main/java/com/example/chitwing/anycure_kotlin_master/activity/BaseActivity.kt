@@ -54,7 +54,7 @@ abstract class BaseActivity : AppCompatActivity() {
         /**
         * 自适应
         * */
-        Unit.customDensity(this,MyApp.getApp())
+
 
     }
 

@@ -1,6 +1,7 @@
 package com.example.chitwing.anycure_kotlin_master.main
 
 import android.util.Log
+import com.bumptech.glide.Glide
 import com.example.chitwing.anycure_kotlin_master.MainActivity
 import com.example.chitwing.anycure_kotlin_master.base.CWBaseProvider
 import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
@@ -12,6 +13,7 @@ import com.example.chitwing.anycure_kotlin_master.network.NetRequest
 import com.example.chitwing.anycure_kotlin_master.unit.SharedPreferencesHelper
 import com.example.chitwing.anycure_kotlin_master.unit.Unit
 import com.orhanobut.logger.Logger
+import kotlinx.coroutines.experimental.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -44,7 +46,9 @@ class CWMainProvider(private val  ac:MainActivity): CWBaseProvider(ac){
     override fun fetchDataSource() {
         val update = SharedPreferencesHelper.getObject(SharedPreferencesHelper.timeKey,1.toLong()) as Long
         Logger.d("更新时间->$update")
-        if (update == 1.toLong()){
+        val dic = ac.getExternalFilesDir(null)
+        val file = File(dic,DownloadConfigure.resTargetName)
+        if (update == 1.toLong() || !file.exists()){
             downloadRes()
             return
         }
@@ -61,7 +65,7 @@ class CWMainProvider(private val  ac:MainActivity): CWBaseProvider(ac){
                     val time = it.toLong() * 1000
                     val date = Date(time)
                     val old = Date(update)
-                    Logger.d("时间戳->$time 时间->$date")
+                    Logger.d("时间戳->$time 时间->${date.time}")
                     if (date > old) {
                         downloadRes()
                     }
@@ -146,8 +150,21 @@ class CWMainProvider(private val  ac:MainActivity): CWBaseProvider(ac){
                 Unit.unZip(zip,unzip.path)
                 /**保存好数据刷新时间**/
                 SharedPreferencesHelper.put(SharedPreferencesHelper.timeKey,Date().time)
-                //:成功
-                ac.downloadResSuccessful()
+                val glide = Glide.get(ac)
+                glide.clearMemory()
+                val job = launch {
+                    glide.clearDiskCache()
+                    val cache = Glide.getPhotoCacheDir(ac)
+                    cache?.delete()
+                    Logger.d("清除缓存")
+                    ac.runOnUiThread {
+                        //:成功
+                        Logger.d("更新数据!1")
+                        ac.downloadResSuccessful()
+                        Logger.d("更新数据!2")
+                    }
+                }
+                job.start()
                 mImageSuccess = true
                 mDialog?.dismiss()
             }else{

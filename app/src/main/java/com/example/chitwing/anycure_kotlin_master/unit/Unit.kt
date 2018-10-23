@@ -4,7 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.content.res.Resources
-import android.util.Log
+import android.graphics.Bitmap
 import android.widget.ImageView
 import android.widget.Toast
 import com.bumptech.glide.Glide
@@ -12,14 +12,20 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.chitwing.anycure_kotlin_master.R
 import android.util.TypedValue
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.chitwing.anycure_kotlin_master.app.MyApp
 import com.example.chitwing.anycure_kotlin_master.download.DownloadConfigure
 import com.example.chitwing.anycure_kotlin_master.network.NetRequest
 import com.example.chitwing.anycure_kotlin_master.ui.CWCircleTransform
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.EncodeHintType
+import com.google.zxing.WriterException
+import com.google.zxing.qrcode.QRCodeWriter
+import com.orhanobut.logger.Logger
 import java.io.*
+import java.util.*
 import java.util.zip.ZipEntry
 import java.util.zip.ZipFile
-import java.util.zip.ZipInputStream
 
 
 /***********************************************************
@@ -93,44 +99,50 @@ object Unit {
      * zip解压缩
      * */
     fun unZip(zipFile: File, targetDir: String){
-        val zFile = ZipFile(zipFile)
-        val zList = zFile.entries()
-        var ze: ZipEntry?
-        val buffer = ByteArray(1024 * 4)
         var input: BufferedInputStream? = null
         var output: BufferedOutputStream? = null
         try {
-            while (zList.hasMoreElements()){
-                ze = zList.nextElement()
-                if (ze.isDirectory){
-                    val path = targetDir + File.separator + ze.name
-                    val f = File(path)
-                    f.mkdir()
-                    continue
-                }
-                val folder = File(targetDir,ze.name)
-                if (!folder.exists()){
-                    folder.createNewFile()
-                }
-                output = BufferedOutputStream(FileOutputStream(folder))
-                input = BufferedInputStream(zFile.getInputStream(ze))
-                var readLen = 0
+            val zFile = ZipFile(zipFile)
+            val zList = zFile.entries()
+            var ze: ZipEntry?
+            val buffer = ByteArray(1024 * 4)
+            try {
+                while (zList.hasMoreElements()){
+                    ze = zList.nextElement()
+                    if (ze.isDirectory){
+                        val path = targetDir + File.separator + ze.name
+                        val f = File(path)
+                        f.mkdir()
+                        continue
+                    }
+                    val folder = File(targetDir,ze.name)
+                    if (!folder.exists()){
+                        folder.createNewFile()
+                    }
+                    output = BufferedOutputStream(FileOutputStream(folder))
+                    input = BufferedInputStream(zFile.getInputStream(ze))
+                    var readLen = 0
 
-                while (input.read(buffer,0,1024).apply { readLen = this } > 0){
-                    output.write(buffer,0,readLen)
-                }
+                    while (input.read(buffer,0,1024).apply { readLen = this } > 0){
+                        output.write(buffer,0,readLen)
+                    }
 
-                input.close()
-                output.close()
+                    input.close()
+                    output.close()
+                }
+            }catch (e: Exception){
+                e.printStackTrace()
             }
         }catch (e: Exception){
-            Log.d("unzip","解压失败")
+            e.printStackTrace()
         }
         finally {
             input?.close()
             output?.close()
         }
     }
+
+
 }
 
 /**
@@ -145,6 +157,7 @@ fun ImageView.loader(context: Context, url:String?){
         val dir = context.getExternalFilesDir(null)
         val file = File(dir,DownloadConfigure.resTargetName + File.separator + last)
         val options = RequestOptions().error(R.drawable.ic_launcher_background)
+        options.diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
 //        val path = NetRequest.IMAGE_BASE_PATH + it
         Glide.with(context).load(file).apply(options).into(this)
     }
@@ -164,6 +177,7 @@ fun ImageView.loadRadius(context: Context,url: String?,radius:Int){
         val corners = RoundedCorners(radius)
         val options = RequestOptions().placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_foreground).transform(corners)
 //        val path = NetRequest.IMAGE_BASE_PATH + it
+        options.diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
         Glide.with(context).load(file).apply(options).into(this)
     }
 }
@@ -178,6 +192,7 @@ fun ImageView.loadCircle(context: Context,url: String?){
         val dir = context.getExternalFilesDir(null)
         val file = File(dir,DownloadConfigure.resTargetName + File.separator + last)
         val options = RequestOptions().placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_background).transform(CWCircleTransform())
+        options.diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
 //        val path = NetRequest.IMAGE_BASE_PATH + it
         Glide.with(context).load(file).apply(options).into(this)
     }
@@ -198,5 +213,6 @@ fun ImageView.loadCircle(context: Context,file: File){
 fun Context.showToast(text:String){
     Toast.makeText(this,text,Toast.LENGTH_SHORT).show()
 }
+
 
 

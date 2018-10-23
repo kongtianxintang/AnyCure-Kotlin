@@ -10,6 +10,7 @@ import com.example.chitwing.anycure_kotlin_master.network.NetRequest
 import com.google.gson.Gson
 import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.content_about.*
+import kotlinx.coroutines.experimental.launch
 
 class AboutActivity : BaseActivity() {
 
@@ -17,7 +18,11 @@ class AboutActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_about)
-        initView()
+
+        val job = launch {
+            runOnUiThread { initView() }
+        }
+        job.start()
     }
 
     override fun initView() {

@@ -3,6 +3,7 @@ package com.example.chitwing.anycure_kotlin_master.network
 import android.util.Log
 import com.example.chitwing.anycure_kotlin_master.model.*
 import com.google.gson.Gson
+import com.orhanobut.logger.Logger
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
@@ -48,7 +49,7 @@ object NetRequest {
 
     private fun getLogger() = HttpLoggingInterceptor( object : HttpLoggingInterceptor.Logger{
         override fun log(message: String?) {
-            Log.d("网络请求类","json->$message")
+            Logger.d("网络请求类: json->$message")
         }
     }).setLevel(HttpLoggingInterceptor.Level.BODY)
 

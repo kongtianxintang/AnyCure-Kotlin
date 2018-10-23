@@ -9,6 +9,7 @@ import android.util.Log
 import com.example.chitwing.anycure_kotlin_master.BuildConfig
 import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
 import com.example.chitwing.anycure_kotlin_master.model.MyObjectBox
+import com.example.chitwing.anycure_kotlin_master.unit.Unit
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 import io.objectbox.BoxStore
@@ -42,6 +43,7 @@ class MyApp :Application() {
 
         ProcessLifecycleOwner.get().lifecycle.addObserver(MyLifecycle())
         initLogger()
+
     }
 
     inner class MyLifecycle: LifecycleObserver {

@@ -2,7 +2,6 @@ package com.example.chitwing.anycure_kotlin_master.ot
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +9,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.example.chitwing.anycure_kotlin_master.R
 import com.example.chitwing.anycure_kotlin_master.model.Recipe
-import com.example.chitwing.anycure_kotlin_master.network.NetRequest
 import com.example.chitwing.anycure_kotlin_master.unit.loader
 
 /***********************************************************
@@ -20,7 +18,7 @@ import com.example.chitwing.anycure_kotlin_master.unit.loader
  * Author:chitwing
  * Date:  2018/8/22
  * QQ/Tel/Mail:383118832
- * Description:
+ * Description: 特别组(保健按摩)
  * Others:新手勿喷
  * Modifier:
  * Reason:

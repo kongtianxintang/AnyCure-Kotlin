@@ -46,6 +46,7 @@ class RecipeAdapter(private val dataSet:List<Recipe>,val context: Context) :Recy
         val item = dataSet[position]
         holder as RecipeAdapter.ViewHolder
         holder.mTextView.text = item.recipeName
+        Logger.d("处方名称->${item.recipeName}")
         holder.mDesc.text = item.recipeUse
         item.recipeIcon?.let {
             val path = NetRequest.IMAGE_BASE_PATH + it

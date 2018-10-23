@@ -28,6 +28,22 @@ enum class CWChannel {
     None;
 
     /**
+     * 产权
+     * */
+    val copyright: String by lazy {
+        when (this){
+            ALL -> return@lazy "Copyright © 2018 东莞捷荣技术股份有限公司"
+            ChitWing -> return@lazy "捷荣"
+            MingYi -> return@lazy "Copyright © 2018 名医"
+            PingAn -> return@lazy "Copyright © 2018 平安"
+            CTT -> return@lazy "Copyright © 2018 康辉"
+            QuanJian -> return@lazy "Copyright © 2018 权健"
+            Other -> return@lazy "Copyright © 2018 深圳迈瑞铂通讯科技有限公司"
+            else -> return@lazy "Copyright © 2018 东莞捷荣技术股份有限公司"
+        }
+    }
+
+    /**
      * 渠道号 中文
      * */
     val CN_CODE:String by lazy {

@@ -18,6 +18,7 @@ import android.widget.TextView
 import com.example.chitwing.anycure_kotlin_master.R
 import com.example.chitwing.anycure_kotlin_master.activity.LoginActivity
 import com.example.chitwing.anycure_kotlin_master.activity.about.AboutActivity
+import com.example.chitwing.anycure_kotlin_master.activity.about.CWAboutActivity
 import com.example.chitwing.anycure_kotlin_master.activity.bind.BindActivity
 import com.example.chitwing.anycure_kotlin_master.activity.shared.SharedActivity
 import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
@@ -71,7 +72,7 @@ class MineFragment : BaseFragment() {
                     startActivity(intent)
                 }
                 2 -> {
-                    val intent = Intent(activity!!,AboutActivity ::class.java)
+                    val intent = Intent(activity!!, CWAboutActivity ::class.java)
                     startActivity(intent)
                 }
                 3 -> {

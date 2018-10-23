@@ -68,11 +68,11 @@
             android:theme="@style/AppTheme.Push" />
         <activity
             android:name=".activity.about.AboutActivity"
-            android:label="@string/title_activity_about"
-             />
-        <activity android:name=".activity.shared.SharedActivity"
-            android:label="@string/shared_activity"
-            />
+            android:label="@string/title_activity_about" />
+        <activity
+            android:name=".activity.shared.SharedActivity"
+            android:label="@string/shared_activity" />
+        <activity android:name=".activity.about.CWAboutActivity"></activity>
     </application>
 
 </manifest>

@@ -1,7 +1,6 @@
 package com.example.chitwing.anycure_kotlin_master.activity.about
 
 import android.os.Bundle
-import android.util.Log
 import android.webkit.*
 import com.example.chitwing.anycure_kotlin_master.BuildConfig
 import com.example.chitwing.anycure_kotlin_master.R
@@ -32,12 +31,10 @@ class AboutActivity : BaseActivity() {
         val injects = InjectsObj()
         mWebView.addJavascriptInterface(injects,"aboutObj")
 
-        //本地html
-//        val path = "file:///android_asset/web/jr-about/about.html"
         //网络html
         val path = NetRequest.CW_HOST_IP + "/about/about.html"
         mWebView.loadUrl(path)
-
+        
         /**
          * 对手机屏幕适应
          * */

@@ -1,5 +1,6 @@
 package com.example.chitwing.anycure_kotlin_master.download
 
+import com.example.chitwing.anycure_kotlin_master.database.DBHelper
 import com.example.chitwing.anycure_kotlin_master.network.NetRequest
 import retrofit2.Call
 import retrofit2.Callback
@@ -25,6 +26,8 @@ class CWCheckVersionProvider {
         call.enqueue(object : Callback<Version> {
             override fun onResponse(call: Call<Version>, response: Response<Version>) {
                 response.body()?.let {
+                    DBHelper.removeAll(Version::class.java)
+                    DBHelper.insert(it,Version::class.java)
                     when (it.code){
                         1 -> {
                             callback?.checkVersion(true,it.url,it.content,it.version)

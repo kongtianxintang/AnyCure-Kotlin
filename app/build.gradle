@@ -14,8 +14,8 @@ android {
         applicationId "com.example.chitwing.anycure_kotlin_master"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 122
-        versionName "1.22"
+        versionCode 123
+        versionName "1.23"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -79,7 +79,7 @@ dependencies {
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
     implementation 'com.7heaven.widgets:segmentcontrol:1.17'
     implementation 'com.github.ybq:Android-SpinKit:1.1.0'//动画
-    implementation "android.arch.lifecycle:extensions:1.1.1"
+    implementation "android.arch.lifecycle:extensions:1.1.1"//生命周期
     implementation "com.orhanobut:logger:2.2.0"//logger信息
     implementation 'com.google.zxing:core:3.3.0'//二维码
     implementation 'com.google.zxing:android-core:3.3.0'//二维码

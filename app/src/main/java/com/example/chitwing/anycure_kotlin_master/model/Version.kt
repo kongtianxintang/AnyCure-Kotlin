@@ -1,5 +1,7 @@
 package com.example.chitwing.anycure_kotlin_master.model
 
+import io.objectbox.annotation.Entity
+
 /***********************************************************
  * 版权所有,2018,Chitwing.
  * Copyright(C),2018,Chitwing co. LTD.All rights reserved.
@@ -12,7 +14,8 @@ package com.example.chitwing.anycure_kotlin_master.model
  * Modifier:
  * Reason:
  *************************************************************/
-class Version {
+@Entity
+class Version :BaseData(){
     var code:Int = 0
     var version: String? = null
     var content: String? = null

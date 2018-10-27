@@ -1,6 +1,6 @@
 package com.example.chitwing.anycure_kotlin_master.ble
 
-import android.bluetooth.BluetoothDevice
+import android.bluetooth.le.ScanResult
 
 /***********************************************************
  * 版权所有,2018,Chitwing.
@@ -18,6 +18,6 @@ interface CWScanCallback {
     /**
      * 发现的设备
      * */
-    fun discoveryDevice(item: BluetoothDevice,manager:CWBleManager)
+    fun discoveryDevice(item: ScanResult, manager:CWBleManager)
 
 }

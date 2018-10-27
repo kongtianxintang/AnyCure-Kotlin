@@ -83,7 +83,9 @@ class MyApp :Application() {
         Logger.addLogAdapter(object : AndroidLogAdapter(){
             override fun isLoggable(priority: Int, tag: String?): Boolean {
                 return BuildConfig.DEBUG
+//                return false
             }
+
         })
     }
 

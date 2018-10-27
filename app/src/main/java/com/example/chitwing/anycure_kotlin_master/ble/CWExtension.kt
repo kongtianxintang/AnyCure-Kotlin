@@ -1,7 +1,10 @@
 package com.example.chitwing.anycure_kotlin_master.ble
 
 import android.bluetooth.BluetoothDevice
+import android.bluetooth.le.ScanResult
+import android.os.ParcelUuid
 import android.util.Log
+import java.text.DecimalFormat
 
 /***********************************************************
  * 版权所有,2018,Chitwing.
@@ -24,9 +27,9 @@ enum class CWDeviceType{
  * */
 fun BluetoothDevice.deviceType() :CWDeviceType {
     if (name.contains("MRB_")){
-        return CWDeviceType.New
+        return CWDeviceType.Old
     }
-    return CWDeviceType.Old
+    return CWDeviceType.New
 }
 
 /**
@@ -35,7 +38,7 @@ fun BluetoothDevice.deviceType() :CWDeviceType {
 fun BluetoothDevice.channelCode() :String?{
     val type = deviceType()
     when(type){
-        CWDeviceType.Old -> {
+        CWDeviceType.New -> {
             return null
         }
         else -> {
@@ -46,3 +49,33 @@ fun BluetoothDevice.channelCode() :String?{
         }
     }
 }
+
+/**
+ * 从广播包里获取渠道号
+ * */
+val ScanResult.channelCode: String?
+    get():String?{
+        val pUuid = ParcelUuid(CWGattAttributes.Cw_Service_Data)
+        val data = this.scanRecord.getServiceData(pUuid)
+        val subs = data.map { val t = it.toInt()
+            if (t !in 0 .. 255){
+                t and 0xff
+            }else{
+                t
+            }
+        }
+        var code:String? = null
+        //todo: 隐患 担心到了10以后咋整
+        val format = DecimalFormat("00")
+        if (subs.count() > 1){
+            for (i in 0 until 2){
+                val t = subs[i]
+                if (code == null){
+                    code = format.format(t)
+                }else {
+                    code += format.format(t)
+                }
+            }
+        }
+        return code
+    }

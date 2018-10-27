@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothDevice
 import android.content.DialogInterface
 import android.os.Bundle
 import android.app.DialogFragment
+import android.bluetooth.le.ScanResult
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
@@ -94,17 +95,18 @@ class BleDialog : DialogFragment() {
      * 扫描回调
      * */
     private val mScanCallback = object :CWScanCallback {
-        override fun discoveryDevice(item: BluetoothDevice, manager: CWBleManager) {
-            val device = mSaveDevices?.find { it.mac == item.address }
+        override fun discoveryDevice(item: ScanResult, manager: CWBleManager) {
+            val device = mSaveDevices?.find { it.mac == item.device.address }
             device?.let {
                 if (mDevice != null){
                     return@let
                 }
-                mDevice = item
-                manager.connect(item)
+                mDevice = item.device
+                manager.connect(item.device)
                 manager.stopScanDevice()
             }
         }
+
     }
 
     /**

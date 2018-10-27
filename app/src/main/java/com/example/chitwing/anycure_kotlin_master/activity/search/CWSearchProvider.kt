@@ -1,6 +1,7 @@
 package com.example.chitwing.anycure_kotlin_master.activity.search
 
 import android.bluetooth.BluetoothDevice
+import android.bluetooth.le.ScanResult
 import android.os.Build
 import android.util.Log
 import com.example.chitwing.anycure_kotlin_master.base.CWBaseProvider
@@ -46,11 +47,11 @@ class CWSearchProvider(private val context: SearchActivity) :CWBaseProvider(cont
         CWBleManager.setStatusCallback(bleStatusCallback)
 
         CWBleManager.setScanCallback(object : CWScanCallback{
-            override fun discoveryDevice(item: BluetoothDevice, manager: CWBleManager) {
-                if (!context.mDataSet.contains(item)){
-                    val cw = mBinds.find { it.mac == item.address }
+            override fun discoveryDevice(item: ScanResult, manager: CWBleManager) {
+                if (!context.mDataSet.contains(item.device)){
+                    val cw = mBinds.find { it.mac == item.device.address }
                     if (cw == null){
-                        context.mDataSet.add(item)
+                        context.mDataSet.add(item.device)
                         context.mAdapter!!.notifyDataSetChanged()
                     }
                 }

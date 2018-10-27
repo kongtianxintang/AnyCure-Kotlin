@@ -12,13 +12,10 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Handler
 import android.os.ParcelUuid
-import android.util.Log
 import com.example.chitwing.anycure_kotlin_master.app.MyApp
 import com.orhanobut.logger.Logger
-import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
-
 /***********************************************************
  * 版权所有,2018,Chitwing.
  * Copyright(C),2018,Chitwing co. LTD.All rights reserved.
@@ -175,29 +172,22 @@ object  CWBleManager {
                      * 旧的设备都可以链接
                      * 新的设备则需要判断 client 与 设备为同一个渠道
                      * */
-                    val code = it.device.channelCode()
-                    Logger.d("设备名称${it.device.name} 渠道号:$code")
+                    Logger.d("设备名称${it.device.name}")
                     val type = it.device.deviceType()
-                    when(type){
-                        CWDeviceType.Old -> {
-//                            mDevices.add(it.device)
-//                            mScanCallback!!.discoveryDevice(it.device,this@CWBleManager)
+                    val code = if (type == CWDeviceType.Old) it.device.channelCode() else it.channelCode
+                    when(configure.channel){//如果为自己有渠道 则都可以链接
+                        CWChannel.ChitWing,CWChannel.ALL -> {
+                            mDevices.add(it.device)
+                            mScanCallback!!.discoveryDevice(it,this@CWBleManager)
                         }
                         else -> {
-                            when(configure.channel){//如果为自己有渠道 则都可以链接
-                                CWChannel.ChitWing,CWChannel.ALL -> {
-                                    mDevices.add(it.device)
-                                    mScanCallback!!.discoveryDevice(it.device,this@CWBleManager)
-                                }
-                                else -> {
-                                    if (code == configure.channel.SHORT_NUM_CODE){
-                                        mDevices.add(it.device)
-                                        mScanCallback!!.discoveryDevice(it.device,this@CWBleManager)
-                                    }
-                                }
+                            Logger.d("code->$code 本地->#$configure.channel.SHORT_NUM_CODE")
+                            if (code == configure.channel.SHORT_NUM_CODE){
+                                mDevices.add(it.device)
+                                mScanCallback!!.discoveryDevice(it,this@CWBleManager)
                             }
                         }
-                        }
+                    }
                     }
                 }
         }

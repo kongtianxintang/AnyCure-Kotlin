@@ -207,6 +207,30 @@ fun ImageView.loadCircle(context: Context,file: File){
 }
 
 /**
+ * 扩展imageView 方法 加载网络图片 圆形
+ * */
+fun ImageView.loadCircleRemoteUrl(ac: Context,remoteUrl:String?){
+    remoteUrl?.let {
+        if (it.isEmpty()){ return }
+        val options = RequestOptions().placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_background).transform(CWCircleTransform())
+        val path = NetRequest.IMAGE_BASE_PATH + it
+        Glide.with(context).load(path).apply(options).into(this)
+    }
+}
+
+/**
+ * 扩展imageView 方法 加载网络图片
+ * */
+fun ImageView.loadCircleUrl(ac: Context,remoteUrl:String?){
+    remoteUrl?.let {
+        if (it.isEmpty()){ return }
+        val options = RequestOptions().placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_background)
+        val path = NetRequest.IMAGE_BASE_PATH + it
+        Glide.with(context).load(path).apply(options).into(this)
+    }
+}
+
+/**
  * 扩展Context方法
  * 显示toast
  * */

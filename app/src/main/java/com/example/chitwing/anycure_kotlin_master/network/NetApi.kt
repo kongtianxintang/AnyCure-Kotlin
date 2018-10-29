@@ -1,7 +1,6 @@
 package com.example.chitwing.anycure_kotlin_master.network
 
 import com.example.chitwing.anycure_kotlin_master.model.*
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
 

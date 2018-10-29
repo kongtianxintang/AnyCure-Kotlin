@@ -439,6 +439,7 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
         }else{
             isError = true
             mCallback?.prepareFail("通信编号错误",this)
+            endCureAction()
         }
 
     }

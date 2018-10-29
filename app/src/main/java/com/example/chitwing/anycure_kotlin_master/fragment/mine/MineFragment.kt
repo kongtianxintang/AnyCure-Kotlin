@@ -92,7 +92,7 @@ class MineFragment : BaseFragment() {
         val logs = DBHelper.findAll(Login ::class.java)
         val log = logs?.lastOrNull()
         log?.let {
-            icon.loadCircle(this.activity!!,it.icon)
+            icon.loadCircleRemoteUrl(this.activity!!,it.icon)
         }
         val phone = SharedPreferencesHelper.getObject(SharedPreferencesHelper.telephone,"134 **** 2934") as String
         val temp = phone.replaceRange(3 until 7,"****")

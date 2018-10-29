@@ -6,6 +6,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import com.example.chitwing.anycure_kotlin_master.model.Version
+import com.orhanobut.logger.Logger
 
 /***********************************************************
  * 版权所有,2018,Chitwing.
@@ -28,6 +29,7 @@ class CWCheckVersionProvider {
                 response.body()?.let {
                     DBHelper.removeAll(Version::class.java)
                     DBHelper.insert(it,Version::class.java)
+                    Logger.d("版本更新->url:${it.url} content:${it.content} ver:${it.version}")
                     when (it.code){
                         1 -> {
                             callback?.checkVersion(true,it.url,it.content,it.version)

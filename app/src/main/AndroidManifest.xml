@@ -36,9 +36,11 @@
 
         <activity
             android:name=".MainActivity"
+            android:screenOrientation="portrait"
             android:label="@string/main_title" />
         <activity
             android:name=".launch.LaunchActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Launch">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -49,30 +51,41 @@
         <activity
             android:name=".activity.LoginActivity"
             android:label="@string/title_activity_login"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.bind.BindActivity"
+            android:screenOrientation="portrait"
             android:label="@string/bind_title" />
         <activity
             android:name=".activity.search.SearchActivity"
+            android:screenOrientation="portrait"
             android:label="@string/search_title" />
         <activity
             android:name=".activity.prepare.PrepareActivity"
+            android:screenOrientation="portrait"
             android:label="@string/prepare_title" />
         <activity
             android:name=".activity.prepare.OtPrepareActivity"
+            android:screenOrientation="portrait"
             android:label="@string/ot_prepare_title" />
         <activity
             android:name=".activity.register.CWRegisterActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_cwregister"
             android:theme="@style/AppTheme.Push" />
         <activity
             android:name=".activity.about.AboutActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_about" />
         <activity
             android:name=".activity.shared.SharedActivity"
+            android:screenOrientation="portrait"
             android:label="@string/shared_activity" />
-        <activity android:name=".activity.about.CWAboutActivity"></activity>
+        <activity
+            android:name=".activity.about.CWAboutActivity"
+            android:screenOrientation="portrait"
+            />
     </application>
 
 </manifest>

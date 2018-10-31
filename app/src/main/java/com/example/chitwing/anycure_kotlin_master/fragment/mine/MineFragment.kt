@@ -64,22 +64,16 @@ class MineFragment : BaseFragment() {
         val data = listOf(device,help,about,share)
         val mad = OtMineAdapter(data,R.layout.mine_item)
 
+        val subs = listOf(BindActivity ::class.java,null,CWAboutActivity ::class.java,SharedActivity ::class.java)
+
         mRecyclerView.adapter = mad
         mad.setOnItemClickListener { _, _, position ->
-            when (position){
-                0 -> {
-                    val intent = Intent(activity!!,BindActivity ::class.java)
-                    startActivity(intent)
-                }
-                2 -> {
-                    val intent = Intent(activity!!, CWAboutActivity ::class.java)
-                    startActivity(intent)
-                }
-                3 -> {
-                    val  intent = Intent(activity!!,SharedActivity ::class.java)
-                    startActivity(intent)
-                }
-                else -> { activity?.showToast("功能未开放😂")}
+            val obj = subs[position]
+            if (obj == null) {
+                activity?.showToast("功能未开放哦")
+            }else{
+                val intent = Intent(this.activity!!,obj)
+                startActivity(intent)
             }
 
         }

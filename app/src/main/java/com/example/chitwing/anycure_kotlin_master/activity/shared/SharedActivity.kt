@@ -9,6 +9,7 @@ import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
 import com.example.chitwing.anycure_kotlin_master.network.NetRequest
 import com.example.chitwing.anycure_kotlin_master.unit.QRcodeUnit
 import com.orhanobut.logger.Logger
+import kotlinx.coroutines.experimental.launch
 
 class SharedActivity : BaseActivity() {
 
@@ -27,13 +28,20 @@ class SharedActivity : BaseActivity() {
     }
 
     override fun initView() {
-        val str = NetRequest.CW_HOST_IP + "/client/" + CWBleManager.configure.channel.NUM_CODE
-        val s = R.mipmap.app_icon
-        val b = BitmapFactory.decodeResource(resources,s)
-        val bitmap = QRcodeUnit.createQRCodeWithLogo(str,b)
+
         mQRCoder = findViewById(R.id.mQRCode)
-        mQRCoder?.setImageBitmap(bitmap)
-        Logger.d("测试->bitmap->$bitmap  qrcode->$mQRCoder")
+
+        val job = launch {
+            val str = NetRequest.CW_HOST_IP + "/client/" + CWBleManager.configure.channel.NUM_CODE
+            val s = R.mipmap.app_icon
+            val b = BitmapFactory.decodeResource(resources,s)
+            val bitmap = QRcodeUnit.createQRCodeWithLogo(str,b)
+            runOnUiThread {
+                mQRCoder?.setImageBitmap(bitmap)
+            }
+        }
+
+        job.start()
     }
 
     override fun onDestroy() {

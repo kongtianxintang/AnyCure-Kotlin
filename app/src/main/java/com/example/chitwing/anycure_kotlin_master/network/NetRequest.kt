@@ -116,6 +116,14 @@ object NetRequest {
         val body = createPair(map)
         return api.dataRefresh(body)
     }
+
+    /**
+     * 忘记密码
+     * */
+    fun forgetPasswordAction(map: Map<String, String>): Call<ForgetBean>{
+        val body = createPair(map)
+        return api.forgetPassword(body)
+    }
     /**
      * 配置参数
      * */

@@ -2,6 +2,7 @@ package com.example.chitwing.anycure_kotlin_master.activity.register
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.AbsoluteSizeSpan
@@ -39,8 +40,7 @@ class RegisterFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val type = activity?.intent?.extras?.getInt("type")
-        configureTitle(type!!)
+        val type = (activity as? CWRegisterActivity)?.type
         initView()
         fetchData(type)
     }
@@ -58,17 +58,15 @@ class RegisterFragment : BaseFragment() {
         listener?.onFragmentNextStep()
     }
 
-    private fun fetchData(type:Int?) {
+    private fun fetchData(type:CWPasswordType?) {
         type?.let {
-            configureTitle(it)
             when(it){
-                1 -> {
+                CWPasswordType.Register -> {
                     configureHasAccount()
                 }
-                2 -> {
+                CWPasswordType.Forget -> {
                     hiddenHasAccount()
                 }
-                else -> {}
             }
         }
     }
@@ -81,7 +79,7 @@ class RegisterFragment : BaseFragment() {
     private fun configureHasAccount(){
         val account = "已有账号 "
         val login = "登录"
-        val color = ForegroundColorSpan(resources.getColor(R.color.app_gray))
+        val color = ForegroundColorSpan(ContextCompat.getColor(this.activity!!,R.color.app_gray))
         val size = AbsoluteSizeSpan(Unit.dip2px(15f))
 
         val spanBuilder = SpannableStringBuilder(account)
@@ -91,7 +89,7 @@ class RegisterFragment : BaseFragment() {
 
         spanBuilder.append(login)
 
-        val normal = ForegroundColorSpan(resources.getColor(R.color.main))
+        val normal = ForegroundColorSpan(ContextCompat.getColor(this.activity!!,R.color.main))
         val normalSize = AbsoluteSizeSpan(Unit.dip2px(17f))
         spanBuilder.setSpan(normal,account.length,spanBuilder.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         spanBuilder.setSpan(normalSize,account.length,spanBuilder.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -103,11 +101,6 @@ class RegisterFragment : BaseFragment() {
         listener = null
     }
 
-    private fun configureTitle(type:Int){
-        val ac = activity as? CWRegisterActivity
-        val str = if (type == 1) "手机号注册" else "忘记密码"
-        ac?.customTitle?.text = str
-    }
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -117,22 +110,5 @@ class RegisterFragment : BaseFragment() {
     interface OnFragmentInteractionListener {
         fun onFragmentNextStep()
         fun onFragmentLoginAction()
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @return A new instance of fragment RegisterFragment.
-         */
-        @JvmStatic
-        fun newInstance(param1: Int) =
-                RegisterFragment().apply {
-                    arguments = Bundle().apply {
-                        putInt(ARG_TYPE,param1)
-                    }
-                }
     }
 }

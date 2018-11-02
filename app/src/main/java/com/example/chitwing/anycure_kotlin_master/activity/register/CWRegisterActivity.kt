@@ -11,9 +11,11 @@ import android.util.Log
 import com.example.chitwing.anycure_kotlin_master.R
 import com.example.chitwing.anycure_kotlin_master.activity.BaseActivity
 import com.example.chitwing.anycure_kotlin_master.model.CWRegister
+import com.example.chitwing.anycure_kotlin_master.model.ForgetBean
 import com.example.chitwing.anycure_kotlin_master.network.NetRequest
 import com.example.chitwing.anycure_kotlin_master.unit.CWRegex
 import com.example.chitwing.anycure_kotlin_master.unit.showToast
+import com.orhanobut.logger.Logger
 
 import kotlinx.android.synthetic.main.activity_cwregister.*
 import kotlinx.android.synthetic.main.fragment_register.*
@@ -22,8 +24,25 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
 
+enum class CWPasswordType {
+
+    //注册,忘记密码
+    Register,
+    Forget;
+
+    val desc by lazy {
+        when(this){
+            Register -> return@lazy "手机号注册"
+            else -> return@lazy "忘记密码"
+        }
+    }
+}
 class CWRegisterActivity : BaseActivity() {
 
+    /**
+     * 类型 -
+     * */
+    var type: CWPasswordType = CWPasswordType.Register
     //输入手机号～
     private var mRegisterFragment:RegisterFragment? = null
     //验证码
@@ -36,7 +55,6 @@ class CWRegisterActivity : BaseActivity() {
     private var mPasswordFragment: CWPasswordFragment? = null
     //服务器下发的验证码～
     var mCodes:String? = null
-    // let body = ["mobile":phone,"passwd":pw,"sex":sexStr,"birthdate":dateStr,"imei":imei,"city":city];
     //密码
     private var mPassWord:String? = null
     //性别
@@ -54,22 +72,25 @@ class CWRegisterActivity : BaseActivity() {
     }
 
     override fun initView() {
-        val type = intent.extras.getInt("type")
-        mRegisterFragment = RegisterFragment.newInstance(type)
+        //配置类型
+        val tempType = intent.extras.get("type") as CWPasswordType
+        this.type = tempType
+
+        mRegisterFragment = RegisterFragment()
         mRegisterFragment!!.listener = mRegisterInterface
         val transaction = supportFragmentManager.beginTransaction()
         transaction.add(R.id.cw_register_content_view,mRegisterFragment!!)
         transaction.show(mRegisterFragment!!)
         transaction.commit()
 
-        customTitle?.text = getText(R.string.title_activity_register)
+        customTitle?.text = this.type.desc
     }
 
     override fun fetchData() {
 
     }
 
-     private val mRegisterInterface = object :RegisterFragment.OnFragmentInteractionListener {
+    private val mRegisterInterface = object :RegisterFragment.OnFragmentInteractionListener {
 
         override fun onFragmentLoginAction() {
             finish()
@@ -120,7 +141,10 @@ class CWRegisterActivity : BaseActivity() {
         }
         override fun onNextStep(password: String) {
             mPassWord = password
-            registerAction()
+            when (type) {
+                CWPasswordType.Register -> registerAction()
+                else -> forgetPasswordAction()
+            }
         }
     }
     /**
@@ -156,6 +180,37 @@ class CWRegisterActivity : BaseActivity() {
                 }
             })
         }
+    }
+
+    /**
+     * 忘记密码
+     * */
+    private fun forgetPasswordAction(){
+        val imei = "imei"
+        val map = mapOf("mobile" to phone!!,"newPwd" to mPassWord!!,"imei" to imei)
+        Logger.d("发送的数据->$map")
+        val request = NetRequest.forgetPasswordAction(map)
+        request.enqueue(object : Callback<ForgetBean> {
+            override fun onFailure(call: Call<ForgetBean>, t: Throwable) {
+                this@CWRegisterActivity.showToast(t.toString())
+            }
+
+            override fun onResponse(call: Call<ForgetBean>, response: Response<ForgetBean>) {
+                val obj = response.body()
+                obj?.let {
+                    when(it.code) {
+                        1000 -> {
+                            this@CWRegisterActivity.showToast("修改密码成功")
+                            finish()
+                        }
+                        else -> {
+                            this@CWRegisterActivity.showToast(it.msg ?: "未知错误")
+                        }
+                    }
+                }
+            }
+        })
+
     }
 
 

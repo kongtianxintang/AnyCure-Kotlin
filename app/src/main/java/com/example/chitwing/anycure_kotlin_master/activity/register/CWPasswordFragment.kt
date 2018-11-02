@@ -39,6 +39,7 @@ class CWPasswordFragment : BaseFragment() {
                 listener?.onNextStep(it)
             }
         }
+        fetchData()
     }
 
 
@@ -61,6 +62,14 @@ class CWPasswordFragment : BaseFragment() {
         return null
     }
 
+    private fun fetchData(){
+        val type = (activity as CWRegisterActivity).type
+        val str = when (type) {
+            CWPasswordType.Register -> "注册"
+            else -> "重置密码"
+        }
+        mRegister.text = str
+    }
 
     override fun onDetach() {
         super.onDetach()

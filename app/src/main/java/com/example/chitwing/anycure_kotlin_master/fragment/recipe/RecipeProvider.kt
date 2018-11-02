@@ -58,7 +58,7 @@ class RecipeProvider(private val context: Context,private val fm:RecipeFragment)
                 if(fm.refreshView!!.isRefreshing){
                     fm.refreshView!!.isRefreshing = false
                 }
-                context.showToast("数据请求失败,${t.toString()}")
+                context.showToast("数据请求失败")
             }
         })
     }

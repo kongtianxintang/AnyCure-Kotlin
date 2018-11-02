@@ -80,4 +80,11 @@ interface NetApi {
     @FormUrlEncoded
     fun dataRefresh(@FieldMap map: Map<String,String>): Call<String>
 
+    /**
+     * 忘记密码
+     * */
+    @POST("/User/changePasswd")
+    @FormUrlEncoded
+    fun forgetPassword(@FieldMap map: Map<String,String>): Call<ForgetBean>
+
 }

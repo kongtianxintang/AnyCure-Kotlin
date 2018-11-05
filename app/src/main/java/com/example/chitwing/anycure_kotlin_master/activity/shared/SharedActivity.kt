@@ -10,6 +10,9 @@ import com.example.chitwing.anycure_kotlin_master.network.NetRequest
 import com.example.chitwing.anycure_kotlin_master.unit.QRcodeUnit
 import com.orhanobut.logger.Logger
 import kotlinx.coroutines.experimental.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class SharedActivity : BaseActivity() {
 

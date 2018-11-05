@@ -32,7 +32,7 @@ class RecipeProvider(private val context: Context,private val fm:RecipeFragment)
         if(!fm.refreshView!!.isRefreshing){
             fm.refreshView!!.isRefreshing = true
         }
-        val map = mapOf("channels" to "00000006")
+        val map = mapOf("channels" to CWBleManager.configure.channel.NUM_CODE)
         val api = NetRequest.fetchRecipeAction(map)
         api.enqueue(object : Callback<List<Recipe>> {
 
@@ -50,7 +50,6 @@ class RecipeProvider(private val context: Context,private val fm:RecipeFragment)
                     if(fm.refreshView!!.isRefreshing){
                         fm.refreshView!!.isRefreshing = false
                     }
-                    context.showToast("数据请求成功")
                 }
             }
 
@@ -58,7 +57,6 @@ class RecipeProvider(private val context: Context,private val fm:RecipeFragment)
                 if(fm.refreshView!!.isRefreshing){
                     fm.refreshView!!.isRefreshing = false
                 }
-                context.showToast("数据请求失败")
             }
         })
     }

@@ -132,14 +132,14 @@ class CWSearchProvider(private val context: SearchActivity) :CWBaseProvider(cont
                 delay(time)
                 finish()
             }
-            job!!.start()
+            job?.start()
         }
     }
 
     fun finish(){
         if (mIsScan){
             CWBleManager.stopScanDevice()
-            job!!.cancel()
+            job?.cancel()
             job = null
         }
         context.resultStatus()

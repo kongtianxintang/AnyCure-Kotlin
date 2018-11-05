@@ -23,6 +23,7 @@ import android.content.Intent
 import android.util.Log
 import com.example.chitwing.anycure_kotlin_master.MainActivity
 import com.example.chitwing.anycure_kotlin_master.R
+import com.example.chitwing.anycure_kotlin_master.activity.register.CWPasswordType
 import com.example.chitwing.anycure_kotlin_master.activity.register.CWRegisterActivity
 import com.example.chitwing.anycure_kotlin_master.database.DBHelper
 import com.example.chitwing.anycure_kotlin_master.model.Login
@@ -61,11 +62,10 @@ class LoginActivity : BaseActivity(), LoaderCallbacks<Cursor> {
     override fun initView() {
 
         registerView.setOnClickListener {
-            createRegisterActivity(1)
+            createRegisterActivity(CWPasswordType.Register)
         }
         forgetPassword.setOnClickListener {
-//            createRegisterActivity(2)
-            showToast("此功能未开放😂")
+            createRegisterActivity(CWPasswordType.Forget)
         }
 
         customTitle?.text = getText(R.string.title_activity_login)
@@ -74,7 +74,7 @@ class LoginActivity : BaseActivity(), LoaderCallbacks<Cursor> {
     /**
      * 创建--1 注册 2 忘记密码
      * */
-    private fun createRegisterActivity(type:Int){
+    private fun createRegisterActivity(type:CWPasswordType){
         val intent = Intent(this@LoginActivity, CWRegisterActivity ::class.java)
         intent.putExtra("type",type)
         startActivity(intent)

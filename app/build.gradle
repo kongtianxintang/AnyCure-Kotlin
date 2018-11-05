@@ -14,8 +14,8 @@ android {
         applicationId "com.example.chitwing.anycure_kotlin_master"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 125
-        versionName "1.25"
+        versionCode 126
+        versionName "1.26"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -83,6 +83,7 @@ dependencies {
     implementation "com.orhanobut:logger:2.2.0"//logger信息
     implementation 'com.google.zxing:core:3.3.0'//二维码
     implementation 'com.google.zxing:android-core:3.3.0'//二维码
+    implementation 'com.tencent.bugly:crashreport:latest.release'//crash收集
     annotationProcessor "android.arch.lifecycle:compiler:1.1.1"
 
     testImplementation 'junit:junit:4.12'

@@ -5,16 +5,15 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
 import com.example.chitwing.anycure_kotlin_master.R
+import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
 import com.example.chitwing.anycure_kotlin_master.fragment.BaseFragment
 import com.example.chitwing.anycure_kotlin_master.model.SMSCode
 import com.example.chitwing.anycure_kotlin_master.network.NetRequest
-import com.example.chitwing.anycure_kotlin_master.unit.showToast
 import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.fragment_sm.*
 import retrofit2.Call
@@ -94,7 +93,7 @@ class SMSFragment : BaseFragment() {
         val typeStr = if (type == 1) "01" else "02"
         map["type"] = typeStr
         map["mobile"] = ac!!.phone!!
-        map["channel"] = "00000006"
+        map["channel"] = CWBleManager.configure.channel.NUM_CODE
         //todo:发送忘记密码 验证码时提示发送失败 请与iOS对比
         val call = NetRequest.fetchSMSCode(map)
         call.enqueue( object :Callback<SMSCode> {
@@ -169,11 +168,15 @@ class SMSFragment : BaseFragment() {
         mTimer!!.schedule(mTimerTask!!, Date(),1000)
     }
 
-    private fun deInitTimer(){
+    /**
+     * 取消倒计时
+     * */
+    fun deInitTimer(){
         mTimer?.cancel()
         mTimer = null
         mTimerTask?.cancel()
         mTimerTask = null
+        Logger.d("定时器置null")
     }
 
     private fun showRegainButton(){

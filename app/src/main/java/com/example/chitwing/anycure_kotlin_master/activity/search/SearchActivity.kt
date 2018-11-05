@@ -16,6 +16,7 @@ import android.util.Log
 import android.view.View
 import com.example.chitwing.anycure_kotlin_master.R
 import com.example.chitwing.anycure_kotlin_master.activity.BaseActivity
+import com.example.chitwing.anycure_kotlin_master.unit.CWUserActionLogManager
 import com.example.chitwing.anycure_kotlin_master.unit.Unit
 import com.example.chitwing.anycure_kotlin_master.unit.showToast
 import com.orhanobut.logger.Logger
@@ -101,6 +102,8 @@ class SearchActivity : BaseActivity() {
             }else{
                 showToast("使用蓝牙需要定位权限")
             }
+            val str = if (g == PackageManager.PERMISSION_GRANTED) "同意定位权限" else "拒绝定位权限"
+            CWUserActionLogManager.permissionRequest(mapOf(CWUserActionLogManager.locationPermission to str))
         }
     }
 

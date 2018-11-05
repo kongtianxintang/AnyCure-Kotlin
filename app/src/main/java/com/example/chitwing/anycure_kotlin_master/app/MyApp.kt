@@ -5,14 +5,14 @@ import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.OnLifecycleEvent
 import android.arch.lifecycle.ProcessLifecycleOwner
-import android.util.Log
 import com.example.chitwing.anycure_kotlin_master.BuildConfig
 import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
 import com.example.chitwing.anycure_kotlin_master.model.MyObjectBox
-import com.example.chitwing.anycure_kotlin_master.unit.Unit
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
+import com.tencent.bugly.crashreport.CrashReport
 import io.objectbox.BoxStore
+import kotlinx.coroutines.experimental.launch
 
 /***********************************************************
  * 版权所有,2018,Chitwing.
@@ -43,7 +43,7 @@ class MyApp :Application() {
 
         ProcessLifecycleOwner.get().lifecycle.addObserver(MyLifecycle())
         initLogger()
-
+        initCrashReport()
     }
 
     inner class MyLifecycle: LifecycleObserver {
@@ -87,6 +87,16 @@ class MyApp :Application() {
             }
 
         })
+    }
+
+    /**
+     * 启动crash收集日志
+     * */
+    private fun initCrashReport(){
+        val job = launch {
+            CrashReport.initCrashReport(this@MyApp,"c1be7386bb",BuildConfig.DEBUG)
+        }
+        job.start()
     }
 
 }

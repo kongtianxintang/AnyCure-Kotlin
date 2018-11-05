@@ -87,4 +87,10 @@ interface NetApi {
     @FormUrlEncoded
     fun forgetPassword(@FieldMap map: Map<String,String>): Call<ForgetBean>
 
+    /**
+     * 用户行为统计
+     * */
+    @POST("/Log/actionLog")
+    @FormUrlEncoded
+    fun userActionLog(@FieldMap map: Map<String,String>): Call<String>
 }

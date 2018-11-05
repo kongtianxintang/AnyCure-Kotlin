@@ -124,6 +124,14 @@ object NetRequest {
         val body = createPair(map)
         return api.forgetPassword(body)
     }
+
+    /**
+     * 用户行为统计
+     * */
+    fun userActionLog(map: Map<String, String>): Call<String>{
+        val body = createPair(map)
+        return api.userActionLog(body)
+    }
     /**
      * 配置参数
      * */

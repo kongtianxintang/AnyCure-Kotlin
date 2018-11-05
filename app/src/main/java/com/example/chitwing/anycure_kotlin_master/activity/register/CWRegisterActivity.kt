@@ -214,4 +214,9 @@ class CWRegisterActivity : BaseActivity() {
     }
 
 
+    override fun finish() {
+        super.finish()
+        mSMSFragment?.deInitTimer()
+    }
+
 }

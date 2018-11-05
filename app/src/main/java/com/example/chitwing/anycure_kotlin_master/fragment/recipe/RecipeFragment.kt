@@ -27,6 +27,7 @@ import com.example.chitwing.anycure_kotlin_master.model.Recipe
 import com.example.chitwing.anycure_kotlin_master.model.RecipeSection
 import com.example.chitwing.anycure_kotlin_master.ot.RecipeInterface
 import com.example.chitwing.anycure_kotlin_master.ot.RecipeSectionAdapter
+import com.example.chitwing.anycure_kotlin_master.unit.CWUserActionLogManager
 import com.example.chitwing.anycure_kotlin_master.unit.showToast
 import com.orhanobut.logger.Logger
 
@@ -185,6 +186,8 @@ class RecipeFragment : BaseFragment() {
                     }else{
                         activity?.showToast("请求权限失败")
                     }
+                    val str = if (it == PackageManager.PERMISSION_GRANTED) "同意定位权限" else "拒绝定位权限"
+                    CWUserActionLogManager.permissionRequest(mapOf(CWUserActionLogManager.locationPermission to str))
                 }
             }
             else -> {

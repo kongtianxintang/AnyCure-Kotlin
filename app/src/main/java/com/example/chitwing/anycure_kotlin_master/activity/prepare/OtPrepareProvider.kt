@@ -6,6 +6,7 @@ import com.example.chitwing.anycure_kotlin_master.ble.CWDevice
 import com.example.chitwing.anycure_kotlin_master.ble.CWDeviceInterface
 import com.example.chitwing.anycure_kotlin_master.database.DBHelper
 import com.example.chitwing.anycure_kotlin_master.dialog.CWDialog
+import com.example.chitwing.anycure_kotlin_master.dialog.CWDialogInterface
 import com.example.chitwing.anycure_kotlin_master.model.PrepareHint
 import com.example.chitwing.anycure_kotlin_master.unit.showToast
 import kotlinx.android.synthetic.main.activity_ot_prepare.*
@@ -109,6 +110,7 @@ class OtPrepareProvider (private val context:OtPrepareActivity): CWBaseProvider(
         override fun prepareFail(error: String, item: CWDevice) {
             context.runOnUiThread {
                 val dialog = CWDialog.Builder().setTitle("提示").setDesc(error).create()
+                dialog.setCallback(dialogInterface)
                 dialog.show(context.fragmentManager,"prepareError")
             }
         }
@@ -157,6 +159,12 @@ class OtPrepareProvider (private val context:OtPrepareActivity): CWBaseProvider(
 
         override fun transferPower(value: Int, item: CWDevice) {
 
+        }
+    }
+
+    private val dialogInterface = object : CWDialogInterface {
+        override fun onClickButton(flag: Boolean, item: CWDialog) {
+            item.dismiss()
         }
     }
 }

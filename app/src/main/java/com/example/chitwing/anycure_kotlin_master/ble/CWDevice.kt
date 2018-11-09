@@ -129,10 +129,18 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
         }
     }
 
+    /**
+     * 处方写入
+     * */
     override fun cwBleRecipeSendIndexCallback(index: Int, total: Int) {
         mRecipeContent?.let {
             if (index == 0) {
-                gattWrite.cwBleWriteLoadingRecipe()
+                val local = it.size / 12 - 1
+                if (total  == local){
+                    gattWrite.cwBleWriteLoadingRecipe()
+                }else {
+                    mCallback?.prepareFail("处方帧数丢失",this)
+                }
             }else{
                 gattWrite.cwBleWriteRecipeContent(index + 1,it)
             }
@@ -445,6 +453,7 @@ data class CWDevice ( val mDevice:BluetoothDevice, var mGatt:BluetoothGatt?):CWG
     }
 
     override fun cwBleSoftwareEndCure(flag: Boolean) {
+        Logger.d("不走吗？")
         endCureNotify()
     }
 

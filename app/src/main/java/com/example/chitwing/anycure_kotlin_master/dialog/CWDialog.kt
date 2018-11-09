@@ -42,6 +42,7 @@ class CWDialog :DialogFragment(){
     private var mIcon:ImageView? = null
     private var mAlone:Button? = null
     private var mCallback:CWDialogInterface? = null
+    private var mIsLayout = false
 
     fun setCallback(callback:CWDialogInterface){
         this.mCallback = callback
@@ -79,23 +80,29 @@ class CWDialog :DialogFragment(){
     override fun onStart() {
         super.onStart()
         dialog?.let {
-            val dm = DisplayMetrics()
-            activity!!.windowManager!!.defaultDisplay.getMetrics(dm)
-            it.window.setLayout((dm.widthPixels * 0.75).toInt(),ViewGroup.LayoutParams.WRAP_CONTENT)
+            if (!mIsLayout){
+                mIsLayout = true
+                val dm = DisplayMetrics()
+                activity!!.windowManager!!.defaultDisplay.getMetrics(dm)
+                it.window.setLayout((dm.widthPixels * 0.75).toInt(),ViewGroup.LayoutParams.WRAP_CONTENT)
+            }
         }
     }
 
 
     private fun configureSubviews(){
         mSure?.setOnClickListener {
+            this.dismiss()
             mCallback?.onClickButton(true,this)
         }
 
         mCancel?.setOnClickListener {
+            this.dismiss()
             mCallback?.onClickButton(false,this)
         }
 
         mAlone?.setOnClickListener {
+            this.dismiss()
             mCallback?.onClickButton(true,this)
         }
 

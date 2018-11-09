@@ -1,10 +1,6 @@
 package com.example.chitwing.anycure_kotlin_master.unit
 
-import android.content.Context
 import android.os.Build
-import android.telephony.TelephonyManager
-import com.example.chitwing.anycure_kotlin_master.BuildConfig
-import com.example.chitwing.anycure_kotlin_master.app.MyApp
 import com.example.chitwing.anycure_kotlin_master.network.NetRequest
 import retrofit2.Call
 import retrofit2.Callback
@@ -13,8 +9,14 @@ import retrofit2.Response
 object CWUserActionLogManager {
 
 
-    const val locationPermission = "定位权限"
-    const val bluetoothPermisson = "蓝牙权限"
+    /**
+     * 定位权限
+     * */
+    const val locationPermission = "locationPermission"
+    /**
+     * 蓝牙权限
+     * */
+    const val bluetoothPermission = "bluetoothPermission"
     /**
      * 用户权限统计
      * */

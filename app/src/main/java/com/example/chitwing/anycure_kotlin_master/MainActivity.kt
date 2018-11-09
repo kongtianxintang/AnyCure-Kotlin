@@ -53,7 +53,7 @@ class MainActivity : BaseActivity() {
     private var mBadge:TextView? = null
 
     private val mFragmentTags by lazy {
-        return@lazy listOf("mRecipe","mCure","mMall","mMine")
+        return@lazy listOf("mRecipe","mCure","mMine")
     }
 
 
@@ -125,7 +125,7 @@ class MainActivity : BaseActivity() {
                 R.id.action_mine -> {
                     customTitle?.text = "我的"
                     showItem = mMineFragment
-                    tagIndex = 3
+                    tagIndex = 2
                 }
                 R.id.action_recipe -> {
                     customTitle?.text = "首页"
@@ -138,16 +138,18 @@ class MainActivity : BaseActivity() {
                     tagIndex = 1
                 }
                 else -> {
-                    customTitle?.text = "发现"
-                    showItem = mMallFragment
-                    tagIndex = 2
+                    customTitle?.text = "控制器"
+                    showItem = mCureFragment
+                    tagIndex = 1
+//                    customTitle?.text = "发现"
+//                    showItem = mMallFragment
+//                    tagIndex = 2
                 }
             }
 
             val hideItem = when(currentItem) {
                 R.id.action_recipe ->  mRecipeFragment
                 R.id.action_cure ->  mCureFragment
-                R.id.action_mall ->  mMallFragment
                 else ->  mMineFragment
             }
             if (!showItem.isAdded){

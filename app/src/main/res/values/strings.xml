@@ -37,7 +37,7 @@
     <string name="default_intensity_num">0</string>
     <string name="default_clock_desc">剩余时间</string>
     <string name="default_clock_num">00:00</string>
-    <string name="default_resume_desc">播放</string>
+    <string name="default_resume_desc">开始</string>
     <string name="default_stop_desc">暂停</string>
     <string name="default_more">查看更多</string>
 

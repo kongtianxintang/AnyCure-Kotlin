@@ -30,6 +30,7 @@ import com.example.chitwing.anycure_kotlin_master.unit.SharedPreferencesHelper
 import com.example.chitwing.anycure_kotlin_master.unit.Unit
 import com.example.chitwing.anycure_kotlin_master.unit.showToast
 import com.orhanobut.logger.Logger
+import com.tencent.bugly.crashreport.CrashReport
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
@@ -173,6 +174,8 @@ class MainActivity : BaseActivity() {
             transaction.commit()
             customTitle?.text = "首页"
         }
+        val phone = SharedPreferencesHelper.getObject(SharedPreferencesHelper.telephone,"134 **** 2934") as String
+        CrashReport.setUserId(phone)
     }
 
 

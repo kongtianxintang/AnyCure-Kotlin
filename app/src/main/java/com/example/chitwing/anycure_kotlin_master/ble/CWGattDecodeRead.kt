@@ -168,6 +168,7 @@ class CWGattDecodeRead(delegate:CWGattReadInterface) :CWGattReadInterface by del
             }
         }
         if (randoms.count() > 9){
+
             val n = randoms[9] % 10
             Logger.d("计算cid 原始数据->$n")
             cid1 = (randoms[(n + 1) % 10] + 11) % 256 or 0x80

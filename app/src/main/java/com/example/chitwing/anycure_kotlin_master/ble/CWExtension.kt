@@ -20,7 +20,8 @@ import java.text.DecimalFormat
  *************************************************************/
 enum class CWDeviceType{
     New,
-    Old
+    Old,
+    Unknown
 }
 /**
  * 扩展设备是否为新设备
@@ -29,7 +30,10 @@ fun BluetoothDevice.deviceType() :CWDeviceType {
     if (name.contains("MRB_")){
         return CWDeviceType.Old
     }
-    return CWDeviceType.New
+    if (name.contains("MRB ")){
+        return CWDeviceType.New
+    }
+    return CWDeviceType.Unknown
 }
 
 /**
@@ -57,6 +61,7 @@ val ScanResult.channelCode: String?
     get():String?{
         val pUuid = ParcelUuid(CWGattAttributes.Cw_Service_Data)
         val data = this.scanRecord.getServiceData(pUuid)
+        if (data == null){ return null }
         val subs = data.map { val t = it.toInt()
             if (t !in 0 .. 255){
                 t and 0xff

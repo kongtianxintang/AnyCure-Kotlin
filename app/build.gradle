@@ -14,8 +14,8 @@ android {
         applicationId "com.example.chitwing.anycure_kotlin_master"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 127
-        versionName "1.26.1"
+        versionCode 129
+        versionName "1.29"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

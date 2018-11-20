@@ -48,12 +48,17 @@ class CWHintDialog: DialogFragment() {
         return v!!
     }
 
+    private var mIsLayout = false
+
     override fun onStart() {
         super.onStart()
         dialog?.let {
-            val dm = DisplayMetrics()
-            activity!!.windowManager!!.defaultDisplay.getMetrics(dm)
-            it.window.setLayout((dm.widthPixels * 0.85).toInt(), ViewGroup.LayoutParams.WRAP_CONTENT)
+            if (!mIsLayout){
+                mIsLayout = true
+                val dm = DisplayMetrics()
+                activity!!.windowManager!!.defaultDisplay.getMetrics(dm)
+                it.window.setLayout((dm.widthPixels * 0.85).toInt(), ViewGroup.LayoutParams.WRAP_CONTENT)
+            }
         }
     }
 

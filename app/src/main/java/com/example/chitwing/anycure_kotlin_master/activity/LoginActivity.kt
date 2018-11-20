@@ -32,6 +32,7 @@ import com.example.chitwing.anycure_kotlin_master.unit.SharedPreferencesHelper
 import com.example.chitwing.anycure_kotlin_master.unit.showToast
 
 import kotlinx.android.synthetic.main.activity_login.*
+import java.io.IOException
 
 
 /**
@@ -238,21 +239,22 @@ class LoginActivity : BaseActivity(), LoaderCallbacks<Cursor> {
      */
     inner class UserLoginTask internal constructor(private val mEmail: String, private val mPassword: String) : AsyncTask<Void, Void, Boolean>() {
 
+        private var error: String? = null
+
         override fun doInBackground(vararg params: Void): Boolean? {
             try {
                 // Simulate network access.
                 val map = mapOf("mobile" to mEmail,"passwd" to mPassword)
                 val logCallback = NetRequest.loginAction(map)
                 val response = logCallback.execute()
-
+                error = response?.errorBody()?.toString()
                 val log = response.body()
                 var isSuccessful = false
                 log?.let {
-                    when(it.code){
-                        1000,1001 -> isSuccessful = true
-                        else -> isSuccessful = false
+                    isSuccessful = when(it.code) {
+                        1000,1001 -> true
+                        else -> false
                     }
-
                 }
 
                 when(isSuccessful) {
@@ -260,12 +262,13 @@ class LoginActivity : BaseActivity(), LoaderCallbacks<Cursor> {
                         insert(log!!)
                         SharedPreferencesHelper.put(SharedPreferencesHelper.telephone,mEmail)
                     }
-                    else -> {}
+                    else -> { error = log?.msg }
                 }
 
                 return isSuccessful
 
-            } catch (e: InterruptedException) {
+            } catch (e: IOException) {
+                error = "网络异常"
                 return false
             }
 
@@ -284,7 +287,7 @@ class LoginActivity : BaseActivity(), LoaderCallbacks<Cursor> {
                 startActivity(intent)
                 finish()
             } else {
-                password.error = getString(R.string.error_incorrect_password)
+                password.error = error
                 password.requestFocus()
             }
         }

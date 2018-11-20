@@ -42,7 +42,6 @@ class CWDialog :DialogFragment(){
     private var mIcon:ImageView? = null
     private var mAlone:Button? = null
     private var mCallback:CWDialogInterface? = null
-    private var mIsLayout = false
 
     fun setCallback(callback:CWDialogInterface){
         this.mCallback = callback
@@ -77,6 +76,8 @@ class CWDialog :DialogFragment(){
         return v
     }
 
+    private var mIsLayout = false
+
     override fun onStart() {
         super.onStart()
         dialog?.let {
@@ -84,7 +85,7 @@ class CWDialog :DialogFragment(){
                 mIsLayout = true
                 val dm = DisplayMetrics()
                 activity!!.windowManager!!.defaultDisplay.getMetrics(dm)
-                it.window.setLayout((dm.widthPixels * 0.75).toInt(),ViewGroup.LayoutParams.WRAP_CONTENT)
+                it.window.setLayout((dm.widthPixels * 0.85).toInt(), ViewGroup.LayoutParams.WRAP_CONTENT)
             }
         }
     }

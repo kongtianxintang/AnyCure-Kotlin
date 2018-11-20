@@ -50,12 +50,6 @@ object  CWBleManager {
     * */
     val mCWDevices = mutableListOf<CWDevice>()
     private val mDevices = mutableListOf<BluetoothDevice>()
-    /**
-     * handle
-     * */
-    private val mHandler: Handler by lazy {
-        return@lazy Handler()
-    }
 
     /**
      *设置蓝牙状态回调
@@ -174,17 +168,22 @@ object  CWBleManager {
                      * */
                     Logger.d("设备名称${it.device.name}")
                     val type = it.device.deviceType()
-                    val code = if (type == CWDeviceType.Old) it.device.channelCode() else it.channelCode
-                    when(configure.channel){//如果为自己有渠道 则都可以链接
-                        CWChannel.ChitWing,CWChannel.ALL -> {
-                            mDevices.add(it.device)
-                            mScanCallback!!.discoveryDevice(it,this@CWBleManager)
-                        }
+                    when (type) {
+                        CWDeviceType.Unknown -> {}
                         else -> {
-                            Logger.d("code->$code 本地->#$configure.channel.SHORT_NUM_CODE")
-                            if (code == configure.channel.SHORT_NUM_CODE){
-                                mDevices.add(it.device)
-                                mScanCallback!!.discoveryDevice(it,this@CWBleManager)
+                            val code = if (type == CWDeviceType.Old) it.device.channelCode() else it.channelCode
+                            when(configure.channel){//如果为自己有渠道 则都可以链接
+                                CWChannel.ChitWing,CWChannel.ALL -> {
+                                    mDevices.add(it.device)
+                                    mScanCallback!!.discoveryDevice(it,this@CWBleManager)
+                                }
+                                else -> {
+                                    Logger.d("code->$code 本地->#${configure.channel.SHORT_NUM_CODE}")
+                                    if (code == configure.channel.SHORT_NUM_CODE){
+                                        mDevices.add(it.device)
+                                        mScanCallback!!.discoveryDevice(it,this@CWBleManager)
+                                    }
+                                }
                             }
                         }
                     }

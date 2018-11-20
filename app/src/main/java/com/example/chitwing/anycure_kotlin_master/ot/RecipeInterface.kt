@@ -19,6 +19,7 @@ import com.example.chitwing.anycure_kotlin_master.model.Recipe
  * 定义一个类似与iOS中IndexPath的类
  * section :在第几区域
  * row:在当前区域的第几个
+ * description:暂时不用 😂
  * */
 data class IndexPath(val section:Int,val row:Int)
 

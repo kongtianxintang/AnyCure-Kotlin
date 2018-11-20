@@ -66,18 +66,19 @@ class OtPrepareActivity : BaseActivity() {
             //注意事项
             //根据partId区分 精品推荐or处方库 0:精品推荐  1:处方库
             //处方库 无电极贴法
-            when (it.recipe!!.partId){
-                0 -> {
-                    topSegment.setText("方案综述","电极贴法")
-                    //电极贴法
-                    configureRecyclerView(it.recipe)
+            if (it.recipe != null){
+                when (it.recipe!!.partId){
+                    0 -> {
+                        topSegment.setText("方案综述","电极贴法")
+                        //电极贴法
+                        configureRecyclerView(it.recipe)
+                    }
+                    1 -> {
+                        topSegment.setText("方案综述")
+                    }
+                    else -> {}
                 }
-                1 -> {
-                    topSegment.setText("方案综述")
-                }
-                else -> {}
             }
-
             //设置回调
             it.mCallback = mProvider.deviceInterface
             it.writeData()

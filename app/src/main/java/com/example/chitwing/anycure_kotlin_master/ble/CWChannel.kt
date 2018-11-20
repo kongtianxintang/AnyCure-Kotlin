@@ -69,7 +69,7 @@ enum class CWChannel {
             MingYi -> return@lazy "00000001"
             PingAn -> return@lazy "00000003"
             CTT -> return@lazy "00000005"
-            QuanJian -> return@lazy "00000004"
+            QuanJian -> return@lazy "00000009"
             Other -> return@lazy "00000006"
             else -> return@lazy "00000002"
         }

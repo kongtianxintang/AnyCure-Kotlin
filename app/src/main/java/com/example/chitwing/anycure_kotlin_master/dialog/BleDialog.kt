@@ -27,7 +27,7 @@ import java.util.*
  * Author:chitwing
  * Date:  2018/6/28
  * QQ/Tel/Mail:383118832
- * Description:
+ * Description:搜索蓝牙设备 dialog
  * Others:新手勿喷
  * Modifier:
  * Reason:
@@ -38,6 +38,8 @@ class BleDialog : DialogFragment() {
      * 处方
      * */
     private var mRecipe:Recipe? = null
+    private var mFinal = false
+
     fun setRecipe(m:Recipe){
         this.mRecipe = m
     }
@@ -86,6 +88,7 @@ class BleDialog : DialogFragment() {
     private fun configureSubviews(){
         mTitle.text = "提示"
         mButton.setOnClickListener {
+            mFinal = false
             dismiss()
             mCallback?.onClickButton(false)
         }
@@ -136,12 +139,16 @@ class BleDialog : DialogFragment() {
         }
     }
 
+    private var mIsLayout = false
     override fun onStart() {
         super.onStart()
         dialog?.let {
-            val dm = DisplayMetrics()
-            activity!!.windowManager!!.defaultDisplay.getMetrics(dm)
-            it.window.setLayout((dm.widthPixels * 0.75).toInt(),ViewGroup.LayoutParams.WRAP_CONTENT)
+            if (!mIsLayout){
+                mIsLayout = true
+                val dm = DisplayMetrics()
+                activity!!.windowManager!!.defaultDisplay.getMetrics(dm)
+                it.window.setLayout((dm.widthPixels * 0.85).toInt(), ViewGroup.LayoutParams.WRAP_CONTENT)
+            }
         }
     }
 

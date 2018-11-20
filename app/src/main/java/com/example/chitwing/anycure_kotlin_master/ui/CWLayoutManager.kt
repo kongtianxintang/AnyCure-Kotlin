@@ -40,7 +40,6 @@ class CWLayoutManager(val context:Context, orientation:Int,
         val offsetY = 0
         var lastSpace = 0
 
-        Log.d(mTag,"开始layout")
         for (i in 1 .. itemCount){
             val position = i - 1
             val scrap = recycler?.getViewForPosition(position)

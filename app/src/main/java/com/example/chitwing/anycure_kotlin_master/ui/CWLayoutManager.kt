@@ -7,6 +7,12 @@ import android.support.v7.widget.LinearSmoothScroller
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.ViewGroup
+import android.graphics.PointF
+import android.support.v7.widget.LinearSnapHelper
+import android.support.v7.widget.OrientationHelper
+import android.util.AttributeSet
+import android.util.SparseArray
+import android.view.View
 
 /***********************************************************
  * 版权所有,2018,Chitwing.

@@ -1,6 +1,7 @@
 package com.example.chitwing.anycure_kotlin_master.fragment.otCure
 
 import android.graphics.Color
+import android.widget.TextView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.example.chitwing.anycure_kotlin_master.R
@@ -25,7 +26,14 @@ class OtCureAdapter(layoutResId: Int,data:List<CWDevice>) :BaseQuickAdapter<CWDe
 
     override fun convert(helper: BaseViewHolder?, item: CWDevice?) {
         helper?.setText(R.id.otCureRecipeName,item?.recipe?.recipeName)
-//        item?.let {
+        item?.let {
+            val view = helper?.itemView
+            val alpha = if (it.isSelect) 1f else 0.3f
+            val scale = if (it.isSelect) 1f else 0.5f
+            view?.scaleX = scale
+            view?.scaleY = scale
+            view?.alpha = alpha
+
 //            when (it.isSelect){
 //                true -> {
 //                    helper?.setAlpha(R.id.otCureRecipeName,1f)
@@ -34,7 +42,8 @@ class OtCureAdapter(layoutResId: Int,data:List<CWDevice>) :BaseQuickAdapter<CWDe
 //                    helper?.setAlpha(R.id.otCureRecipeName,0.3f)
 //                }
 //            }
-//        }
+
+        }
     }
 
 

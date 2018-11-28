@@ -26,6 +26,7 @@ import java.io.*
 import java.util.*
 import java.util.zip.ZipEntry
 import java.util.zip.ZipFile
+import  com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
 
 
 /***********************************************************
@@ -159,7 +160,7 @@ fun ImageView.loader(context: Context, url:String?){
         val options = RequestOptions().error(R.drawable.ic_launcher_background)
         options.diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
 //        val path = NetRequest.IMAGE_BASE_PATH + it
-        Glide.with(context).load(file).apply(options).into(this)
+        Glide.with(context).load(file).transition(withCrossFade()).apply(options).into(this)
     }
 }
 /**
@@ -178,7 +179,7 @@ fun ImageView.loadRadius(context: Context,url: String?,radius:Int){
         val options = RequestOptions().placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_foreground).transform(corners)
 //        val path = NetRequest.IMAGE_BASE_PATH + it
         options.diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
-        Glide.with(context).load(file).apply(options).into(this)
+        Glide.with(context).load(file).transition(withCrossFade()).apply(options).into(this)
     }
 }
 /**
@@ -194,7 +195,7 @@ fun ImageView.loadCircle(context: Context,url: String?){
         val options = RequestOptions().placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_background).transform(CWCircleTransform())
         options.diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
 //        val path = NetRequest.IMAGE_BASE_PATH + it
-        Glide.with(context).load(file).apply(options).into(this)
+        Glide.with(context).load(file).transition(withCrossFade()).apply(options).into(this)
     }
 }
 
@@ -203,7 +204,7 @@ fun ImageView.loadCircle(context: Context,url: String?){
  * */
 fun ImageView.loadCircle(context: Context,file: File){
     val options = RequestOptions().placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_background).transform(CWCircleTransform())
-    Glide.with(context).load(file).apply(options).into(this)
+    Glide.with(context).load(file).transition(withCrossFade()).apply(options).into(this)
 }
 
 /**
@@ -214,7 +215,7 @@ fun ImageView.loadCircleRemoteUrl(ac: Context,remoteUrl:String?){
         if (it.isEmpty()){ return }
         val options = RequestOptions().placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_background).transform(CWCircleTransform())
         val path = NetRequest.IMAGE_BASE_PATH + it
-        Glide.with(context).load(path).apply(options).into(this)
+        Glide.with(context).load(path).transition(withCrossFade()).apply(options).into(this)
     }
 }
 
@@ -226,7 +227,7 @@ fun ImageView.loadCircleUrl(ac: Context,remoteUrl:String?){
         if (it.isEmpty()){ return }
         val options = RequestOptions().placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_background)
         val path = NetRequest.IMAGE_BASE_PATH + it
-        Glide.with(context).load(path).apply(options).into(this)
+        Glide.with(context).load(path).transition(withCrossFade()).apply(options).into(this)
     }
 }
 

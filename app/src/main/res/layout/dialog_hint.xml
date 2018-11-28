@@ -20,25 +20,34 @@
         android:textColor="@color/theme_ignore_gray"
         />
 
-    <TextView
+    <ScrollView
+        android:id="@+id/mScrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/dp_256"
         app:layout_constraintTop_toBottomOf="@id/mHintTitle"
-        android:id="@+id/mHint"
-        android:text="@string/hint"
-        android:layout_marginTop="@dimen/dp_12"
-        android:paddingStart="@dimen/dp_8"
-        android:paddingEnd="@dimen/dp_8"
-        android:textColor="@color/theme_ignore_gray"
-        android:lineSpacingExtra="@dimen/dp_8"
-        />
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/mHintTitle"
+            android:id="@+id/mHint"
+            android:text="@string/hint"
+            android:layout_marginTop="@dimen/dp_12"
+            android:paddingStart="@dimen/dp_8"
+            android:paddingEnd="@dimen/dp_8"
+            android:paddingBottom="@dimen/dp_12"
+            android:textColor="@color/theme_ignore_gray"
+            android:lineSpacingExtra="@dimen/dp_8"
+            />
+
+    </ScrollView>
+
     <RadioButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/mHint"
+        app:layout_constraintTop_toBottomOf="@id/mScrollView"
         android:text="@string/do_not_again"
         android:id="@+id/mRadio"
-        android:layout_marginTop="@dimen/dp_12"
         android:textColor="@color/theme_ignore_gray"
         />
     <Button

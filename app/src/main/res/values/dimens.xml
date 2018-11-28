@@ -52,6 +52,8 @@
     <dimen name="dp_80">80dp</dimen>
     <dimen name="dp_128">128dp</dimen>
     <dimen name="dp_156">156dp</dimen>
+    <dimen name="dp_214">214dp</dimen>
+    <dimen name="dp_256">256dp</dimen>
 
 
     <dimen name="sp_10">10sp</dimen>

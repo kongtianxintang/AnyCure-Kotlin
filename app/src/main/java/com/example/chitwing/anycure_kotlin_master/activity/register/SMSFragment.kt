@@ -8,6 +8,9 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
 
 import com.example.chitwing.anycure_kotlin_master.R
 import com.example.chitwing.anycure_kotlin_master.ble.CWBleManager
@@ -34,10 +37,24 @@ class SMSFragment : BaseFragment() {
     private var mTimerTask:TimerTask? = null
     private var mCount = 0
 
+    /**
+     * 子控件
+     * */
+    private var mSmsStatus: TextView? = null
+    private var mSmsCountdown: TextView? = null
+    private var mSmsRegain: Button? = null
+    private var mSmsNum: EditText? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_sm, container, false)
+        val view = inflater.inflate(R.layout.fragment_sm, container, false)
+
+        mSmsStatus = view.findViewById(R.id.smsStatus)
+        mSmsCountdown = view.findViewById(R.id.smsCountdown)
+        mSmsRegain = view.findViewById(R.id.smsRegain)
+        mSmsNum = view.findViewById(R.id.smsNum)
+
+        return view
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -50,15 +67,16 @@ class SMSFragment : BaseFragment() {
      * 配置子控件基础内容
      * */
     private fun defaultSubviews(){
-        defaultSMSStatus()
-        smsCountdown.visibility = View.INVISIBLE
-        smsRegain.visibility = View.INVISIBLE
 
-        smsRegain.setOnClickListener {
+        defaultSMSStatus()
+        mSmsCountdown?.visibility = View.INVISIBLE
+        mSmsRegain?.visibility = View.INVISIBLE
+
+        mSmsRegain?.setOnClickListener {
             fetchCode()
         }
 
-        smsNum.addTextChangedListener( object :TextWatcher{
+        mSmsNum?.addTextChangedListener( object :TextWatcher{
             override fun afterTextChanged(s: Editable?) {
 
             }
@@ -68,17 +86,17 @@ class SMSFragment : BaseFragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    s?.let {
-                        if (it.length >= 6){
-                            val tCode = it.toString()
-                            Logger.d("用户输入的验证码$tCode")
-                            val ac = getAC()
-                            if (tCode == ac?.mCodes){
-                                //切换到密码页面
-                                ac.switchPasswordFragment()
-                            }
+                s?.let {
+                    if (it.length >= 6){
+                        val tCode = it.toString()
+                        Logger.d("用户输入的验证码$tCode")
+                        val ac = getAC()
+                        if (tCode == ac?.mCodes){
+                            //切换到密码页面
+                            ac.switchPasswordFragment()
                         }
                     }
+                }
             }
         })
     }
@@ -94,7 +112,6 @@ class SMSFragment : BaseFragment() {
         map["type"] = typeStr
         map["mobile"] = ac!!.phone!!
         map["channel"] = CWBleManager.configure.channel.NUM_CODE
-        //todo:发送忘记密码 验证码时提示发送失败 请与iOS对比
         val call = NetRequest.fetchSMSCode(map)
         call.enqueue( object :Callback<SMSCode> {
             override fun onResponse(call: Call<SMSCode>?, response: Response<SMSCode>?) {
@@ -125,7 +142,7 @@ class SMSFragment : BaseFragment() {
 
     private fun defaultSMSStatus(){
         getAC()?.let {
-            it.smsStatus.text = "正在发送短信到${it.phone}"
+            mSmsStatus?.text = "正在发送短信到${it.phone}"
         }
     }
     /**
@@ -136,14 +153,14 @@ class SMSFragment : BaseFragment() {
             it.mCodes = obj.data!!.code
             showCountdown()
             resumeTimer()
-            smsStatus.text = "短信已下发到${it.phone}"
+            mSmsStatus?.text = "短信已下发到${it.phone}"
         }
     }
 
     private fun fetchFailure(error: String?){
         showRegainButton()
         getAC()?.let {
-            smsStatus.text = "短信发送失败:$error"
+            mSmsStatus?.text = "短信发送失败:$error"
         }
     }
 
@@ -168,34 +185,30 @@ class SMSFragment : BaseFragment() {
         mTimer!!.schedule(mTimerTask!!, Date(),1000)
     }
 
-    /**
-     * 取消倒计时
-     * */
-    fun deInitTimer(){
+    private fun deInitTimer(){
         mTimer?.cancel()
         mTimer = null
         mTimerTask?.cancel()
         mTimerTask = null
-        Logger.d("定时器置null")
     }
 
     private fun showRegainButton(){
         getAC()?.runOnUiThread {
-            smsRegain.visibility = View.VISIBLE
-            smsCountdown.visibility = View.INVISIBLE
+            mSmsRegain?.visibility = View.VISIBLE
+            mSmsCountdown?.visibility = View.INVISIBLE
         }
     }
 
     private fun showCountdown(){
         getAC()?.runOnUiThread {
-            smsCountdown.visibility = View.VISIBLE
-            smsRegain.visibility = View.INVISIBLE
+            mSmsCountdown?.visibility = View.VISIBLE
+            mSmsRegain?.visibility = View.INVISIBLE
         }
     }
 
     private fun configureCountdown(){
         getAC()?.runOnUiThread {
-            smsCountdown.text = "${mCount}秒后重新获取验证码"
+            mSmsCountdown?.text = "${mCount}秒后重新获取验证码"
         }
     }
 
@@ -207,7 +220,6 @@ class SMSFragment : BaseFragment() {
     private fun getAC() :CWRegisterActivity?{
         return activity as? CWRegisterActivity
     }
-
 
 
 }

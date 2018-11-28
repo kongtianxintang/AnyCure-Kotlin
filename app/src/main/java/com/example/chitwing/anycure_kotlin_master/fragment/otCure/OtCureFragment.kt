@@ -25,7 +25,9 @@ import com.example.chitwing.anycure_kotlin_master.dialog.CWDialog
 import com.example.chitwing.anycure_kotlin_master.dialog.CWDialogInterface
 import com.example.chitwing.anycure_kotlin_master.dialog.CWDialogType
 import com.example.chitwing.anycure_kotlin_master.fragment.BaseFragment
+import com.example.chitwing.anycure_kotlin_master.ui.CWCureLayoutManager
 import com.example.chitwing.anycure_kotlin_master.ui.CWLayoutManager
+import com.example.chitwing.anycure_kotlin_master.ui.CWStackLayout
 import com.example.chitwing.anycure_kotlin_master.unit.loader
 import com.example.chitwing.anycure_kotlin_master.unit.showToast
 import com.orhanobut.logger.Logger
@@ -115,21 +117,28 @@ class OtCureFragment : BaseFragment() {
 
     private fun initAdapter(){
 
-        //test
-        val customLayout = CWLayoutManager(this.context!!, LinearLayoutManager.HORIZONTAL,false)
-        mRecyclerView.layoutManager = customLayout
 
-//        val layout = LinearLayoutManager(this.context!!, LinearLayoutManager.HORIZONTAL,false)
-//        mRecyclerView.layoutManager = layout
+//        val layoutManager = CWCureLayoutManager(CWCureLayoutManager.HORIZONTAL)
+//        layoutManager.setItemTransformer(ScaleTransformer())
+//        layoutManager.setOnItemSelectedListener { _, _, position ->
+//            val item = CWBleManager.mCWDevices[position]
+//            Logger.d("处方名->${item.recipe?.recipeName} 编号->${item.recipe?.recipeId}")
+//            scrollerItem(item)
+//        }
+//
+//
+//        layoutManager.attach(mRecyclerView)
+
+        val layout = CWStackLayout()
+        mRecyclerView.layoutManager = layout
+
+
         val adapter = OtCureAdapter(R.layout.ot_cure_item,CWBleManager.mCWDevices)
 
         adapter.setOnItemClickListener { _, _, position ->
             Logger.d("点击位置->$position")
-            val count = CWBleManager.mCWDevices.count()
-            if (count > position){
-                val obj = CWBleManager.mCWDevices[position]
-                switchItem(obj)
-            }
+            val obj = CWBleManager.mCWDevices[position]
+            switchItem(obj)
         }
         mRecyclerView.adapter = adapter
 
@@ -222,6 +231,15 @@ class OtCureFragment : BaseFragment() {
      * 切换设备
      * */
     fun switchItem(obj:CWDevice){
+        configureItem(obj)
+        reloadData()
+    }
+
+//    private fun scrollerItem(obj:CWDevice){
+//        configureItem(obj)
+//    }
+
+    private fun configureItem(obj:CWDevice){
         if (mCurrentDevice == obj){ return }
 
         mCurrentDevice?.selectDevice(false)
@@ -246,7 +264,6 @@ class OtCureFragment : BaseFragment() {
         setRecipeName(obj.recipe?.recipeName)
         setPlayDuration(obj.mDuration - obj.playDuration)
         mEmptyView.visibility = View.GONE
-        reloadData()
     }
 
     /// 配置resumeButton的 文字及 图标
@@ -410,5 +427,20 @@ class OtCureFragment : BaseFragment() {
         alpha.repeatMode = Animation.REVERSE
         mReCureIcon.animation = alpha
         alpha.start()
+    }
+}
+
+/**
+ * 缩放 和 透明度
+ * */
+class ScaleTransformer : CWCureLayoutManager.ItemTransformer {
+
+    override fun transformItem(layoutManager: CWCureLayoutManager?, item: View?, fraction: Float) {
+        item?.let {
+            val scale = 1 - 0.3f * Math.abs(fraction)
+            it.scaleX = scale
+            it.scaleY = scale
+            it.alpha = scale
+        }
     }
 }
